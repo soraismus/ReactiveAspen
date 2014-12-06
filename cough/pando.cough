@@ -1,0 +1,988 @@
+# This system of rescheduling should work well enough when dispatcher
+# chains are synchronous; however, asynchronous chains, like those
+# introduced by AJAX calls, may cause problems. The properties in a tail
+# off of an asynchronous cleavage might not be updated within the same
+# 'transaction' as the other nodes of the DAG, and so the atomicity
+# of transactions cannot be fully guaranteed.
+
+initiating-DAG-update? = true
+DAG-updating? = false
+
+get-initiation-status = ->
+  _initiating-DAG-update? = initiating-DAG-update?
+  initiating-DAG-update? = false
+  DAG-updating? = true
+  _initiating-DAG-update?
+
+reset-DAG-update-process = ->
+  DAG-updating? = false
+  initiating-DAG-update? = true
+
+# -------------------------------------------------------------------------
+
+reschedule = \thunk ->
+  setTimeout (thunk, 0)
+
+has-postpone? = \value ->
+  isCell value && (
+      (inner-value = value.read ()) == postpone ||
+      has-postpone? inner-value)
+
+# Necessary?
+is-postpone? = \value ->
+  value == postpone
+
+postponed? = \value ->
+  is-postpone? value || has-postpone? value
+
+any-postponement? = \args ->
+  args.some postponed?
+
+# Should this deeply traverse the structure provided?
+sample-properties = \args ->
+  map (\val -> if isProperty val then $sample val else val) args
+
+cytolyse = \val ->
+  if isCell val then cytolyse (val.read ()) else val
+
+endocytate = (N, fn, managed-args, cell) ->
+  if any-postponement? managed-args
+    cell.write postpone
+    # WET: This approach at limited async recursion is used multiple times.
+    reschedule (-> endocytate (N - 1, fn, managed-args, cell)) if N > 0
+  else
+    cytolysed-args = map cytolyse managed-args
+    # As of now, cells can contain other cells;
+    # this possibility could be problematic.
+    cell.write (fn cytolysed-args...)
+  return cell
+
+ignoreIrrelevant = (fn) -> (args...) ->
+  if args.every isRelevant then fn args... else none
+
+###
+data State = Resolved | Updating
+data State s => Property s t = State s
+data Potential t = Identity t | Postpone | Now t
+data Capsule t = Identity t | Potential t | Property _ t
+
+checkValue :: (a -> b) -> (Capsule a -> Potential b)
+-- `remerse` relates to a comonadic action.
+remerse-as-extend :: Property s a -> (Property s a -> b) -> Property s b
+remerse :: Property s a -> (a -> b) -> Property s b
+remerse p f = remerse-as-extend p $ f . extract
+continuate :: Potential a -> (a -> b) -> b
+continuate p f = case p of Identity x -> f x
+                           Now x -> f x
+                           Postpone -> reschedule (\_ -> continuate p f)
+###
+
+# Akin to `Bacon.combineWith`.
+# TODO: Devise new name for this function.
+checkValue = (fn) -> (args...) ->
+  endocytate (
+    10
+    ignoreIrrelevant fn
+    sample-properties args
+    createCell ()
+  )
+
+blockTillReady = (fn) -> (args...) ->
+  block-N (10, fn, args)
+
+try-N-times = (N) -> (fn) -> (args...) ->
+  if any-postponement? args
+    reschedule (-> try-N-times (N - 1) fn (args...)) if N > 0
+  else
+    fn ((fmap cytolyse args)...)
+
+# try-10 :: (a -> b) -> (Potential a) -> b
+try-10 = try-N-times 10
+
+block-N = (N, fn, args) ->
+  if any-postponement? args
+    reschedule (-> block-N (N - 1, fn, args)) if N > 0
+  else
+    cytolysed-args = map cytolyse args
+    fn cytolysed-args...
+
+frpBind = (fn) -> (args...) ->
+  nativeBind.apply ((checkValue fn), [null].concat args)
+
+transbind = \transmerse \fn ->
+  ; transmerse frpBind (fn) ;
+
+# -------------------------------------------------------------------------
+# Many of the functions of this section are
+# also found in 'utilities2.js.cough'
+
+get-key = \key \obj ->
+  obj[key]
+
+@prototype = get-key 'prototype'
+
+[FuncProto, ObjProto] = [Function, Object].map @prototype
+
+getPrototypeOf = Object.getPrototypeOf
+nativeBind     = FuncProto.bind
+nativeToString = ObjProto.toString
+
+array? = \val ->
+  val instanceof Array
+
+bind = (fn) -> (args...) ->
+  nativeBind.apply (fn, [null].concat args)
+
+call-only-once = (fn) ->
+  fn-proxy = (args...) ->
+    fn-proxy = no-op
+    fn args...
+  (args...) -> fn-proxy args...
+
+defined? = \val ->
+  ? val
+
+each = \fn \array ->
+  array.forEach fn
+
+each-property = \fn \obj ->
+  fn val for own key, val of obj
+
+empty? = \obj ->
+  Object.keys(obj).length == 0
+
+extend! = (obj, mixins...) ->
+  for mixin in mixins
+    for own key, value of mixin
+      # Clobbers every value of `obj`.
+      obj[key] = value
+  obj
+
+# WET.
+extend-proto = (prototype, mixins...) ->
+  result = Object.create prototype
+  for mixin in mixins
+    for own key, value of mixin
+      # Clobbers every value of `result`.
+      result[key] = value
+  result
+
+flip = (fn) -> (args1...) -> (args2...) ->
+  fn (args2...) (args1...) # Cough quirk.
+
+function? = \val ->
+  typeof val == 'function'
+
+get-arg-array = (possibly-overbuilt-array) ->
+  if array? possibly-overbuilt-array[0]
+    possibly-overbuilt-array[0]
+  else
+    possibly-overbuilt-array
+
+hash? = \value ->
+  nativeToString.call value == '[object Object]'
+
+identity = \val ->
+  val
+
+map = \fn \value ->
+  value.map fn
+
+object? = \value ->
+  # typeof value == 'object'
+  # Object.prototype.toString.call value == '[object Object]'
+  # value instanceof Object
+  value == Object value
+
+# -------------------------------------------------------------------------
+
+bracket = \label ->
+  '<' + label + '>'
+
+create-singleton = \label ->
+  { inspect: -> bracket label }
+
+[active, clock, end, inactive, none, paused, postpone] =
+  map create-singleton [
+    'active'
+    'clock'
+    'end'
+    'inactive'
+    'none'
+    'paused'
+    'postpone']
+
+no-op         = (->)
+return-no-op  = -> no-op
+
+# Consider changing this predicate's name to `terminal?`.
+isEnd = \value ->
+  value == end
+
+# TODO: Find non-negative name for this predicate.
+nonterminal? = \value ->
+  ! isEnd value
+
+getType = \value ->
+  if object? value then getPrototypeOf value else toString.call value
+
+isRelevant = \value ->
+  value != none
+
+isFromType = \type \val ->
+  t = getType val
+  switch
+    when (t == type) then true
+    when not (hash? t) then false
+    when (t == ObjProto) then false
+    else isFromType type t
+
+# -------------------------------------------------------------------------
+
+createCell = \initial-value ->
+  value = initial-value ?? null
+  read = ->
+    value
+  write = \_value ->
+    value = _value
+  extend-proto (CoreCell, { read, write })
+
+# TODO: Refactor `isCell` to be consistent
+# with other type-determining predicates.
+isCell = \val -> getType val == CoreCell
+
+# -------------------------------------------------------------------------
+
+seed = 0
+generate-id = ->
+  seed++
+
+registrar = do ->
+  entities = {}
+  register = \entity ->
+    entities[entity.id] = entity
+    entity
+  removeFromRegistrar = \id ->
+    delete entities[id]
+  transmit = (id) -> (message) -> (args...) ->
+    entities[id][message] args... if entities[id]
+  { register, removeFromRegistrar, transmit }
+
+[register, removeFromRegistrar, transmit] = map (flip get-key registrar) [
+  'register', 'removeFromRegistrar', 'transmit']
+
+# -------------------------------------------------------------------------
+
+createDispatcherType = \opts \source ->
+  dispatcher = _createDispatcherType opts source
+  register dispatcher
+  dispatcher
+
+# Later, refactor to use mediator more; & add a method for adding pending srcs.
+# Improve memory efficiency. Many of these methods should be shared.
+# Many of these internal functions can be moved outside of
+# the `_createDispatcherType` function.
+# (This library should be distributed across several modular files
+# for greater maintainability.)
+# Perhaps memory shouldn't be a determining factor.
+_createDispatcherType = \opts \source ->
+  { mixins, proto, transformDispatch, transformSubscribe } = parse-opts opts
+
+  mixins              ?= {}
+  proto               ?= CoreDispatcher
+  source              ?= return-no-op
+  transformDispatch   ?= identity
+  transformSubscribe  ?= identity
+
+  id                 = generate-id ()
+  sinks              = {}
+  stop-source-influx = no-op
+  terminated?        = false
+
+  alias = id
+  setAlias = \val -> alias = val
+
+  activate = call-only-once ->
+    # Dispatching `call-only-once` on `(source dispatch)`
+    # might be unnecessary, since `call-only-once` has been
+    # included in the function `_subscribe`.
+    stop-source-influx = call-only-once (source dispatch)
+  add-subscriber = \sink ->
+    #sink.id = generate-id () unless sink.id
+    unless sink.id
+      sink.id = generate-id ()
+    sinks[sink.id] = sink
+  disconnect-from = (source-id, sid) ->
+    subscription-id = sid ?? id
+    transmit source-id 'unsubscribe' subscription-id if source-id
+  _dispatch = (value, source-id, subscription-id) ->
+    dispatch-N (10, value, source-id, subscription-id)
+  dispatch-N = (N, value, source-id, sid) ->
+    switch
+      when postponed? value
+        reschedule (-> dispatch-N (N - 1, value, source-id, sid)) if N > 0
+      when terminated?
+        disconnect-from (source-id, sid)
+      else
+        transact ((cytolyse value), source-id, sid)
+  distribute = \value ->
+    if isEnd value
+      terminate ()
+    else
+      _distrib = \sink ->
+        sink (value, id, (sink.id || 'no-ID'))
+      each-property _distrib sinks
+  inform-subscribers = ->
+    # TODO: Refactor the following line.
+    each-property (\sink -> sink end) sinks
+  # Clobbered?
+  _subscribe = \sink ->
+    if terminated?
+      # TODO: Refactor the following line.
+      sink end
+      no-op
+    else
+      add-subscriber sink
+      activate ()
+      # The following should be callable only once,
+      # by either subscriber or dispatcher.
+      call-only-once -> unsubscribe sink
+  terminate = ->
+    stop-source-influx ()
+    terminated? = true
+    inform-subscribers ()
+    sinks = {}
+    removeFromRegistrar id
+  transact = (value, source-id, sid) ->
+    update-initiator? = get-initiation-status ()
+    try
+      distribute value
+      disconnect-from (source-id, sid) if terminated?
+    finally
+      reset-DAG-update-process () if update-initiator?
+  unsubscribe = \val ->
+    # Validating that `val` is of ID type is possibly necessary.
+    subscriber-id = if function? val then val.id else val
+    delete sinks[subscriber-id]
+    terminate () if empty? sinks
+
+  dispatch  = transformDispatch _dispatch
+  subscribe = transformSubscribe (_subscribe, unsubscribe)
+
+  dispatch.id = id
+
+  properties = {
+    activate
+    alias
+    dispatch
+    id
+    setAlias
+    subscribe
+    terminate
+    unsubscribe }
+
+  # TODO: Perhaps `_createDispatcherType` can be unwrapped. Try the following:
+  # register (extend-proto (proto, properties, mixins))
+  extend-proto (proto, properties, mixins)
+
+# -------------------------------------------------------------------------
+
+display = \supertype \subtype ->
+  -> bracket "#{supertype}: #{subtype}"
+
+create-super-type = (display, type-label) ->
+  inspect   : display 'Core'
+  supertype : type-label
+  type      : type-label
+
+[display-cell-type, display-dispatcher-type, display-signal-type] =
+  map display ['Cell', 'Dispatcher', 'Signal']
+
+# WET: 'Core' + 'Cell' and 'core-cell'
+CoreCell = create-super-type (display-cell-type, 'core-cell')
+
+CoreDispatcher = create-super-type (
+  display-dispatcher-type, 'core-dispatcher')
+
+extend-core-dispatcher = \type ->
+  inspect = display-dispatcher-type type
+  extend-proto (CoreDispatcher, { inspect, type })
+
+# Override clones' `insepct` methods.
+[EventStream, Property] =
+  map extend-core-dispatcher ['Eventstream', 'Property']
+
+isDispatcher = isFromType CoreDispatcher
+
+# WET.
+extend-core-signal = \type ->
+  inspect = display-signal-type type
+  extend-proto (CoreSignal, { inspect, type })
+
+CoreSignal = create-super-type (display-signal-type, 'core-signal')
+
+Time = extend-core-signal 'Time'
+
+isEventStream = isFromType EventStream
+
+isProperty = isFromType Property
+
+isSignal = \value ->
+  isFromType CoreSignal value || isProperty value
+
+# -------------------------------------------------------------------------
+
+genESOpts = (opts = {}) ->
+  result = parse-opts opts
+  result.proto = EventStream
+  result
+
+parse-opts = \opts ->
+  if function? opts
+    transformDispatch = opts
+  else
+    { mixins, proto, transformDispatch, transformSubscribe } = opts
+
+  mixins             ?= {}
+  proto              ?= CoreDispatcher
+  transformDispatch  ?= identity
+  transformSubscribe ?= identity
+
+  { mixins, proto, transformDispatch, transformSubscribe }
+
+parse-signal-opts = \opts ->
+  if function? opts
+    transformSource = opts
+  else
+    { mixins, proto, transformSource } = opts
+
+  mixins          ?= {}
+  proto           ?= CoreSignal
+  transformSource ?= identity
+
+  { mixins, proto, transformSource }
+
+genPropOpts = (initial-value) -> (opts = {}) ->
+  { mixins, transformDispatch, transformSubscribe } = parse-opts opts
+
+  cached-value = initial-value ?? none
+  ended?       = false
+  proto        = Property
+
+  read = -> cached-value
+  sample = \cell ->
+    sample-N (10, cell)
+  sample-N = (N, cell) ->
+    if DAG-updating?
+      set cell postpone
+      reschedule (-> sample-N (N - 1, cell)) if N > 0
+    else
+      set cell (read ())
+    cell
+  set = \cell \val ->
+    cell.write val
+  write = \value -> cached-value = value
+
+  extend! (mixins, { read, sample, write })
+
+  push-value-thru = \sink \value ->
+    if sink.id then sink (value, sink.id, '?1') else sink (value, '?2', '?2')
+
+  immediately-end = \sink ->
+    # TODO: Refactor the following line.
+    push-value-thru sink end
+    no-op
+
+  _transformDispatch = (dispatch) -> (value, source-id, sid) ->
+    if isEnd value
+      ended? = true
+    else
+      write value
+    dispatch (value, source-id, sid)
+
+  _transformSubscribe = \subscribe \sink ->
+    if isRelevant cached-value
+      push-value-thru sink cached-value
+      if ended? then immediately-end sink else subscribe sink
+    else
+      subscribe sink
+
+  mixins             : mixins
+  proto              : proto
+  transformDispatch  : (• transformDispatch _transformDispatch)
+  transformSubscribe : (• transformSubscribe _transformSubscribe)
+
+$sample = \property ->
+  property.sample (createCell ())
+
+genNonInitPropOpts = genPropOpts none
+
+createEventStream = ; createDispatcherType genESOpts ;
+
+createEventStreamBus = -> createEventStream () fromInternalDispatchOnly 
+
+createNonInitProperty = ; createDispatcherType genNonInitPropOpts ;
+
+createNonInitPropertyBus = ->
+  createNonInitProperty () fromInternalDispatchOnly
+
+createProperty = \initial-value ->
+  ; createDispatcherType genPropOpts (initial-value) ;
+
+createPropertyBus = \initial-value ->
+  createProperty initial-value () fromInternalDispatchOnly
+
+###
+FayeSubscriber = { type: 'faye-subscriber' }
+createFayeSubscriber = \fayeClient \source ->
+  channel = null
+  valid-new-channel? = \value ->
+    ? value && channel != value
+  transformDispatch = (dispatch) -> (value, source-id) ->
+    dispatch (value, source-id) if isEnd value
+    fayeClient.unsubscribe channel if valid-new-channel?
+    channel = value
+    fayeClient.subscribe (channel, dispatch)
+  create-dispatcher-type { proto: FayeSubscriber, transformDispatch } source
+###
+
+# -------------------------------------------------------------------------
+
+fromArray = \array \sink ->
+  available? = true
+  id         = generate-id ()
+  index      = 0
+  length     = array.length
+  unsubscribe = -> available? = false
+
+  register { id, unsubscribe }
+
+  while available?
+    if index < length
+      sink (array[index++], id, "Array-#{id}")
+    else
+      sink (end, id, "Array-#{id}")
+
+  unsubscribe
+
+fromEventTarget = \dom-tgt \event-name \sink ->
+  sub = dom-tgt.addEventListener ?? (dom-tgt.addListener ?? dom-tgt.bind)
+  unsub =
+    dom-tgt.removeEventListener ?? (dom-tgt.removeListener ?? dom-tgt.unbind)
+  sub.call (dom-tgt, event-hame, sink)
+  -> unsub.call (dom-tgt, event-name)
+
+# TODO: Consider renaming parameters.
+fromSourceFunction = (subscribe, unsubscribe) -> (sink) ->
+  unsubscribe ?= return-no-op
+  subscribe sink
+  -> unsubscribe sink
+
+# WET.
+fromCallback = (use-as-callback, stop-using-as-callback) -> (sink) ->
+  stop-using-as-callback ?= return-no-op
+  # Callbacks don't have a source ID.
+  _sink = \val ->
+    sink val
+    sink end
+  use-as-callback _sink
+  -> stop-using-as-callback _sink
+
+fromDispatcher = \dispatcher ->
+  dispatcher.subscribe
+
+fromInternalDispatchOnly = return-no-op
+
+fromMerger = \dispatchers \sink ->
+  subscriptions = []
+  dispatchers.forEach \dispatcher ->
+    subscriptions.push (dispatcher.subscribe sink)
+  -> subscriptions.forEach \unsubscribe -> unsubscribe ()
+
+fromPoll = \transform-sink \delay-duration \sink ->
+  poll-id = setInterval ((transform-sink sink), delay-duration)
+  -> clearInterval poll-id
+
+fromFinitePeriodicSequence = \values ->
+  index = 0
+  len = values.length
+  fromPoll (\sink ->
+    val = values[index]
+    index += 1
+    sink val
+    sink end if index == len
+  )
+
+fromDelayedValue = \value ->
+  fromFinitePeriodicSequence [value]
+
+###
+fromPromise = \promise ->
+  source = \sink ->
+    promise.then sink
+    return-no-op
+  createPointSource source
+###
+
+# -------------------------------------------------------------------------
+
+# What about `id`?
+$dispatch = \dispatcher \value ->
+  dispatcher.dispatch value
+
+# TODO: Consider applying `checkValue` to `arg` if it's a function.
+# `else (-> checkValue identity arg)`
+functionize = (arg, args) ->
+  switch
+    when function? arg
+      if array? args then bind arg args... else arg
+    when keypath? arg
+      \val ->
+        component = get-component (arg.slice 1) val
+        if function? component then apply component args else component
+    when isCell arg
+      if postponed? arg
+        msg = "The function 'functionize' cannot manage suspended cells."
+        throw new Error msg
+      else
+        (-> cytolyse arg)
+    else (-> arg)
+
+blocking = blockTillReady
+
+bind-data = (sink, source-id, sid) -> (val) ->
+  sink (val, source-id, sid)
+
+sink-if-sinkable = (sink) -> (value, sinkable?) ->
+  sink value if isEnd value || sinkable? == true
+
+# `pred value` is checked b/c it's possible that `pred` returns
+# a boolean value (or a potential boolean value) independently of `value`.
+_filtering = \pred \sink \value ->
+  try-10 (sink-if-sinkable sink) (value, (pred value))
+
+filtering = \pred \sink -> (value, source-id, sid) ->
+  _sink = bind-data (sink, source-id, sid)
+  _filtering (checkValue pred) _sink value
+
+_mapping = (sink) -> (original-value, transformed-value) ->
+  if isEnd original-value
+    sink original-value
+  else
+    sink transformed-value
+
+mapping = (arg, args...) ->
+  fn = functionize (arg, args...)
+  (sink) -> (value, source-id, sid) ->
+    _sink = bind-data (sink, source-id, sid)
+    # `fn value` is eagerly determined, but this is ok in most cases.
+    try-10 (_mapping _sink) (value, (fn value)) 
+
+filteringDefined = filtering defined?
+
+filteringNonterminal = \sink -> (value, source-id, sid) ->
+  sink (value, source-id, sid) if nonterminal? value
+
+filteringRelevant = filtering isRelevant
+
+delaying = \delay-duration \sink -> (value, source-id, sid) ->
+  if isEnd value
+    # Should sinking of `end` be delayed too?
+    sink (end, source-id, sid)
+  else
+    setInterval ((-> sink (value, source-id, sid)), delay-duration)
+
+# Perhaps an alias should be `monitoring`?
+flattening = \sink ->
+  subscriptions = []
+  unsub = -> subscriptions.forEach \unsubscribe -> unsubscribe ()
+  (dispatcher, source-id) ->
+    if isEnd dispatcher
+      unsub ()
+      sink (end, source-id)
+    else
+      subscriptions.push (dispatcher.subscribe sink)
+
+monitoringFirst = \sink ->
+  accepting? = true
+  unsub = no-op
+  \dispatcher ->
+    if isEnd dispatcher
+      unsub ()
+      sink end
+    if accepting?
+      accepting? = false
+      unsub = dispatcher.subscribe sink
+
+monitoringLatest = \sink ->
+  unsub = no-op
+  \dispatcher ->
+    if isEnd dispatcher
+      unsub ()
+      sink end
+    else
+      unsub = dispatcher.subscribe sink
+
+permitting-only-one-value = \sink \value ->
+  sink value
+  sink end
+
+reducing = \memo \fn \sink ->
+  cached-value = memo
+  \value ->
+    if nonterminal? value
+      cached-value = fn cached-value value
+    else
+      sink cached-value
+
+staggering = \offset \sink ->
+  cache    = []
+  sinking? = false
+  (value, source-id, sid) ->
+    cache.push [value, source-id, sid]
+    if sinking?
+      args = cache.shift()
+      #sink (cache.shift()...)
+      sink args...
+    else
+      offset   = offset - 1
+      sinking? = offset == 0
+
+taking = \nbr \sink ->
+  iteration = nbr
+  (value, source-id) ->
+    if iteration > 0
+      iteration = iteration - 1
+      sink (value, source-id)
+    else
+      # Should `end` automatically be sunk after last nonterminal value?
+      sink (end, source-id)
+
+stateMachineProcessing = \initial-state \fn \sink \value ->
+  state = initial-state
+  { newState, newValue } = fn state value
+  state = newState
+  sink newValue
+
+scanning = \memo \fn \sink ->
+  cached-value = memo
+  \value ->
+    if isEnd value
+      sink value
+    else
+      cached-value = fn cached-value value
+      sink cached-value
+
+[bfiltering, bfilteringNonterminal, bmapping] = map transbind [
+  filtering, filteringNonterminal, mapping]
+
+fmapD = \dispatcher-factory \fn \dispatcher ->
+  dispatcher-factory (mapping fn) dispatcher.subscribe
+
+$subscribe = \dispatcher \sink ->
+  dispatcher.subscribe sink
+
+_subscribe = \sink \dispatcher ->
+  dispatcher.subscribe sink
+
+# "Dispatch" as a functor.
+# "Dispatch x" represents a context such that "x" shall be dispatched.
+# "fmap f (Dispatch x)" ---> "Dispatch (f x)".
+# "Source" as a different functor, whose context is a set of
+# values to be provided.
+# `remerse Dispatch f Source` ---> "Dispatch (f x), for each x of Source".
+
+# let f be a pointed-set homomorphism from the values provided 
+# by the source to the values that are to be dispatched.
+# let g be a pointed-set action of the type Values → Dispatchers → ?
+# g (f value) dispatcher --->
+
+# No, a dispatcher is like but is not exactly a set acted on by a pointed set.
+# It is a functor that has a member of a pointed set in its context.
+
+merge = \tgt-dispatcher \reactive-values ->
+  each (plug tgt-dispatcher) reactive-values
+
+negating = mapping (\bool -> ! bool)
+
+plug = \tgt-dispatcher \src-dispatcher ->
+  src-dispatcher.subscribe tgt-dispatcher.dispatch
+
+remerse = \dispatcher-factory \fn \source ->
+  _source = if isDispatcher source then source.subscribe else source
+  dispatcher-factory fn _source
+
+transubscribe = \transmerse ->
+  ; _subscribe transmerse ;
+
+$transubscribe = \transmerse \dispatcher ->
+  ; $subscribe (dispatcher) transmerse ;
+
+onFirstAndOnlyValue = transubscribe permitting-only-one-value
+
+onValue = transubscribe filteringNonterminal
+$onValue = $transubscribe filteringNonterminal
+
+# -------------------------------------------------------------------------
+
+createSignalType = (opts = {}) -> (source) ->
+  { mixins, proto, transformSource } = parse-signal-opts opts
+
+  replaceTransform = \new-transform ->
+    transformSource = new-transform
+
+  read = -> transformSource (source ())
+
+  extend-proto (CoreSignal, { read, replaceTransform }, mixins)
+
+# WET.
+createClock = \opts ->
+  error-msg  = 'Clock is not running'
+  offset     = 0
+  start-time = null
+  running?   = false
+
+  current-time = ->
+    new Date ()
+  pause = ->
+    offset += current-time () - start-time
+    running? = false
+    paused
+  read = ->
+    throw new Error error-msg unless running?
+    (current-time () - start-time + offset) / 1000
+  reset = ->
+    running? = false
+    offset = 0
+    inactive
+  restart = ->
+    reset ()
+    start ()
+  start = ->
+    start-time = current-time ()
+    running? = true
+    active
+
+  extend-proto (clock, { pause, read, reset, restart, start })
+
+genSignalOpts = (opts = {}) ->
+
+genTimeOpts = (opts = {}) ->
+  result = parse-signal-opts opts
+  result.proto = Time
+  result
+
+createSignal = • createSignalType genSignalOpts
+
+# WET.
+createTime = • createSignalType genTimeOpts
+
+stepper = \signal \dispatcher ->
+  dispatcher.subscribe signal.replaceTransform
+
+switcher = \signal \dispatcher ->
+  read = \val -> val.read ()
+  dispatcher.subscribe (• signal.replaceTransform read)
+
+# -------------------------------------------------------------------------
+
+fmapS = \signal-factory \fn \readable ->
+  signal-factory (-> fn (readable.read ()))
+
+liftS = \fn \readables ->
+  signal-factory ->
+    readables.reduce (((memo, val) -> memo = memo (val.read ())), fn)
+
+liftS2 = \dyadic-fn \readable1 \readable2 ->
+  signal-factory (-> dyadic-fn (readable1.read ()) (readable2.read ())) 
+
+# -------------------------------------------------------------------------
+
+# The first parameter of `transform` should be a dyadic function.
+connect = \src \tgt \transform ->
+  transform ?= identity
+  new-sink = transform tgt.dispatch
+  # The original subscription id, if any, will be filtered out,
+  # since the following function is dyadic.
+  subscription = (value, source-id) ->
+    new-sink (value, source-id, subscription.id)
+  subscription.id = generate-id ()
+  src.subscribe subscription
+
+# -------------------------------------------------------------------------
+
+FRP = {
+  bfiltering
+  bfilteringNonterminal
+  blocking
+  blockTillReady
+  bmapping
+  checkValue
+  connect
+  createCell
+  createClock
+  createDispatcherType
+  createEventStream
+  createEventStreamBus
+  createNonInitProperty
+  createNonInitPropertyBus
+  createProperty
+  createPropertyBus
+  createSignal
+  createSignalType
+  createTime
+  delaying
+  end
+  filtering
+  filteringDefined
+  filteringNonterminal
+  filteringRelevant
+  flattening
+  fmapD
+  fmapS
+  fromArray
+  fromDelayedValue
+  fromFinitePeriodicSequence
+  fromInternalDispatchOnly
+  fromMerger
+  fromPoll
+  fromSourceFunction
+  frpBind
+  genESOpts
+  genNonInitPropOpts
+  genPropOpts
+  getType
+  isDispatcher
+  isEnd
+  isEventStream
+  isProperty
+  isRelevant
+  mapping
+  merge
+  monitoringFirst
+  monitoringLatest
+  negating
+  none
+  onFirstAndOnlyValue
+  onValue
+  $onValue
+  plug
+  remerse
+  reducing
+  $sample
+  scanning
+  staggering
+  stateMachineProcessing
+  taking
+  transbind
+  transubscribe
+}
+
+if (? define) and (? define['amd'])
+  define ([], -> FRP)
+  this.FRP = FRP
+else if (? module)
+  module.exports = FRP
+  FRP.FRP = FRP
+else
+  this.FRP = FRP

@@ -1,0 +1,29 @@
+{ connect }                     = require './channel-connectors.js'
+{ getEventStream, getProperty } = require './channel-registrar.js'
+{ identity }                    = require '../utilities.js'
+linkTogetherMVC                 = require './linkTogetherMVC.js'
+Pando                           = require '../pando.js'
+{ React }                       = require '../react-module/exports.js'
+
+{ blockTillReady, checkValue, $onValue } = Pando
+
+appState         = getProperty 'app-state'
+APP_DOM_ID       = 'reactive-aspen-app'
+getElementById   = document.getElementById
+node             = getElementById APP_DOM_ID
+renderComponent  = React.renderComponent
+_linkTogetherMVC = checkValue linkTogtherMVC
+TERMINUS         = 'terminus'
+topViewFactory   = getProperty 'top-view-factory'
+
+plugIntoTerminus = \observable ->
+  connect observable TERMINUS identity
+
+resetAppState = \transform ->
+  newAppState = checkValue transform appState
+  component = _linkTogetherMVC (topViewFactory, newAppState)
+  blockTillReady renderComponent (component, node)
+
+$onValue (getEventStream 'terminus') (blockTillReady resetAppState)
+
+module.exports = { plugIntoTerminus }

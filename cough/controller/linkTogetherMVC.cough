@@ -1,0 +1,12 @@
+connectViewToController = require '../adapter/pando-adapter.js'
+{ push }                = require './channel-connectors.js'
+
+appStateChannelName = 'app-state'
+
+linkTogetherMVC = (topViewFactory, appState) ->
+  push appStateChannelName appState    # Connect model and controller.
+  descriptor = topViewFactory appState # Connect model and view.
+  connectViewToController ()           # Connect view and controller.
+  descriptor
+
+module.exports = linkTogetherMVC

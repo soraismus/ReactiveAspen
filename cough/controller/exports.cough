@@ -1,0 +1,20 @@
+{ connect, interpret, plug, push } = require './channel-connectors.js'
+
+{ getDispatcher, getEventStream, getProperty } =
+  require './channel-registrar.js'
+
+linkTogetherMVC = require './linkTogetherMVC.js'
+
+{ plugIntoTerminus } = require './terminus.js'
+
+module.exports = {
+  connect
+  getDispatcher
+  getEventStream
+  getProperty
+  interpret
+  linkTogetherMVC
+  plug
+  plugIntoTerminus
+  push
+}

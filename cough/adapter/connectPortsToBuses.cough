@@ -1,0 +1,40 @@
+{ connect } = require './channel-connectors.js'
+{ connectPort } = require './port-registrar.js'
+{ createNonInitProperty, filtering, remerse } = require '../pando.js'
+
+inputTypes  = ['checkbox', 'password', 'text']
+reactIntake = 'react-intake'
+
+connectInput = \src \tgt ->
+  transform = (sink) -> (capsule, id) ->
+    sink ((getTargetValue capsule), id)
+  connect src tgt (-> transform)
+
+# Limitedly connect the bus with the name 'react-intake' to the `targetBus`.
+connectIntakeToTarget = ([type, label, targetBus]) ->
+  _connect = if input? type then connectInput else connectNonInput
+  _connect (filterIntake (type, label)) targetBus
+
+connectNonInput = \src \tgt ->
+  connect src tgt identity
+
+connectPortsToBuses = \triplets ->
+  each connectIntakeToTarget triplets
+
+filter = \predicate \dispatcher ->  
+  remerseProp (filtering predicate) dispatcher
+
+filterByTypeAndLabel = (sourceBus) -> (type, label) ->
+  filter (\val -> val.type == type && val.label == label) sourceBus
+
+filterIntake = filterByTypeAndLabel (connectPort reactIntake)
+
+getTargetValue = \capsule ->
+  capsule|['event']|['target']|['value']
+
+input? = \capsuleType ->
+  capsuleType in inputTypes
+
+remerseProp = remerse createNonInitProperty
+
+module.exports = connectPortsToBuses 

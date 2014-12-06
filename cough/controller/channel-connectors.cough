@@ -1,0 +1,46 @@
+{ getDispatcher }     = require './channel-registrar.js'
+{ isArray, isString } = './utilities.js'
+pandoConnect          = require('../pando.js').connect
+
+_connect = (src, tgt, transform) ->
+  [_src, _tgt] = [src, tgt].map interpret
+  setAlias _src src
+  setAlias _tgt tgt
+  pandoConnect _src _tgt transform
+
+connect = \sources \targets \thunk ->
+  if isArray sources
+    connectMultiple (sources, targets, thunk ())
+  else
+    connectSingle (sources, targets, thunk ())
+
+connectMultiple = (sources, targets, transforms) ->
+  if isArray targets
+    for tgt, i in targets
+      for src, j in sources
+        connect src tgt (-> transforms[i][j])
+  else
+    for src, i in sources
+      connect src targets (-> transforms[i])
+
+connectSingle = (source, targets, transforms) ->
+  if isArray targets
+    for tgt, i in targets
+      connect source tgt (-> transforms[i])
+  else
+    _connect (source, targets, transforms)
+
+interpret = \value ->
+  if isString value then getDispatcher (value, false) else value
+
+plug = \targets \thunk \sources ->
+  connect sources targets thunk
+
+push = \label \val ->
+  bus = interpret label
+  bus.dispatch (val, bus.id)
+
+setAlias = \bus \val ->
+  bus.setAlias val if isString val
+
+module.exports = { connect, interpret, plug, push }

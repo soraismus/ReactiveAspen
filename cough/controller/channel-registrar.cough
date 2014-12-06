@@ -1,0 +1,67 @@
+{ isArray, isString } = '../utilities.js'
+
+{ createEventStreamBus
+  createNonInitPropertyBus
+  plug
+} = require '../pando.js'
+
+disconnectors = {}
+dispatchers   = {}
+plugs         = {}
+
+deleteBus = \label ->
+  free label
+  delete dispatchers[label]
+  delete plugs[label]
+
+free = \label ->
+  for own key, disconnect of disconnectors[label]
+    disconnect ()
+
+getDispatcher = (label, eventstream?) ->
+  getBus = if eventstream? then getEventStream else getProperty
+  dispatchers[label] || getBus label
+
+matchesExistingDispatcher? = \label ->
+  !! dispatchers[label]
+
+_register = (busFactory, label) ->
+  id = 0
+
+  bus = dispatchers[label] = busFactory ()
+  bus.setAlias label
+
+  load = \observable ->
+    _unplug = plug bus observable
+
+    observable-id = id
+
+    unplug = ->
+      delete disconnectors[label][observable-id]
+      _unplug ()
+
+    disconnectors[label] ?= {}
+    disconnectors[label][observable-id] = unplug
+
+    id += 1
+
+    unplug
+
+  plugs[label] = load
+
+  bus
+
+register = (busFactory) -> (label/s) ->
+  switch
+    when isArray label/s
+      label/s.map (register busFactory)
+    when matchesExistingDispatcher? label/s
+      dispatchers[label/s]
+    else
+      _register (busFactory, label/s)
+
+[getEventStream, getProperty] =
+  [createEventStreamBus, createNonInitPropertyBus].map register
+
+module.exports =
+  { getDispatcher, getEventStream, getProperty }

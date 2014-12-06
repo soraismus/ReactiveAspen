@@ -1,0 +1,42 @@
+ObjProto = Object.prototype
+
+applyUnsplat = (fn) -> (args...) ->
+  apply fn (shallowFlatten args)
+
+hasType? = \type \val ->
+  "[object #{type}]" == toString val
+
+[isFunction, isString] = ['Function', 'String'].map hasType?
+
+isObject = \val ->
+  val == Object val
+
+memoize = (fn, hasher) ->
+  memo = {}
+  hasher = identity unless isFunction hasher
+  (args...) ->
+    key = hasher args...
+    if memo.hasOwnProperty key
+      memo[key]
+    else
+      memo[key] = fn args...
+
+shallowCopy = \val ->
+  copy = {}
+  copy[key] = prop for own key, prop of val
+  copy
+
+shallowFlatten = \array ->
+  nativeConcat.apply ([], array)
+
+toString = \val ->
+  ObjProto.toString.call val
+
+module.exports = {
+  applyUnsplat
+  isFunction
+  isObject
+  isString
+  memoize
+  shallowCopy
+}
