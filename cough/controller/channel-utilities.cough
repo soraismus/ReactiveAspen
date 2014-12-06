@@ -1,4 +1,11 @@
-{ checkValue, mapping, merge, remerse } = require '../pando.js'
+{ checkValue
+  createEventStream
+  createProperty
+  mapping
+  merge
+  remerse
+} = require '../pando.js'
+
 { compose, identity, isArray, useParamListOrArray } = require '../utilities.js' 
 { interpret } = './channel-connectors.js'
 
