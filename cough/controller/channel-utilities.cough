@@ -1,6 +1,6 @@
 { checkValue
   createEventStream
-  createProperty
+  createNonInitProperty
   mapping
   merge
   remerse
