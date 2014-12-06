@@ -1,7 +1,7 @@
-var checkValue, compose, identity, interpret, isArray, mapMapping, mapping, mappingCompose, merge, remerse, remerseES, remerseP, sample, sampling, useParamListOrArray, _merge, _ref, _ref1, _ref2, _remerse,
+var checkValue, compose, createEventStream, createProperty, identity, interpret, isArray, mapMapping, mapping, mappingCompose, merge, remerse, remerseES, remerseP, sample, sampling, useParamListOrArray, _merge, _ref, _ref1, _ref2, _remerse,
   __slice = [].slice;
 
-_ref = require('../pando.js'), checkValue = _ref.checkValue, mapping = _ref.mapping, merge = _ref.merge, remerse = _ref.remerse;
+_ref = require('../pando.js'), checkValue = _ref.checkValue, createEventStream = _ref.createEventStream, createProperty = _ref.createProperty, mapping = _ref.mapping, merge = _ref.merge, remerse = _ref.remerse;
 
 _ref1 = require('../utilities.js'), compose = _ref1.compose, identity = _ref1.identity, isArray = _ref1.isArray, useParamListOrArray = _ref1.useParamListOrArray;
 
