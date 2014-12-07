@@ -66,7 +66,7 @@ _register = function(busFactory, label) {
 register = function(busFactory) {
   return function(label_slash_s) {
     switch (false) {
-      case !isArray(label_slash_s):
+      case !Array.isArray(label_slash_s):
         return label_slash_s.map(register(busFactory));
       case !matchesExistingDispatcher_question_(label_slash_s):
         return dispatchers[label_slash_s];
