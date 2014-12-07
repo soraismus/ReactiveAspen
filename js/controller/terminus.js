@@ -1,4 +1,4 @@
-var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getElementById, getEventStream, getProperty, identity, linkTogetherMVC, node, plugIntoTerminus, renderComponent, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
+var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getElementById, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, renderComponent, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
 
 connect = require('./channel-connectors.js').connect;
 
@@ -18,9 +18,9 @@ appState = getProperty('app-state');
 
 APP_DOM_ID = 'reactive-aspen-app';
 
-getElementById = document.getElementById;
-
-node = getElementById(APP_DOM_ID);
+if (typeof document !== "undefined" && document !== null) {
+  getElementById = document.getElementById;
+}
 
 renderComponent = React.renderComponent;
 
@@ -35,7 +35,8 @@ plugIntoTerminus = function(observable) {
 };
 
 resetAppState = function(transform) {
-  var component, newAppState;
+  var component, newAppState, node;
+  node = getElementById(APP_DOM_ID);
   newAppState = checkValue(transform)(appState);
   component = _linkTogetherMVC(topViewFactory, newAppState);
   return blockTillReady(renderComponent)(component, node);
