@@ -11,7 +11,7 @@ appState         = getProperty 'app-state'
 APP_DOM_ID       = 'reactive-aspen-app'
 getElementById   = document.getElementById if ? document
 renderComponent  = React.renderComponent
-_linkTogetherMVC = checkValue linkTogtherMVC
+_linkTogetherMVC = checkValue linkTogetherMVC
 TERMINUS         = 'terminus'
 topViewFactory   = getProperty 'top-view-factory'
 

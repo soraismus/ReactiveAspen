@@ -24,7 +24,7 @@ if (typeof document !== "undefined" && document !== null) {
 
 renderComponent = React.renderComponent;
 
-_linkTogetherMVC = checkValue(linkTogtherMVC);
+_linkTogetherMVC = checkValue(linkTogetherMVC);
 
 TERMINUS = 'terminus';
 
