@@ -63,5 +63,4 @@ register = (busFactory) -> (label/s) ->
 [getEventStream, getProperty] =
   [createEventStreamBus, createNonInitPropertyBus].map register
 
-module.exports =
-  { getDispatcher, getEventStream, getProperty }
+module.exports = { getDispatcher, getEventStream, getProperty }
