@@ -1,9 +1,9 @@
-var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, isString, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _ref2, _register,
+var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
 
-_ref = '../utilities.js', isArray = _ref.isArray, isString = _ref.isString;
+isArray = '../utilities.js'.isArray;
 
-_ref1 = require('../pando.js'), createEventStreamBus = _ref1.createEventStreamBus, createNonInitPropertyBus = _ref1.createNonInitPropertyBus, plug = _ref1.plug;
+_ref = require('../pando.js'), createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus, plug = _ref.plug;
 
 disconnectors = {};
 
@@ -18,12 +18,12 @@ deleteBus = function(label) {
 };
 
 free = function(label) {
-  var disconnect, key, _ref2, _results;
-  _ref2 = disconnectors[label];
+  var disconnect, key, _ref1, _results;
+  _ref1 = disconnectors[label];
   _results = [];
-  for (key in _ref2) {
-    if (!__hasProp.call(_ref2, key)) continue;
-    disconnect = _ref2[key];
+  for (key in _ref1) {
+    if (!__hasProp.call(_ref1, key)) continue;
+    disconnect = _ref1[key];
     _results.push(disconnect());
   }
   return _results;
@@ -66,7 +66,7 @@ _register = function(busFactory, label) {
 register = function(busFactory) {
   return function(label_slash_s) {
     switch (false) {
-      case !Array.isArray(label_slash_s):
+      case !isArray(label_slash_s):
         return label_slash_s.map(register(busFactory));
       case !matchesExistingDispatcher_question_(label_slash_s):
         return dispatchers[label_slash_s];
@@ -76,7 +76,7 @@ register = function(busFactory) {
   };
 };
 
-_ref2 = [createEventStreamBus, createNonInitPropertyBus].map(register), getEventStream = _ref2[0], getProperty = _ref2[1];
+_ref1 = [createEventStreamBus, createNonInitPropertyBus].map(register), getEventStream = _ref1[0], getProperty = _ref1[1];
 
 module.exports = {
   getDispatcher: getDispatcher,

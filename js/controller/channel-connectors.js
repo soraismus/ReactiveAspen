@@ -2,7 +2,7 @@ var connect, connectMultiple, connectSingle, getDispatcher, interpret, isArray, 
 
 getDispatcher = require('./channel-registrar.js').getDispatcher;
 
-_ref = './utilities.js', isArray = _ref.isArray, isString = _ref.isString;
+_ref = '../utilities.js', isArray = _ref.isArray, isString = _ref.isString;
 
 pandoConnect = require('../pando.js').connect;
 
