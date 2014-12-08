@@ -1,3 +1,5 @@
+{ isArray } = require '../utilities.js'
+
 { createEventStreamBus
   createNonInitPropertyBus
   plug
@@ -51,7 +53,7 @@ _register = (busFactory, label) ->
 
 register = (busFactory) -> (label/s) ->
   switch
-    when Array.isArray label/s
+    when isArray label/s
       label/s.map (register busFactory)
     when matchesExistingDispatcher? label/s
       dispatchers[label/s]
