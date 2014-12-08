@@ -1,7 +1,5 @@
-var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
+var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
-
-isArray = '../utilities.js'.isArray;
 
 _ref = require('../pando.js'), createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus, plug = _ref.plug;
 
@@ -66,7 +64,7 @@ _register = function(busFactory, label) {
 register = function(busFactory) {
   return function(label_slash_s) {
     switch (false) {
-      case !isArray(label_slash_s):
+      case !Array.isArray(label_slash_s):
         return label_slash_s.map(register(busFactory));
       case !matchesExistingDispatcher_question_(label_slash_s):
         return dispatchers[label_slash_s];
