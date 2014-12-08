@@ -1,6 +1,6 @@
-{ getDispatcher }     = require './channel-registrar.js'
-{ isArray, isString } = '../utilities.js'
-pandoConnect          = require('../pando.js').connect
+{ getDispatcher } = require './channel-registrar.js'
+{ isString }      = '../utilities.js'
+pandoConnect      = require('../pando.js').connect
 
 _connect = (src, tgt, transform) ->
   [_src, _tgt] = [src, tgt].map interpret
@@ -9,13 +9,13 @@ _connect = (src, tgt, transform) ->
   pandoConnect _src _tgt transform
 
 connect = \sources \targets \thunk ->
-  if isArray sources
+  if Array.isArray sources
     connectMultiple (sources, targets, thunk ())
   else
     connectSingle (sources, targets, thunk ())
 
 connectMultiple = (sources, targets, transforms) ->
-  if isArray targets
+  if Array.isArray targets
     for tgt, i in targets
       for src, j in sources
         connect src tgt (-> transforms[i][j])
@@ -24,7 +24,7 @@ connectMultiple = (sources, targets, transforms) ->
       connect src targets (-> transforms[i])
 
 connectSingle = (source, targets, transforms) ->
-  if isArray targets
+  if Array.isArray targets
     for tgt, i in targets
       connect source tgt (-> transforms[i])
   else
