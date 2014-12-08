@@ -6,7 +6,7 @@
   remerse
 } = require '../pando.js'
 
-{ compose, identity, isArray, useParamListOrArray } = require '../utilities.js' 
+{ compose, identity, useParamListOrArray } = require '../utilities.js' 
 { interpret } = './channel-connectors.js'
 
 mapMapping = \array ->
