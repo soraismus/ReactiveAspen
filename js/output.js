@@ -2075,9 +2075,9 @@ module.exports = {
 };
 
 },{"./factory-injector.js":17,"./utilities.js":19}],16:[function(_dereq_,module,exports){
-var BUTTON, CHECKBOX, FORM, LINK, PASSWORD, TEXT, a, button, collectAdapters, dollarize, ensureCheckboxProps, ensureLinkProps, ensurePasswordProps, ensureProps, ensureTextProps, form, getAdapter, getInjectedFactory, input, isObject, isString, onChange, onClick, onSubmit, records, shallowCopy, _ref, _ref1;
+var BUTTON, CHECKBOX, FORM, LABEL, LINK, PASSWORD, TEXT, a, button, collectAdapters, dollarize, ensureCheckboxProps, ensureLinkProps, ensurePasswordProps, ensureProps, ensureTextProps, form, getAdapter, getInjectedFactory, input, isObject, isString, label, onChange, onClick, onSubmit, records, shallowCopy, _ref, _ref1;
 
-_ref = _dereq_('./react.js').DOM, a = _ref.a, button = _ref.button, form = _ref.form, input = _ref.input;
+_ref = _dereq_('./react.js').DOM, a = _ref.a, button = _ref.button, form = _ref.form, input = _ref.input, label = _ref.label;
 
 getInjectedFactory = _dereq_('./factory-injector.js').getInjectedFactory;
 
@@ -2090,6 +2090,8 @@ BUTTON = 'button';
 CHECKBOX = 'checkbox';
 
 FORM = 'form';
+
+LABEL = 'label';
 
 LINK = 'link';
 
@@ -2174,7 +2176,7 @@ ensureTextProps = function(val) {
   }
 };
 
-records = [[onClick, ensureProps, button, BUTTON], [onClick, ensureCheckboxProps, input, CHECKBOX], [onSubmit, ensureProps, form, FORM], [onClick, ensureLinkProps, a, LINK], [onChange, ensurePasswordProps, input, PASSWORD], [onChange, ensureTextProps, input, TEXT]];
+records = [[onClick, ensureProps, button, BUTTON], [onClick, ensureCheckboxProps, input, CHECKBOX], [onSubmit, ensureProps, form, FORM], [onClick, ensureProps, label, LABEL], [onClick, ensureLinkProps, a, LINK], [onChange, ensurePasswordProps, input, PASSWORD], [onChange, ensureTextProps, input, TEXT]];
 
 module.exports = collectAdapters({}, records);
 
