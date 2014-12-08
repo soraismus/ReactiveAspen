@@ -17,7 +17,7 @@ _connect = function(src, tgt, transform) {
 connect = function(sources) {
   return function(targets) {
     return function(thunk) {
-      if (Array.isArray(sources)) {
+      if (isArray(sources)) {
         return connectMultiple(sources, targets, thunk());
       } else {
         return connectSingle(sources, targets, thunk());
@@ -28,7 +28,7 @@ connect = function(sources) {
 
 connectMultiple = function(sources, targets, transforms) {
   var i, j, src, tgt, _i, _j, _len, _len1, _results, _results1;
-  if (Array.isArray(targets)) {
+  if (isArray(targets)) {
     _results = [];
     for (i = _i = 0, _len = targets.length; _i < _len; i = ++_i) {
       tgt = targets[i];
@@ -59,7 +59,7 @@ connectMultiple = function(sources, targets, transforms) {
 
 connectSingle = function(source, targets, transforms) {
   var i, tgt, _i, _len, _results;
-  if (Array.isArray(targets)) {
+  if (isArray(targets)) {
     _results = [];
     for (i = _i = 0, _len = targets.length; _i < _len; i = ++_i) {
       tgt = targets[i];
