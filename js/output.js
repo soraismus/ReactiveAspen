@@ -168,17 +168,17 @@ onValue blur bus
 module.exports = _dereq_('../react-module/exports.js').Bridge;
 
 },{"../react-module/exports.js":14}],7:[function(_dereq_,module,exports){
-var connect, connectMultiple, connectSingle, getDispatcher, interpret, isArray, isString, pandoConnect, plug, push, setAlias, _connect, _ref;
+var connect, connectMultiple, connectSingle, getDispatcher, interpret, isString, pandoConnect, plug, push, setAlias, _connect;
 
 getDispatcher = _dereq_('./channel-registrar.js').getDispatcher;
 
-_ref = '../utilities.js', isArray = _ref.isArray, isString = _ref.isString;
+isString = '../utilities.js'.isString;
 
 pandoConnect = _dereq_('../pando.js').connect;
 
 _connect = function(src, tgt, transform) {
-  var _ref1, _src, _tgt;
-  _ref1 = [src, tgt].map(interpret), _src = _ref1[0], _tgt = _ref1[1];
+  var _ref, _src, _tgt;
+  _ref = [src, tgt].map(interpret), _src = _ref[0], _tgt = _ref[1];
   setAlias(_src)(src);
   setAlias(_tgt)(tgt);
   return pandoConnect(_src)(_tgt)(transform);
@@ -187,7 +187,7 @@ _connect = function(src, tgt, transform) {
 connect = function(sources) {
   return function(targets) {
     return function(thunk) {
-      if (isArray(sources)) {
+      if (Array.isArray(sources)) {
         return connectMultiple(sources, targets, thunk());
       } else {
         return connectSingle(sources, targets, thunk());
@@ -198,7 +198,7 @@ connect = function(sources) {
 
 connectMultiple = function(sources, targets, transforms) {
   var i, j, src, tgt, _i, _j, _len, _len1, _results, _results1;
-  if (isArray(targets)) {
+  if (Array.isArray(targets)) {
     _results = [];
     for (i = _i = 0, _len = targets.length; _i < _len; i = ++_i) {
       tgt = targets[i];
@@ -229,7 +229,7 @@ connectMultiple = function(sources, targets, transforms) {
 
 connectSingle = function(source, targets, transforms) {
   var i, tgt, _i, _len, _results;
-  if (isArray(targets)) {
+  if (Array.isArray(targets)) {
     _results = [];
     for (i = _i = 0, _len = targets.length; _i < _len; i = ++_i) {
       tgt = targets[i];
@@ -283,10 +283,8 @@ module.exports = {
 };
 
 },{"../pando.js":13,"./channel-registrar.js":8}],8:[function(_dereq_,module,exports){
-var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
+var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
-
-isArray = '../utilities.js'.isArray;
 
 _ref = _dereq_('../pando.js'), createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus, plug = _ref.plug;
 
@@ -351,7 +349,7 @@ _register = function(busFactory, label) {
 register = function(busFactory) {
   return function(label_slash_s) {
     switch (false) {
-      case !isArray(label_slash_s):
+      case !Array.isArray(label_slash_s):
         return label_slash_s.map(register(busFactory));
       case !matchesExistingDispatcher_question_(label_slash_s):
         return dispatchers[label_slash_s];
