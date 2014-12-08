@@ -1,4 +1,4 @@
-{ a, button, form, input }          = require('./react.js').DOM
+{ a, button, form, input, label }   = require('./react.js').DOM
 { getInjectedFactory }              = require './factory-injector.js'
 { getAdapter }                      = require './adapter-utilities.js'
 { isObject, isString, shallowCopy } = require './utilities.js'
@@ -6,6 +6,7 @@
 BUTTON   = 'button'
 CHECKBOX = 'checkbox'
 FORM     = 'form'
+LABEL    = 'label'
 LINK     = 'link'
 PASSWORD = 'password'
 TEXT     = 'text'
@@ -56,6 +57,7 @@ records = [
   [onClick,  ensureProps,         button, BUTTON  ]
   [onClick,  ensureCheckboxProps, input,  CHECKBOX]
   [onSubmit, ensureProps,         form,   FORM    ]
+  [onClick,  ensureProps,         label,  LABEL   ]
   [onClick,  ensureLinkProps,     a,      LINK    ]
   [onChange, ensurePasswordProps, input,  PASSWORD]
   [onChange, ensureTextProps,     input,  TEXT    ]
