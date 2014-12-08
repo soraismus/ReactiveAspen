@@ -168,17 +168,17 @@ onValue blur bus
 module.exports = _dereq_('../react-module/exports.js').Bridge;
 
 },{"../react-module/exports.js":14}],7:[function(_dereq_,module,exports){
-var connect, connectMultiple, connectSingle, getDispatcher, interpret, isString, pandoConnect, plug, push, setAlias, _connect;
+var connect, connectMultiple, connectSingle, getDispatcher, interpret, isArray, isString, pandoConnect, plug, push, setAlias, _connect, _ref;
 
 getDispatcher = _dereq_('./channel-registrar.js').getDispatcher;
 
-isString = '../utilities.js'.isString;
+_ref = _dereq_('../utilities.js'), isArray = _ref.isArray, isString = _ref.isString;
 
 pandoConnect = _dereq_('../pando.js').connect;
 
 _connect = function(src, tgt, transform) {
-  var _ref, _src, _tgt;
-  _ref = [src, tgt].map(interpret), _src = _ref[0], _tgt = _ref[1];
+  var _ref1, _src, _tgt;
+  _ref1 = [src, tgt].map(interpret), _src = _ref1[0], _tgt = _ref1[1];
   setAlias(_src)(src);
   setAlias(_tgt)(tgt);
   return pandoConnect(_src)(_tgt)(transform);
@@ -282,7 +282,7 @@ module.exports = {
   push: push
 };
 
-},{"../pando.js":13,"./channel-registrar.js":8}],8:[function(_dereq_,module,exports){
+},{"../pando.js":13,"../utilities.js":21,"./channel-registrar.js":8}],8:[function(_dereq_,module,exports){
 var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
 
