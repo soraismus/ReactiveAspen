@@ -1,5 +1,5 @@
 { getDispatcher }     = require './channel-registrar.js'
-{ isArray, isString } = './utilities.js'
+{ isArray, isString } = '../utilities.js'
 pandoConnect          = require('../pando.js').connect
 
 _connect = (src, tgt, transform) ->
