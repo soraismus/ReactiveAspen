@@ -187,7 +187,7 @@ _connect = function(src, tgt, transform) {
 connect = function(sources) {
   return function(targets) {
     return function(thunk) {
-      if (Array.isArray(sources)) {
+      if (isArray(sources)) {
         return connectMultiple(sources, targets, thunk());
       } else {
         return connectSingle(sources, targets, thunk());
@@ -198,7 +198,7 @@ connect = function(sources) {
 
 connectMultiple = function(sources, targets, transforms) {
   var i, j, src, tgt, _i, _j, _len, _len1, _results, _results1;
-  if (Array.isArray(targets)) {
+  if (isArray(targets)) {
     _results = [];
     for (i = _i = 0, _len = targets.length; _i < _len; i = ++_i) {
       tgt = targets[i];
@@ -229,7 +229,7 @@ connectMultiple = function(sources, targets, transforms) {
 
 connectSingle = function(source, targets, transforms) {
   var i, tgt, _i, _len, _results;
-  if (Array.isArray(targets)) {
+  if (isArray(targets)) {
     _results = [];
     for (i = _i = 0, _len = targets.length; _i < _len; i = ++_i) {
       tgt = targets[i];
@@ -283,8 +283,10 @@ module.exports = {
 };
 
 },{"../pando.js":13,"../utilities.js":21,"./channel-registrar.js":8}],8:[function(_dereq_,module,exports){
-var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
+var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
+
+isArray = _dereq_('../utilities.js').isArray;
 
 _ref = _dereq_('../pando.js'), createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus, plug = _ref.plug;
 
@@ -349,7 +351,7 @@ _register = function(busFactory, label) {
 register = function(busFactory) {
   return function(label_slash_s) {
     switch (false) {
-      case !Array.isArray(label_slash_s):
+      case !isArray(label_slash_s):
         return label_slash_s.map(register(busFactory));
       case !matchesExistingDispatcher_question_(label_slash_s):
         return dispatchers[label_slash_s];
@@ -367,7 +369,7 @@ module.exports = {
   getProperty: getProperty
 };
 
-},{"../pando.js":13}],9:[function(_dereq_,module,exports){
+},{"../pando.js":13,"../utilities.js":21}],9:[function(_dereq_,module,exports){
 var connect, getDispatcher, getEventStream, getProperty, interpret, linkTogetherMVC, plug, plugIntoTerminus, push, _ref, _ref1;
 
 _ref = _dereq_('./channel-connectors.js'), connect = _ref.connect, interpret = _ref.interpret, plug = _ref.plug, push = _ref.push;
