@@ -19,7 +19,7 @@ connectNonInput = \src \tgt ->
   connect src tgt identity
 
 connectPortsToBuses = \triplets ->
-  each connectIntakeToTarget triplets
+  triplets.forEach connectIntakeToTarget
 
 filter = \predicate \dispatcher ->  
   remerseProp (filtering predicate) dispatcher
