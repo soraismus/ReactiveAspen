@@ -39,7 +39,7 @@ connectNonInput = function(src) {
 };
 
 connectPortsToBuses = function(triplets) {
-  return each(connectIntakeToTarget)(triplets);
+  return triplets.forEach(connectIntakeToTarget);
 };
 
 filter = function(predicate) {
