@@ -1,11 +1,13 @@
-var connect, connectInput, connectIntakeToTarget, connectNonInput, connectPort, connectPortsToBuses, createNonInitProperty, filter, filterByTypeAndLabel, filterIntake, filtering, getTargetValue, inputTypes, input_question_, reactIntake, remerse, remerseProp, _ref,
+var connect, connectInput, connectIntakeToTarget, connectNonInput, connectPort, connectPortsToBuses, createNonInitProperty, filter, filterByTypeAndLabel, filterIntake, filtering, getTargetValue, identity, inputTypes, input_question_, reactIntake, remerse, remerseProp, _ref,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+_ref = require('../pando.js'), createNonInitProperty = _ref.createNonInitProperty, filtering = _ref.filtering, remerse = _ref.remerse;
 
 connect = require('./channel-connectors.js').connect;
 
 connectPort = require('./port-registrar.js').connectPort;
 
-_ref = require('../pando.js'), createNonInitProperty = _ref.createNonInitProperty, filtering = _ref.filtering, remerse = _ref.remerse;
+identity = require('../utilities.js').identity;
 
 reactIntake = require('./react-intake.js');
 

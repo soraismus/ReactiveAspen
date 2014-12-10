@@ -2,14 +2,16 @@
 module.exports = _dereq_('../controller/channel-connectors.js');
 
 },{"../controller/channel-connectors.js":8}],2:[function(_dereq_,module,exports){
-var connect, connectInput, connectIntakeToTarget, connectNonInput, connectPort, connectPortsToBuses, createNonInitProperty, filter, filterByTypeAndLabel, filterIntake, filtering, getTargetValue, inputTypes, input_question_, reactIntake, remerse, remerseProp, _ref,
+var connect, connectInput, connectIntakeToTarget, connectNonInput, connectPort, connectPortsToBuses, createNonInitProperty, filter, filterByTypeAndLabel, filterIntake, filtering, getTargetValue, identity, inputTypes, input_question_, reactIntake, remerse, remerseProp, _ref,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+_ref = _dereq_('../pando.js'), createNonInitProperty = _ref.createNonInitProperty, filtering = _ref.filtering, remerse = _ref.remerse;
 
 connect = _dereq_('./channel-connectors.js').connect;
 
 connectPort = _dereq_('./port-registrar.js').connectPort;
 
-_ref = _dereq_('../pando.js'), createNonInitProperty = _ref.createNonInitProperty, filtering = _ref.filtering, remerse = _ref.remerse;
+identity = _dereq_('../utilities.js').identity;
 
 reactIntake = _dereq_('./react-intake.js');
 
@@ -75,7 +77,7 @@ remerseProp = remerse(createNonInitProperty);
 
 module.exports = connectPortsToBuses;
 
-},{"../pando.js":14,"./channel-connectors.js":1,"./port-registrar.js":5,"./react-intake.js":7}],3:[function(_dereq_,module,exports){
+},{"../pando.js":14,"../utilities.js":22,"./channel-connectors.js":1,"./port-registrar.js":5,"./react-intake.js":7}],3:[function(_dereq_,module,exports){
 var connectPortsToBuses, connectViewToController;
 
 connectPortsToBuses = _dereq_('./connectPortsToBuses.js');
