@@ -37,6 +37,9 @@ identity = \val ->
 
 isArray = Array.isArray
 
+isObject = \val ->
+  val == Object val
+
 isString = \val ->
   "[object String]" == toString val
 
