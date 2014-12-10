@@ -1,8 +1,9 @@
 { connectTo }   = require './react-bridge.js'
 { connectPort } = require './port-registrar.js'
+reactIntake     = require './react-intake.js'
 
-reactIntake = connectPort 'react-intake'
+reactIntakeBus = connectPort reactIntake
 
-connectViewToController = -> connectTo reactIntake
+connectViewToController = -> connectTo reactIntakeBus
 
 module.exports = connectViewToController
