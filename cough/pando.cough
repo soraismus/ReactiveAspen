@@ -300,7 +300,7 @@ _createDispatcherType = \opts \source ->
   terminated?        = false
 
   alias = id
-  setAlias = \val -> alias = val
+  setAlias = \val -> alias = val # Does NOT reset alias.
 
   activate = call-only-once ->
     # Dispatching `call-only-once` on `(source dispatch)`
