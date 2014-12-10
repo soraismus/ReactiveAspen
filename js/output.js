@@ -22234,13 +22234,20 @@ processKeypath = function(keypath) {
 
 shallowCopy = function(val) {
   var copy, key, prop;
-  copy = {};
-  for (key in val) {
-    if (!__hasProp.call(val, key)) continue;
-    prop = val[key];
-    copy[key] = prop;
+  switch (false) {
+    case !isObject(val):
+      copy = {};
+      for (key in val) {
+        if (!__hasProp.call(val, key)) continue;
+        prop = val[key];
+        copy[key] = prop;
+      }
+      return copy;
+    case !isArray(val):
+      return val.map(identity);
+    default:
+      return val;
   }
-  return copy;
 };
 
 toString = function(val) {
