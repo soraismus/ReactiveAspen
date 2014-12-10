@@ -1,7 +1,9 @@
-{ connect } = require './channel-connectors.js'
-{ connectPort } = require './port-registrar.js'
 { createNonInitProperty, filtering, remerse } = require '../pando.js'
-reactIntake = require './react-intake.js'
+
+{ connect }     = require './channel-connectors.js'
+{ connectPort } = require './port-registrar.js'
+{ identity }    = require '../utilities.js'
+reactIntake     = require './react-intake.js'
 
 inputTypes  = ['checkbox', 'password', 'text']
 
