@@ -1,4 +1,4 @@
-var ObjProto, addComponent, atomicKeypath_question_, compose, compositeRegex, dot, getComponent, getKeys, identity, isArray, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, useParamListOrArray,
+var ObjProto, addComponent, atomicKeypath_question_, compose, compositeRegex, dot, getComponent, getKeys, identity, isArray, isObject, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, useParamListOrArray,
   __hasProp = {}.hasOwnProperty,
   __slice = [].slice;
 
@@ -51,6 +51,10 @@ identity = function(val) {
 };
 
 isArray = Array.isArray;
+
+isObject = function(val) {
+  return val === Object(val);
+};
 
 isString = function(val) {
   return "[object String]" === toString(val);

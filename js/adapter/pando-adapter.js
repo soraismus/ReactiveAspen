@@ -1,13 +1,15 @@
-var connectPort, connectTo, connectViewToController, reactIntake;
+var connectPort, connectTo, connectViewToController, reactIntake, reactIntakeBus;
 
 connectTo = require('./react-bridge.js').connectTo;
 
 connectPort = require('./port-registrar.js').connectPort;
 
-reactIntake = connectPort('react-intake');
+reactIntake = require('./react-intake.js');
+
+reactIntakeBus = connectPort(reactIntake);
 
 connectViewToController = function() {
-  return connectTo(reactIntake);
+  return connectTo(reactIntakeBus);
 };
 
 module.exports = connectViewToController;

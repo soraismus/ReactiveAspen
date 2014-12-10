@@ -5,7 +5,7 @@ _ref = require('../pando.js'), checkValue = _ref.checkValue, createEventStream =
 
 _ref1 = require('../utilities.js'), compose = _ref1.compose, identity = _ref1.identity, useParamListOrArray = _ref1.useParamListOrArray;
 
-interpret = './channel-connectors.js'.interpret;
+interpret = require('./channel-connectors.js').interpret;
 
 mapMapping = function(array) {
   return array.map(mapping);

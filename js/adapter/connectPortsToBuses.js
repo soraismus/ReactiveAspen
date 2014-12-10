@@ -7,9 +7,9 @@ connectPort = require('./port-registrar.js').connectPort;
 
 _ref = require('../pando.js'), createNonInitProperty = _ref.createNonInitProperty, filtering = _ref.filtering, remerse = _ref.remerse;
 
-inputTypes = ['checkbox', 'password', 'text'];
+reactIntake = require('./react-intake.js');
 
-reactIntake = 'react-intake';
+inputTypes = ['checkbox', 'password', 'text'];
 
 connectInput = function(src) {
   return function(tgt) {
