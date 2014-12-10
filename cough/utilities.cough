@@ -23,7 +23,8 @@ atomicKeypath? = \keypath ->
 
 getComponent = (keypath, obj) ->
   if atomicKeypath? keypath
-    shallowCopy obj[keypath]
+    key = keypath.slice 1
+    shallowCopy obj[key]
   else
     [nextKey, nextKeypath] = processKeypath keypath
     return null unless isObject obj[nextKey]
