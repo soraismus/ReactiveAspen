@@ -7,7 +7,7 @@
 } = require '../pando.js'
 
 { compose, identity, useParamListOrArray } = require '../utilities.js' 
-{ interpret } = './channel-connectors.js'
+{ interpret } = require './channel-connectors.js'
 
 mapMapping = \array ->
   array.map mapping
