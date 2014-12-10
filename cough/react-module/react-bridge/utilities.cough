@@ -6,10 +6,8 @@ applyUnsplat = (fn) -> (args...) ->
 hasType? = \type \val ->
   "[object #{type}]" == toString val
 
-[isFunction, isString] = ['Function', 'String'].map hasType?
-
-isObject = \val ->
-  val == Object val
+[isFunction, isObject, isString] =
+  ['Function', 'Object', 'String'].map hasType?
 
 memoize = (fn, hasher) ->
   memo = {}

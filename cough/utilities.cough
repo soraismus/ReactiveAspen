@@ -38,11 +38,10 @@ identity = \val ->
 
 isArray = Array.isArray
 
-isObject = \val ->
-  val == Object val
+hasType? = \type \val ->
+  "[object #{type}]" == toString val
 
-isString = \val ->
-  "[object String]" == toString val
+[isObject, isString] = ['Object', 'String'].map hasType?
 
 processKeypath = \keypath ->
   keypathRegex.exec(keypath).slice(1, 3)
