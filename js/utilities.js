@@ -30,9 +30,10 @@ atomicKeypath_question_ = function(keypath) {
 };
 
 getComponent = function(keypath, obj) {
-  var nextKey, nextKeypath, _ref;
+  var key, nextKey, nextKeypath, _ref;
   if (atomicKeypath_question_(keypath)) {
-    return shallowCopy(obj[keypath]);
+    key = keypath.slice(1);
+    return shallowCopy(obj[key]);
   } else {
     _ref = processKeypath(keypath), nextKey = _ref[0], nextKeypath = _ref[1];
     if (!isObject(obj[nextKey])) {
