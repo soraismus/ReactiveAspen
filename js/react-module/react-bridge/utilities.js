@@ -18,11 +18,7 @@ hasType_question_ = function(type) {
   };
 };
 
-_ref = ['Function', 'String'].map(hasType_question_), isFunction = _ref[0], isString = _ref[1];
-
-isObject = function(val) {
-  return val === Object(val);
-};
+_ref = ['Function', 'Object', 'String'].map(hasType_question_), isFunction = _ref[0], isObject = _ref[1], isString = _ref[2];
 
 memoize = function(fn, hasher) {
   var memo;

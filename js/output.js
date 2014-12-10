@@ -2310,11 +2310,7 @@ hasType_question_ = function(type) {
   };
 };
 
-_ref = ['Function', 'String'].map(hasType_question_), isFunction = _ref[0], isString = _ref[1];
-
-isObject = function(val) {
-  return val === Object(val);
-};
+_ref = ['Function', 'Object', 'String'].map(hasType_question_), isFunction = _ref[0], isObject = _ref[1], isString = _ref[2];
 
 memoize = function(fn, hasher) {
   var memo;
@@ -22172,7 +22168,7 @@ module.exports = warning;
 },{"./emptyFunction":121}]},{},[1])(1)
 });}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],22:[function(_dereq_,module,exports){
-var ObjProto, addComponent, atomicKeypath_question_, compose, compositeRegex, dot, getComponent, getKeys, identity, isArray, isObject, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, useParamListOrArray,
+var ObjProto, addComponent, atomicKeypath_question_, compose, compositeRegex, dot, getComponent, getKeys, hasType_question_, identity, isArray, isObject, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, useParamListOrArray, _ref,
   __hasProp = {}.hasOwnProperty,
   __slice = [].slice;
 
@@ -22227,13 +22223,13 @@ identity = function(val) {
 
 isArray = Array.isArray;
 
-isObject = function(val) {
-  return val === Object(val);
+hasType_question_ = function(type) {
+  return function(val) {
+    return ("[object " + type + "]") === toString(val);
+  };
 };
 
-isString = function(val) {
-  return "[object String]" === toString(val);
-};
+_ref = ['Object', 'String'].map(hasType_question_), isObject = _ref[0], isString = _ref[1];
 
 processKeypath = function(keypath) {
   return keypathRegex.exec(keypath).slice(1, 3);
