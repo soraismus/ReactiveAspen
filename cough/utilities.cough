@@ -48,9 +48,15 @@ processKeypath = \keypath ->
   keypathRegex.exec(keypath).slice(1, 3)
 
 shallowCopy = \val ->
-  copy = {}
-  copy[key] = prop for own key, prop of val
-  copy
+  switch
+    when isObject val
+      copy = {}
+      copy[key] = prop for own key, prop of val
+      copy
+    when isArray val
+      val.map identity
+    else
+      val
 
 toString = \val ->
   ObjProto.toString.call val
