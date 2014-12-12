@@ -1,5 +1,8 @@
+{ blur, preventDefault }        = require './port-utilities.js'
+[_blur, _preventDefault]        = [blur, preventDefault]
 { connectBus }                  = require './port-registrar.js'
-{ getEventStream, getProperty } = require '../controller/channel-registrar.js'
+{ getEventStream, getProperty } = require './channel-registrar.js'
+{ isArray, isObject }           = require '../utilities.js'
 reactIntake                     = require './react-intake.js'
 
 eventStreamRegex = /^\$/
@@ -14,19 +17,27 @@ actAsSwitchboard = \event ->
 connectPortsToBuses = \triplets ->
   triplets.forEach connectIntakeToTarget
 
-connectIntakeToTarget = ([tgtBusLabel, reactViewLabel, type, handler]) ->
+connectIntakeToTarget = \record ->
+  { config, handler, reactViewLabel, tgtBusLabel, type } =
+    interpretRecord record
+
   dispatcher = getDispatcher tgtBusLabel
+
+  manageDispatcher (dispatcher, config)
+
   switches.push
     condition : getFilter (reactViewLabel, type, handler)
     dispatch  : dispatchBy dispatcher
 
 dispatchBy = \bus \capsule ->
-  targetValue = getTargetValue capsule
-  val = if targetValue then targetValue else capsule
-  bus.dispatch (val, bus.id)
+  bus.dispatch ((getDispatchableValue capsule), bus.id)
 
 eventStreamName? = \val ->
   eventStreamRegex.test val
+
+getDispatchableValue = \capsule ->
+  targetValue = getTargetValue capsule
+  if targetValue then targetValue else capsule
 
 getDispatcher = \label ->
   interpret = if eventStreamName? label then getEventStream else getProperty
@@ -39,6 +50,32 @@ getFilter = (label, type, handler) -> (val) ->
 
 getTargetValue = \capsule ->
   capsule|['event']|['target']|['value']
+
+interpretRecord = \record ->
+  if isArray record
+    [tgtBusLabel, reactViewLabel, type, handler, manage?] = record
+
+    if isObject type
+      { blur, preventDefault, handler, type } = type
+    else
+      blur = preventDefault = manage?
+
+  else
+    { handler
+      reactViewLabel
+      blur
+      preventDefault
+      tgtBusLabel
+      type
+    } = record
+
+  config = { doBlur: blur, doPreventDefault: preventDefault }
+  { config, handler, reactViewLabel, tgtBusLabel, type }
+
+manageDispatcher = (dispatcher, config) ->
+  { doBlur, doPreventDefault } = config
+  dispatcher.subscribe _blur if doBlur
+  dispatcher.subscribe _preventDefault if doPreventDefault
 
 reactIntakeBus = connectBus reactIntake
 reactIntakeBus.subscribe actAsSwitchboard
