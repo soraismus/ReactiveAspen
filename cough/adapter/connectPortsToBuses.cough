@@ -30,14 +30,10 @@ connectIntakeToTarget = \record ->
     dispatch  : dispatchBy dispatcher
 
 dispatchBy = \bus \capsule ->
-  bus.dispatch ((getDispatchableValue capsule), bus.id)
+  bus.dispatch (capsule, bus.id)
 
 eventStreamName? = \val ->
   eventStreamRegex.test val
-
-getDispatchableValue = \capsule ->
-  targetValue = getTargetValue capsule
-  if targetValue then targetValue else capsule
 
 getDispatcher = \label ->
   interpret = if eventStreamName? label then getEventStream else getProperty
