@@ -1,4 +1,4 @@
-var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getElementById, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, renderComponent, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
+var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, renderComponent, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
 
 connect = require('./channel-connectors.js').connect;
 
@@ -16,11 +16,7 @@ blockTillReady = Pando.blockTillReady, checkValue = Pando.checkValue, $onValue =
 
 appState = getProperty('app-state');
 
-APP_DOM_ID = 'reactive-aspen-app';
-
-if (typeof document !== "undefined" && document !== null) {
-  getElementById = document.getElementById;
-}
+APP_DOM_ID = 'todoapp';
 
 renderComponent = React.renderComponent;
 
@@ -36,7 +32,7 @@ plugIntoTerminus = function(observable) {
 
 resetAppState = function(transform) {
   var component, newAppState, node;
-  node = getElementById(APP_DOM_ID);
+  node = document.getElementById(APP_DOM_ID);
   newAppState = checkValue(transform)(appState);
   component = _linkTogetherMVC(topViewFactory, newAppState);
   return blockTillReady(renderComponent)(component, node);

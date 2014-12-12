@@ -115,6 +115,7 @@ module.exports = {
   getComponent: getComponent,
   identity: identity,
   isArray: isArray,
+  isObject: isObject,
   isString: isString,
   shallowCopy: shallowCopy,
   useParamListOrArray: useParamListOrArray
