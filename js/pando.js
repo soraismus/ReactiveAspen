@@ -132,7 +132,7 @@ try_hyphen_N_hyphen_times = function(N) {
           });
         }
       } else {
-        return fn.apply(null, fmap(cytolyse)(args));
+        return fn.apply(null, map(cytolyse)(args));
       }
     };
   };
