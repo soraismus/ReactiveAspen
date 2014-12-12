@@ -1,83 +1,75 @@
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.ReactiveAspen=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-module.exports = _dereq_('../controller/channel-connectors.js');
+var actAsSwitchboard, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, reactIntake, reactIntakeBus, switches, _ref;
 
-},{"../controller/channel-connectors.js":8}],2:[function(_dereq_,module,exports){
-var connect, connectInput, connectIntakeToTarget, connectNonInput, connectPort, connectPortsToBuses, createNonInitProperty, filter, filterByTypeAndLabel, filterIntake, filtering, getTargetValue, identity, inputTypes, input_question_, reactIntake, remerse, remerseProp, _ref,
-  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+connectBus = _dereq_('./port-registrar.js').connectBus;
 
-_ref = _dereq_('../pando.js'), createNonInitProperty = _ref.createNonInitProperty, filtering = _ref.filtering, remerse = _ref.remerse;
-
-connect = _dereq_('./channel-connectors.js').connect;
-
-connectPort = _dereq_('./port-registrar.js').connectPort;
-
-identity = _dereq_('../utilities.js').identity;
+_ref = _dereq_('../controller/channel-registrar.js'), getEventStream = _ref.getEventStream, getProperty = _ref.getProperty;
 
 reactIntake = _dereq_('./react-intake.js');
 
-inputTypes = ['checkbox', 'password', 'text'];
+eventStreamRegex = /^\$/;
 
-connectInput = function(src) {
-  return function(tgt) {
-    var transform;
-    transform = function(sink) {
-      return function(capsule, id) {
-        return sink(getTargetValue(capsule), id);
-      };
-    };
-    return connect(src)(tgt)(function() {
-      return transform;
-    });
-  };
-};
+switches = [];
 
-connectIntakeToTarget = function(_arg) {
-  var label, targetBus, type, _connect;
-  type = _arg[0], label = _arg[1], targetBus = _arg[2];
-  _connect = input_question_(type) ? connectInput : connectNonInput;
-  return _connect(filterIntake(type, label))(targetBus);
-};
-
-connectNonInput = function(src) {
-  return function(tgt) {
-    return connect(src)(tgt)(identity);
-  };
+actAsSwitchboard = function(event) {
+  var condition, dispatch, swich, _i, _len;
+  for (_i = 0, _len = switches.length; _i < _len; _i++) {
+    swich = switches[_i];
+    condition = swich.condition, dispatch = swich.dispatch;
+    if (condition(event)) {
+      return dispatch(event);
+    }
+  }
 };
 
 connectPortsToBuses = function(triplets) {
   return triplets.forEach(connectIntakeToTarget);
 };
 
-filter = function(predicate) {
-  return function(dispatcher) {
-    return remerseProp(filtering(predicate))(dispatcher);
+connectIntakeToTarget = function(_arg) {
+  var dispatcher, handler, reactViewLabel, tgtBusLabel, type;
+  tgtBusLabel = _arg[0], reactViewLabel = _arg[1], type = _arg[2], handler = _arg[3];
+  dispatcher = getDispatcher(tgtBusLabel);
+  return switches.push({
+    condition: getFilter(reactViewLabel, type, handler),
+    dispatch: dispatchBy(dispatcher)
+  });
+};
+
+dispatchBy = function(bus) {
+  return function(val) {
+    return bus.dispatch(val, bus.id);
   };
 };
 
-filterByTypeAndLabel = function(sourceBus) {
-  return function(type, label) {
-    return filter(function(val) {
-      return val.type === type && val.label === label;
-    })(sourceBus);
-  };
+eventStreamName_question_ = function(val) {
+  return eventStreamRegex.test(val);
 };
 
-filterIntake = filterByTypeAndLabel(connectPort(reactIntake));
+getDispatcher = function(label) {
+  var interpret;
+  interpret = eventStreamName_question_(label) ? getEventStream : getProperty;
+  return interpret(label);
+};
+
+getFilter = function(label, type, handler) {
+  return function(val) {
+    return val.label === label && (!type || val.type === type) && (!handler || val.handler === handler);
+  };
+};
 
 getTargetValue = function(capsule) {
   var _ref1, _ref2;
   return capsule != null ? (_ref1 = capsule['event']) != null ? (_ref2 = _ref1['target']) != null ? _ref2['value'] : void 0 : void 0 : void 0;
 };
 
-input_question_ = function(capsuleType) {
-  return __indexOf.call(inputTypes, capsuleType) >= 0;
-};
+reactIntakeBus = connectBus(reactIntake);
 
-remerseProp = remerse(createNonInitProperty);
+reactIntakeBus.subscribe(actAsSwitchboard);
 
 module.exports = connectPortsToBuses;
 
-},{"../pando.js":14,"../utilities.js":22,"./channel-connectors.js":1,"./port-registrar.js":5,"./react-intake.js":7}],3:[function(_dereq_,module,exports){
+},{"../controller/channel-registrar.js":8,"./port-registrar.js":4,"./react-intake.js":6}],2:[function(_dereq_,module,exports){
 var connectPortsToBuses, connectViewToController;
 
 connectPortsToBuses = _dereq_('./connectPortsToBuses.js');
@@ -89,7 +81,7 @@ module.exports = {
   connectViewToController: connectViewToController
 };
 
-},{"./connectPortsToBuses.js":2,"./pando-adapter.js":4}],4:[function(_dereq_,module,exports){
+},{"./connectPortsToBuses.js":1,"./pando-adapter.js":3}],3:[function(_dereq_,module,exports){
 var connectPort, connectTo, connectViewToController, reactIntake, reactIntakeBus;
 
 connectTo = _dereq_('./react-bridge.js').connectTo;
@@ -106,8 +98,8 @@ connectViewToController = function() {
 
 module.exports = connectViewToController;
 
-},{"./port-registrar.js":5,"./react-bridge.js":6,"./react-intake.js":7}],5:[function(_dereq_,module,exports){
-var addComponent, connectPort, connectPortComponent, createEventStreamBus, getComponent, getPortComponent, keypaths, portExtension, ports, register, _ref;
+},{"./port-registrar.js":4,"./react-bridge.js":5,"./react-intake.js":6}],4:[function(_dereq_,module,exports){
+var addComponent, busExt, connectBus, connectPort, connectPortComponent, createEventStreamBus, getComponent, getPortComponent, keypaths, portExt, ports, register, _ref, _ref1;
 
 _ref = _dereq_('../utilities.js'), addComponent = _ref.addComponent, getComponent = _ref.getComponent;
 
@@ -117,7 +109,9 @@ keypaths = {};
 
 ports = {};
 
-portExtension = '.port';
+busExt = '.bus';
+
+portExt = '.port';
 
 connectPortComponent = function(extension) {
   return function(keypath) {
@@ -146,9 +140,10 @@ register = function(keypath) {
   return keypaths[keypath] = true;
 };
 
-connectPort = connectPortComponent(portExtension);
+_ref1 = [busExt, portExt].map(connectPortComponent), connectBus = _ref1[0], connectPort = _ref1[1];
 
 module.exports = {
+  connectBus: connectBus,
   connectPort: connectPort
 };
 
@@ -168,13 +163,13 @@ onValue preventDefault bus
 onValue blur bus
  */
 
-},{"../pando.js":14,"../utilities.js":22}],6:[function(_dereq_,module,exports){
+},{"../pando.js":13,"../utilities.js":21}],5:[function(_dereq_,module,exports){
 module.exports = _dereq_('../react-module/exports.js').Bridge;
 
-},{"../react-module/exports.js":15}],7:[function(_dereq_,module,exports){
+},{"../react-module/exports.js":14}],6:[function(_dereq_,module,exports){
 module.exports = '.reactIntake';
 
-},{}],8:[function(_dereq_,module,exports){
+},{}],7:[function(_dereq_,module,exports){
 var connect, connectMultiple, connectSingle, getDispatcher, interpret, isArray, isString, pandoConnect, plug, push, setAlias, _connect, _ref;
 
 getDispatcher = _dereq_('./channel-registrar.js').getDispatcher;
@@ -289,7 +284,7 @@ module.exports = {
   push: push
 };
 
-},{"../pando.js":14,"../utilities.js":22,"./channel-registrar.js":9}],9:[function(_dereq_,module,exports){
+},{"../pando.js":13,"../utilities.js":21,"./channel-registrar.js":8}],8:[function(_dereq_,module,exports){
 var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
 
@@ -376,7 +371,7 @@ module.exports = {
   getProperty: getProperty
 };
 
-},{"../pando.js":14,"../utilities.js":22}],10:[function(_dereq_,module,exports){
+},{"../pando.js":13,"../utilities.js":21}],9:[function(_dereq_,module,exports){
 var connect, getDispatcher, getEventStream, getProperty, interpret, linkTogetherMVC, plug, plugIntoTerminus, push, _ref, _ref1;
 
 _ref = _dereq_('./channel-connectors.js'), connect = _ref.connect, interpret = _ref.interpret, plug = _ref.plug, push = _ref.push;
@@ -399,7 +394,7 @@ module.exports = {
   push: push
 };
 
-},{"./channel-connectors.js":8,"./channel-registrar.js":9,"./linkTogetherMVC.js":11,"./terminus.js":12}],11:[function(_dereq_,module,exports){
+},{"./channel-connectors.js":7,"./channel-registrar.js":8,"./linkTogetherMVC.js":10,"./terminus.js":11}],10:[function(_dereq_,module,exports){
 var appStateChannelName, connectViewToController, linkTogetherMVC, push;
 
 connectViewToController = _dereq_('../adapter/pando-adapter.js');
@@ -418,7 +413,7 @@ linkTogetherMVC = function(topViewFactory, appState) {
 
 module.exports = linkTogetherMVC;
 
-},{"../adapter/pando-adapter.js":4,"./channel-connectors.js":8}],12:[function(_dereq_,module,exports){
+},{"../adapter/pando-adapter.js":3,"./channel-connectors.js":7}],11:[function(_dereq_,module,exports){
 var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getElementById, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, renderComponent, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
 
 connect = _dereq_('./channel-connectors.js').connect;
@@ -469,7 +464,7 @@ module.exports = {
   plugIntoTerminus: plugIntoTerminus
 };
 
-},{"../pando.js":14,"../react-module/exports.js":15,"../utilities.js":22,"./channel-connectors.js":8,"./channel-registrar.js":9,"./linkTogetherMVC.js":11}],13:[function(_dereq_,module,exports){
+},{"../pando.js":13,"../react-module/exports.js":14,"../utilities.js":21,"./channel-connectors.js":7,"./channel-registrar.js":8,"./linkTogetherMVC.js":10}],12:[function(_dereq_,module,exports){
 var Adapter, Bridge, Controller, Pando, React, _ref;
 
 Adapter = _dereq_('./adapter/exports.js');
@@ -488,7 +483,7 @@ module.exports = {
   React: React
 };
 
-},{"./adapter/exports.js":3,"./controller/exports.js":10,"./pando.js":14,"./react-module/exports.js":15}],14:[function(_dereq_,module,exports){
+},{"./adapter/exports.js":2,"./controller/exports.js":9,"./pando.js":13,"./react-module/exports.js":14}],13:[function(_dereq_,module,exports){
 var $dispatch, $onValue, $sample, $subscribe, $transubscribe, CoreCell, CoreDispatcher, CoreSignal, DAG_hyphen_updating_question_, EventStream, FRP, FuncProto, ObjProto, Property, Time, active, any_hyphen_postponement_question_, array_question_, bfiltering, bfilteringNonterminal, bind, bind_hyphen_data, blockTillReady, block_hyphen_N, blocking, bmapping, bracket, call_hyphen_only_hyphen_once, checkValue, clock, connect, createCell, createClock, createDispatcherType, createEventStream, createEventStreamBus, createNonInitProperty, createNonInitPropertyBus, createProperty, createPropertyBus, createSignal, createSignalType, createTime, create_hyphen_singleton, create_hyphen_super_hyphen_type, cytolyse, defined_question_, delaying, display, display_hyphen_cell_hyphen_type, display_hyphen_dispatcher_hyphen_type, display_hyphen_signal_hyphen_type, each, each_hyphen_property, empty_question_, end, endocytate, extend_bang_, extend_hyphen_core_hyphen_dispatcher, extend_hyphen_core_hyphen_signal, extend_hyphen_proto, filtering, filteringDefined, filteringNonterminal, filteringRelevant, flattening, flip, fmapD, fmapS, fromArray, fromCallback, fromDelayedValue, fromDispatcher, fromEventTarget, fromFinitePeriodicSequence, fromInternalDispatchOnly, fromMerger, fromPoll, fromSourceFunction, frpBind, function_question_, functionize, genESOpts, genNonInitPropOpts, genPropOpts, genSignalOpts, genTimeOpts, generate_hyphen_id, getPrototypeOf, getType, get_hyphen_arg_hyphen_array, get_hyphen_initiation_hyphen_status, get_hyphen_key, has_hyphen_postpone_question_, hash_question_, identity, ignoreIrrelevant, inactive, initiating_hyphen_DAG_hyphen_update_question_, isCell, isDispatcher, isEnd, isEventStream, isFromType, isProperty, isRelevant, isSignal, is_hyphen_postpone_question_, liftS, liftS2, map, mapping, merge, monitoringFirst, monitoringLatest, nativeBind, nativeToString, negating, no_hyphen_op, none, nonterminal_question_, object_question_, onFirstAndOnlyValue, onValue, parse_hyphen_opts, parse_hyphen_signal_hyphen_opts, paused, permitting_hyphen_only_hyphen_one_hyphen_value, plug, postpone, postponed_question_, reducing, register, registrar, remerse, removeFromRegistrar, reschedule, reset_hyphen_DAG_hyphen_update_hyphen_process, return_hyphen_no_hyphen_op, sample_hyphen_properties, scanning, seed, sink_hyphen_if_hyphen_sinkable, staggering, stateMachineProcessing, stepper, switcher, taking, transbind, transmit, transubscribe, try_hyphen_10, try_hyphen_N_hyphen_times, _arobase_prototype, _createDispatcherType, _filtering, _mapping, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _subscribe,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2002,7 +1997,7 @@ if ((typeof define !== "undefined" && define !== null) && (define['amd'] != null
   this.FRP = FRP;
 }
 
-},{}],15:[function(_dereq_,module,exports){
+},{}],14:[function(_dereq_,module,exports){
 var Bridge, React, adapters, connectTo;
 
 adapters = _dereq_('./react-bridge/adapters.js');
@@ -2021,7 +2016,7 @@ module.exports = {
   React: React
 };
 
-},{"./react-bridge/adapters.js":17,"./react-bridge/factory-injector.js":18,"./react-bridge/react.js":19}],16:[function(_dereq_,module,exports){
+},{"./react-bridge/adapters.js":16,"./react-bridge/factory-injector.js":17,"./react-bridge/react.js":18}],15:[function(_dereq_,module,exports){
 var getAdapter, getInjectedFactory, getTemplate, handlerRegex, handler_question_, inject, isFunction,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2081,7 +2076,7 @@ module.exports = {
   getAdapter: getAdapter
 };
 
-},{"./factory-injector.js":18,"./utilities.js":20}],17:[function(_dereq_,module,exports){
+},{"./factory-injector.js":17,"./utilities.js":19}],16:[function(_dereq_,module,exports){
 var BUTTON, CHECKBOX, FORM, LABEL, LINK, PASSWORD, TEXT, a, button, collectAdapters, dollarize, ensureCheckboxProps, ensureLinkProps, ensurePasswordProps, ensureProps, ensureTextProps, form, getAdapter, getInjectedFactory, input, isObject, isString, label, onChange, onClick, onSubmit, records, shallowCopy, _ref, _ref1;
 
 _ref = _dereq_('./react.js').DOM, a = _ref.a, button = _ref.button, form = _ref.form, input = _ref.input, label = _ref.label;
@@ -2187,7 +2182,7 @@ records = [[onClick, ensureProps, button, BUTTON], [onClick, ensureCheckboxProps
 
 module.exports = collectAdapters({}, records);
 
-},{"./adapter-utilities.js":16,"./factory-injector.js":18,"./react.js":19,"./utilities.js":20}],18:[function(_dereq_,module,exports){
+},{"./adapter-utilities.js":15,"./factory-injector.js":17,"./react.js":18,"./utilities.js":19}],17:[function(_dereq_,module,exports){
 var connectTo, createInjectable, embedEventInside, exportReactEvents, getCapsule, getInjectedFactory, getWrapper, hasher, isFunction, isString, memoize, shallowCopy, stringify, _getInjectedFactory, _ref, _ref1;
 
 _ref = _dereq_('./utilities.js'), isFunction = _ref.isFunction, isString = _ref.isString, memoize = _ref.memoize, shallowCopy = _ref.shallowCopy;
@@ -2288,10 +2283,10 @@ module.exports = {
   getInjectedFactory: getInjectedFactory
 };
 
-},{"./utilities.js":20}],19:[function(_dereq_,module,exports){
+},{"./utilities.js":19}],18:[function(_dereq_,module,exports){
 module.exports = _dereq_('../react-with-addons.js');
 
-},{"../react-with-addons.js":21}],20:[function(_dereq_,module,exports){
+},{"../react-with-addons.js":20}],19:[function(_dereq_,module,exports){
 var ObjProto, applyUnsplat, hasType_question_, isFunction, isObject, isString, memoize, shallowCopy, shallowFlatten, toString, _ref,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2367,7 +2362,7 @@ module.exports = {
   shallowCopy: shallowCopy
 };
 
-},{}],21:[function(_dereq_,module,exports){
+},{}],20:[function(_dereq_,module,exports){
 (function (global){/**
  * React (with addons) v0.12.0
  */
@@ -22169,7 +22164,7 @@ module.exports = warning;
 
 },{"./emptyFunction":121}]},{},[1])(1)
 });}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],22:[function(_dereq_,module,exports){
+},{}],21:[function(_dereq_,module,exports){
 var ObjProto, addComponent, atomicKeypath_question_, compose, compositeRegex, dot, getComponent, getKeys, hasType_question_, identity, isArray, isObject, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, useParamListOrArray, _ref,
   __hasProp = {}.hasOwnProperty,
   __slice = [].slice;
@@ -22292,6 +22287,6 @@ module.exports = {
   useParamListOrArray: useParamListOrArray
 };
 
-},{}]},{},[13])
-(13)
+},{}]},{},[12])
+(12)
 });
