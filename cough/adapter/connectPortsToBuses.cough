@@ -1,42 +1,44 @@
-{ createNonInitProperty, filtering, remerse } = require '../pando.js'
+{ connectBus }                  = require './port-registrar.js'
+{ getEventStream, getProperty } = require '../controller/channel-registrar.js'
+reactIntake                     = require './react-intake.js'
 
-{ connect }     = require './channel-connectors.js'
-{ connectPort } = require './port-registrar.js'
-{ identity }    = require '../utilities.js'
-reactIntake     = require './react-intake.js'
+eventStreamRegex = /^\$/
 
-inputTypes  = ['checkbox', 'password', 'text']
+switches = []
 
-connectInput = \src \tgt ->
-  transform = (sink) -> (capsule, id) ->
-    sink ((getTargetValue capsule), id)
-  connect src tgt (-> transform)
-
-# Limitedly connect the bus with the name 'react-intake' to the `targetBus`.
-connectIntakeToTarget = ([type, label, targetBus]) ->
-  _connect = if input? type then connectInput else connectNonInput
-  _connect (filterIntake (type, label)) targetBus
-
-connectNonInput = \src \tgt ->
-  connect src tgt identity
+actAsSwitchboard = \event ->
+  for swich in switches
+    { condition, dispatch } = swich
+    return dispatch event if condition event
 
 connectPortsToBuses = \triplets ->
   triplets.forEach connectIntakeToTarget
 
-filter = \predicate \dispatcher ->  
-  remerseProp (filtering predicate) dispatcher
+connectIntakeToTarget = ([tgtBusLabel, reactViewLabel, type, handler]) ->
+  dispatcher = getDispatcher tgtBusLabel
+  switches.push
+    condition : getFilter (reactViewLabel, type, handler)
+    dispatch  : dispatchBy dispatcher
 
-filterByTypeAndLabel = (sourceBus) -> (type, label) ->
-  filter (\val -> val.type == type && val.label == label) sourceBus
+dispatchBy = \bus \val ->
+  bus.dispatch (val, bus.id)
 
-filterIntake = filterByTypeAndLabel (connectPort reactIntake)
+eventStreamName? = \val ->
+  eventStreamRegex.test val
+
+getDispatcher = \label ->
+  interpret = if eventStreamName? label then getEventStream else getProperty
+  interpret label
+
+getFilter = (label, type, handler) -> (val) ->
+  val.label == label &&
+      (!type || val.type == type) &&
+      (!handler || val.handler == handler)
 
 getTargetValue = \capsule ->
   capsule|['event']|['target']|['value']
 
-input? = \capsuleType ->
-  capsuleType in inputTypes
-
-remerseProp = remerse createNonInitProperty
+reactIntakeBus = connectBus reactIntake
+reactIntakeBus.subscribe actAsSwitchboard
 
 module.exports = connectPortsToBuses 
