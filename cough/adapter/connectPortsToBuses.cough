@@ -20,7 +20,9 @@ connectIntakeToTarget = ([tgtBusLabel, reactViewLabel, type, handler]) ->
     condition : getFilter (reactViewLabel, type, handler)
     dispatch  : dispatchBy dispatcher
 
-dispatchBy = \bus \val ->
+dispatchBy = \bus \capsule ->
+  targetValue = getTargetValue capsule
+  val = if targetValue then targetValue else capsule
   bus.dispatch (val, bus.id)
 
 eventStreamName? = \val ->
