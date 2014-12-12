@@ -4,12 +4,14 @@
 keypaths = {}
 ports    = {}
 
-portExtension = '.port'
+busExt  = '.bus'
+portExt = '.port'
 
 connectPortComponent = \extension \keypath ->
   register keypath unless keypaths[keypath]
   getPortComponent (extension, keypath)
 
+# Wny not simpler? Like `ports[label][extension]`?
 getPortComponent = (extension, keypath) ->
   getComponent ((keypath + extension), ports)
 
@@ -20,9 +22,9 @@ register = \keypath ->
   addComponent (keypath, { bus, port }, ports)
   keypaths[keypath] = true
 
-connectPort = connectPortComponent portExtension
+[connectBus, connectPort] = [busExt, portExt].map connectPortComponent
 
-module.exports = { connectPort }
+module.exports = { connectBus, connectPort }
 
 ###
 # This function shouldn't be directly included in this file.
