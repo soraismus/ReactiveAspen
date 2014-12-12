@@ -1,0 +1,7 @@
+blur = \capsule ->
+  capsule.event.target.blur () if capsule.type == 'link'
+
+preventDefault = \capsule ->
+  capsule.event.preventDefault () if capsule.event.preventDefault
+
+module.exports = { blur, preventDefault }
