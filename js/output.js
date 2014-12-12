@@ -37,7 +37,10 @@ connectIntakeToTarget = function(_arg) {
 };
 
 dispatchBy = function(bus) {
-  return function(val) {
+  return function(capsule) {
+    var targetValue, val;
+    targetValue = getTargetValue(capsule);
+    val = targetValue ? targetValue : capsule;
     return bus.dispatch(val, bus.id);
   };
 };
