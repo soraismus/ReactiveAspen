@@ -8,7 +8,7 @@ Pando                           = require '../pando.js'
 { blockTillReady, checkValue, $onValue } = Pando
 
 appState         = getProperty 'app-state'
-APP_DOM_ID       = 'reactive-aspen-app'
+APP_DOM_ID       = 'todoapp'
 getElementById   = document.getElementById if ? document
 renderComponent  = React.renderComponent
 _linkTogetherMVC = checkValue linkTogetherMVC
