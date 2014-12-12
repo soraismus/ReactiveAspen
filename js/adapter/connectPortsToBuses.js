@@ -1,74 +1,69 @@
-var connect, connectInput, connectIntakeToTarget, connectNonInput, connectPort, connectPortsToBuses, createNonInitProperty, filter, filterByTypeAndLabel, filterIntake, filtering, getTargetValue, identity, inputTypes, input_question_, reactIntake, remerse, remerseProp, _ref,
-  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+var actAsSwitchboard, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, reactIntake, reactIntakeBus, switches, _ref;
 
-_ref = require('../pando.js'), createNonInitProperty = _ref.createNonInitProperty, filtering = _ref.filtering, remerse = _ref.remerse;
+connectBus = require('./port-registrar.js').connectBus;
 
-connect = require('./channel-connectors.js').connect;
-
-connectPort = require('./port-registrar.js').connectPort;
-
-identity = require('../utilities.js').identity;
+_ref = require('../controller/channel-registrar.js'), getEventStream = _ref.getEventStream, getProperty = _ref.getProperty;
 
 reactIntake = require('./react-intake.js');
 
-inputTypes = ['checkbox', 'password', 'text'];
+eventStreamRegex = /^\$/;
 
-connectInput = function(src) {
-  return function(tgt) {
-    var transform;
-    transform = function(sink) {
-      return function(capsule, id) {
-        return sink(getTargetValue(capsule), id);
-      };
-    };
-    return connect(src)(tgt)(function() {
-      return transform;
-    });
-  };
-};
+switches = [];
 
-connectIntakeToTarget = function(_arg) {
-  var label, targetBus, type, _connect;
-  type = _arg[0], label = _arg[1], targetBus = _arg[2];
-  _connect = input_question_(type) ? connectInput : connectNonInput;
-  return _connect(filterIntake(type, label))(targetBus);
-};
-
-connectNonInput = function(src) {
-  return function(tgt) {
-    return connect(src)(tgt)(identity);
-  };
+actAsSwitchboard = function(event) {
+  var condition, dispatch, swich, _i, _len;
+  for (_i = 0, _len = switches.length; _i < _len; _i++) {
+    swich = switches[_i];
+    condition = swich.condition, dispatch = swich.dispatch;
+    if (condition(event)) {
+      return dispatch(event);
+    }
+  }
 };
 
 connectPortsToBuses = function(triplets) {
   return triplets.forEach(connectIntakeToTarget);
 };
 
-filter = function(predicate) {
-  return function(dispatcher) {
-    return remerseProp(filtering(predicate))(dispatcher);
+connectIntakeToTarget = function(_arg) {
+  var dispatcher, handler, reactViewLabel, tgtBusLabel, type;
+  tgtBusLabel = _arg[0], reactViewLabel = _arg[1], type = _arg[2], handler = _arg[3];
+  dispatcher = getDispatcher(tgtBusLabel);
+  return switches.push({
+    condition: getFilter(reactViewLabel, type, handler),
+    dispatch: dispatchBy(dispatcher)
+  });
+};
+
+dispatchBy = function(bus) {
+  return function(val) {
+    return bus.dispatch(val, bus.id);
   };
 };
 
-filterByTypeAndLabel = function(sourceBus) {
-  return function(type, label) {
-    return filter(function(val) {
-      return val.type === type && val.label === label;
-    })(sourceBus);
-  };
+eventStreamName_question_ = function(val) {
+  return eventStreamRegex.test(val);
 };
 
-filterIntake = filterByTypeAndLabel(connectPort(reactIntake));
+getDispatcher = function(label) {
+  var interpret;
+  interpret = eventStreamName_question_(label) ? getEventStream : getProperty;
+  return interpret(label);
+};
+
+getFilter = function(label, type, handler) {
+  return function(val) {
+    return val.label === label && (!type || val.type === type) && (!handler || val.handler === handler);
+  };
+};
 
 getTargetValue = function(capsule) {
   var _ref1, _ref2;
   return capsule != null ? (_ref1 = capsule['event']) != null ? (_ref2 = _ref1['target']) != null ? _ref2['value'] : void 0 : void 0 : void 0;
 };
 
-input_question_ = function(capsuleType) {
-  return __indexOf.call(inputTypes, capsuleType) >= 0;
-};
+reactIntakeBus = connectBus(reactIntake);
 
-remerseProp = remerse(createNonInitProperty);
+reactIntakeBus.subscribe(actAsSwitchboard);
 
 module.exports = connectPortsToBuses;
