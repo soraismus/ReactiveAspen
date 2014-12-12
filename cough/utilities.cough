@@ -75,6 +75,7 @@ module.exports = {
   getComponent
   identity
   isArray
+  isObject
   isString
   shallowCopy
   useParamListOrArray
