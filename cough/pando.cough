@@ -94,7 +94,7 @@ try-N-times = (N) -> (fn) -> (args...) ->
   if any-postponement? args
     reschedule (-> try-N-times (N - 1) fn (args...)) if N > 0
   else
-    fn ((fmap cytolyse args)...)
+    fn ((map cytolyse args)...)
 
 # try-10 :: (a -> b) -> (Potential a) -> b
 try-10 = try-N-times 10
