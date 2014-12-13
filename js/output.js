@@ -2,7 +2,7 @@
 module.exports = _dereq_('../controller/channel-registrar.js');
 
 },{"../controller/channel-registrar.js":10}],2:[function(_dereq_,module,exports){
-var actAsSwitchboard, blur, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatchableValue, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, interpretRecord, isArray, isObject, manageDispatcher, preventDefault, reactIntake, reactIntakeBus, switches, _blur, _preventDefault, _ref, _ref1, _ref2, _ref3;
+var actAsSwitchboard, blur, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, interpretRecord, isArray, isObject, manageDispatcher, preventDefault, reactIntake, reactIntakeBus, switches, _blur, _preventDefault, _ref, _ref1, _ref2, _ref3;
 
 _ref = _dereq_('./port-utilities.js'), blur = _ref.blur, preventDefault = _ref.preventDefault;
 
@@ -48,22 +48,12 @@ connectIntakeToTarget = function(record) {
 
 dispatchBy = function(bus) {
   return function(capsule) {
-    return bus.dispatch(getDispatchableValue(capsule), bus.id);
+    return bus.dispatch(capsule, bus.id);
   };
 };
 
 eventStreamName_question_ = function(val) {
   return eventStreamRegex.test(val);
-};
-
-getDispatchableValue = function(capsule) {
-  var targetValue;
-  targetValue = getTargetValue(capsule);
-  if (targetValue) {
-    return targetValue;
-  } else {
-    return capsule;
-  }
 };
 
 getDispatcher = function(label) {
@@ -490,7 +480,7 @@ linkTogetherMVC = function(topViewFactory, appState) {
 module.exports = linkTogetherMVC;
 
 },{"../adapter/pando-adapter.js":4,"./channel-connectors.js":9}],13:[function(_dereq_,module,exports){
-var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, renderComponent, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
+var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, render, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
 
 connect = _dereq_('./channel-connectors.js').connect;
 
@@ -510,7 +500,7 @@ appState = getProperty('app-state');
 
 APP_DOM_ID = 'todoapp';
 
-renderComponent = React.renderComponent;
+render = React.render;
 
 _linkTogetherMVC = checkValue(linkTogetherMVC);
 
@@ -527,7 +517,7 @@ resetAppState = function(transform) {
   node = document.getElementById(APP_DOM_ID);
   newAppState = checkValue(transform)(appState);
   component = _linkTogetherMVC(topViewFactory, newAppState);
-  return blockTillReady(renderComponent)(component, node);
+  return blockTillReady(render)(component, node);
 };
 
 $onValue(getEventStream('terminus'))(blockTillReady(resetAppState));

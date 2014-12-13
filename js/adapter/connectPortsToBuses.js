@@ -1,4 +1,4 @@
-var actAsSwitchboard, blur, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatchableValue, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, interpretRecord, isArray, isObject, manageDispatcher, preventDefault, reactIntake, reactIntakeBus, switches, _blur, _preventDefault, _ref, _ref1, _ref2, _ref3;
+var actAsSwitchboard, blur, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, interpretRecord, isArray, isObject, manageDispatcher, preventDefault, reactIntake, reactIntakeBus, switches, _blur, _preventDefault, _ref, _ref1, _ref2, _ref3;
 
 _ref = require('./port-utilities.js'), blur = _ref.blur, preventDefault = _ref.preventDefault;
 
@@ -44,22 +44,12 @@ connectIntakeToTarget = function(record) {
 
 dispatchBy = function(bus) {
   return function(capsule) {
-    return bus.dispatch(getDispatchableValue(capsule), bus.id);
+    return bus.dispatch(capsule, bus.id);
   };
 };
 
 eventStreamName_question_ = function(val) {
   return eventStreamRegex.test(val);
-};
-
-getDispatchableValue = function(capsule) {
-  var targetValue;
-  targetValue = getTargetValue(capsule);
-  if (targetValue) {
-    return targetValue;
-  } else {
-    return capsule;
-  }
 };
 
 getDispatcher = function(label) {

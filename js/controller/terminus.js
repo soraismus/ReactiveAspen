@@ -1,4 +1,4 @@
-var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, renderComponent, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
+var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, render, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
 
 connect = require('./channel-connectors.js').connect;
 
@@ -18,7 +18,7 @@ appState = getProperty('app-state');
 
 APP_DOM_ID = 'todoapp';
 
-renderComponent = React.renderComponent;
+render = React.render;
 
 _linkTogetherMVC = checkValue(linkTogetherMVC);
 
@@ -35,7 +35,7 @@ resetAppState = function(transform) {
   node = document.getElementById(APP_DOM_ID);
   newAppState = checkValue(transform)(appState);
   component = _linkTogetherMVC(topViewFactory, newAppState);
-  return blockTillReady(renderComponent)(component, node);
+  return blockTillReady(render)(component, node);
 };
 
 $onValue(getEventStream('terminus'))(blockTillReady(resetAppState));
