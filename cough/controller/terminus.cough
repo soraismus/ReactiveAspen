@@ -9,7 +9,7 @@ Pando                           = require '../pando.js'
 
 appState         = getProperty 'app-state'
 APP_DOM_ID       = 'todoapp'
-renderComponent  = React.renderComponent
+render           = React.render
 _linkTogetherMVC = checkValue linkTogetherMVC
 TERMINUS         = 'terminus'
 topViewFactory   = getProperty 'top-view-factory'
@@ -18,10 +18,10 @@ plugIntoTerminus = \observable ->
   connect observable TERMINUS identity
 
 resetAppState = \transform ->
-  node = document.getElementById APP_DOM_ID
+  node        = document.getElementById APP_DOM_ID
   newAppState = checkValue transform appState
-  component = _linkTogetherMVC (topViewFactory, newAppState)
-  blockTillReady renderComponent (component, node)
+  component   = _linkTogetherMVC (topViewFactory, newAppState)
+  blockTillReady render (component, node)
 
 $onValue (getEventStream 'terminus') (blockTillReady resetAppState)
 
