@@ -27,7 +27,9 @@ TERMINUS = 'terminus';
 topViewFactory = getProperty('top-view-factory');
 
 plugIntoTerminus = function(observable) {
-  return connect(observable)(TERMINUS)(identity);
+  return connect(observable)(TERMINUS)(function() {
+    return identity;
+  });
 };
 
 resetAppState = function(transform) {
