@@ -14,8 +14,14 @@ _linkTogetherMVC = checkValue linkTogetherMVC
 TERMINUS         = 'terminus'
 topViewFactory   = getProperty 'top-view-factory'
 
+# Rewrite to use pando directly.
 plugIntoTerminus = \observable ->
-  connect observable TERMINUS identity
+  connect observable TERMINUS (-> identity)
+
+# connectToTerminus = \observable \thunk ->
+#   connect observable TERMINUS thunk
+# mapToTerminus = \observable \thunk ->
+#   connect observable TERMINUS (-> mapping (thunk ()))
 
 resetAppState = \transform ->
   node        = document.getElementById APP_DOM_ID
