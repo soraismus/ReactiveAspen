@@ -79,6 +79,7 @@ continuate p f = case p of Identity x -> f x
 
 # Akin to `Bacon.combineWith`.
 # TODO: Devise new name for this function.
+# Perhaps a good alternative name might be 'asyncDo'.
 checkValue = (fn) -> (args...) ->
   endocytate (
     10
