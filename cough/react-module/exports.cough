@@ -1,7 +1,4 @@
-adapters      = require './react-bridge/adapters.js'
-{ connectTo } = require './react-bridge/factory-injector.js'
-React         = require './react-bridge/react.js'
-
-Bridge = { adapters, connectTo }
+Bridge = require './react-bridge/exports.js'
+React  = require './react-bridge/react.js'
 
 module.exports = { Bridge, React }
