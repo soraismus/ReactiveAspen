@@ -16,6 +16,9 @@ getAdapter = \record ->
 getTemplate = (defaultEventType, ensureProps, reactFactory) ->
   _inject = inject (defaultEventType, ensureProps)
 
+  # TODO: Consider adding a 'type' property to the inner function,
+  # a property that is a string so that React interprets it as an
+  # ordinary 'ReactDOMComponent'.
   (getHandlerForType) -> (props, components...) ->
     newProps = _inject (getHandlerForType, props)
     reactFactory (newProps, components...)
