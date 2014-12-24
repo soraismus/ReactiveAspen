@@ -2,17 +2,17 @@
 { getEventStream, getProperty } = require './channel-registrar.js'
 { identity }                    = require '../utilities.js'
 linkTogetherMVC                 = require './linkTogetherMVC.js'
-Pando                           = require '../pando.js'
-{ React }                       = require '../react-module/exports.js'
+{ render }                      = require('../react-module/exports.js').React
 
-{ blockTillReady, checkValue, $onValue } = Pando
+{ blockTillReady, checkValue, $onValue } = require '../pando.js'
 
-appState         = getProperty 'app-state'
-APP_DOM_ID       = 'todoapp'
-render           = React.render
-_linkTogetherMVC = checkValue linkTogetherMVC
+[appNodeId, appState, topViewFactory] =
+  ['app-node-id', 'app-state', 'top-view-factory'].map getProperty
+
+doAsync          = checkValue
+_getElementById  = doAsync (document.getElementById.bind document)
+_linkTogetherMVC = doAsync linkTogetherMVC
 TERMINUS         = 'terminus'
-topViewFactory   = getProperty 'top-view-factory'
 
 # Rewrite to use pando directly.
 plugIntoTerminus = \observable ->
@@ -24,8 +24,8 @@ plugIntoTerminus = \observable ->
 #   connect observable TERMINUS (-> mapping (thunk ()))
 
 resetAppState = \transform ->
-  node        = document.getElementById APP_DOM_ID
-  newAppState = checkValue transform appState
+  node        = _getElementById appNodeId
+  newAppState = doAsync transform appState
   component   = _linkTogetherMVC (topViewFactory, newAppState)
   blockTillReady render (component, node)
 
