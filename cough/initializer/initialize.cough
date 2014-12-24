@@ -1,0 +1,12 @@
+{ connectPortsToBuses }   = require '../adapter/exports.js'
+{ linkTogetherMVC, push } = require '../controller/exports.js'
+{ render }                = require('../react-module/exports.js').React
+
+initialize = (appNodeID, topViewFactory, initialAppState, viewImports) ->
+  push 'app-node-id' appNodeID
+  push 'top-view-factory' topViewFactory
+  topReactDescriptor = linkTogetherMVC (topViewFactory, initialAppState)
+  render (topReactDescriptor, (document.getElementById appNodeID))
+  connectPortsToBuses viewImports
+
+module.exports = initialize
