@@ -1,15 +1,8 @@
-var Bridge, React, adapters, connectTo;
+var Bridge, React;
 
-adapters = require('./react-bridge/adapters.js');
-
-connectTo = require('./react-bridge/factory-injector.js').connectTo;
+Bridge = require('./react-bridge/exports.js');
 
 React = require('./react-bridge/react.js');
-
-Bridge = {
-  adapters: adapters,
-  connectTo: connectTo
-};
 
 module.exports = {
   Bridge: Bridge,

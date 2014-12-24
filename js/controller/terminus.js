@@ -1,4 +1,4 @@
-var $onValue, APP_DOM_ID, Pando, React, TERMINUS, appState, blockTillReady, checkValue, connect, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, render, resetAppState, topViewFactory, _linkTogetherMVC, _ref;
+var $onValue, TERMINUS, appNodeId, appState, blockTillReady, checkValue, connect, doAsync, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, render, resetAppState, topViewFactory, _getElementById, _linkTogetherMVC, _ref, _ref1, _ref2;
 
 connect = require('./channel-connectors.js').connect;
 
@@ -8,23 +8,19 @@ identity = require('../utilities.js').identity;
 
 linkTogetherMVC = require('./linkTogetherMVC.js');
 
-Pando = require('../pando.js');
+render = require('../react-module/exports.js').React.render;
 
-React = require('../react-module/exports.js').React;
+_ref1 = require('../pando.js'), blockTillReady = _ref1.blockTillReady, checkValue = _ref1.checkValue, $onValue = _ref1.$onValue;
 
-blockTillReady = Pando.blockTillReady, checkValue = Pando.checkValue, $onValue = Pando.$onValue;
+_ref2 = ['app-node-id', 'app-state', 'top-view-factory'].map(getProperty), appNodeId = _ref2[0], appState = _ref2[1], topViewFactory = _ref2[2];
 
-appState = getProperty('app-state');
+doAsync = checkValue;
 
-APP_DOM_ID = 'todoapp';
+_getElementById = doAsync(document.getElementById.bind(document));
 
-render = React.render;
-
-_linkTogetherMVC = checkValue(linkTogetherMVC);
+_linkTogetherMVC = doAsync(linkTogetherMVC);
 
 TERMINUS = 'terminus';
-
-topViewFactory = getProperty('top-view-factory');
 
 plugIntoTerminus = function(observable) {
   return connect(observable)(TERMINUS)(function() {
@@ -34,8 +30,8 @@ plugIntoTerminus = function(observable) {
 
 resetAppState = function(transform) {
   var component, newAppState, node;
-  node = document.getElementById(APP_DOM_ID);
-  newAppState = checkValue(transform)(appState);
+  node = _getElementById(appNodeId);
+  newAppState = doAsync(transform)(appState);
   component = _linkTogetherMVC(topViewFactory, newAppState);
   return blockTillReady(render)(component, node);
 };

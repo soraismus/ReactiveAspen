@@ -1,9 +1,9 @@
-var createClass, encapsulateInfo, getInjectedFactory, sensitiveRenderMixin, sensitize, template,
+var createClass, createFactory, encapsulateInfo, getInjectedFactory, sensitiveRenderMixin, sensitize, template, _ref,
   __slice = [].slice;
 
 getInjectedFactory = require('./factory-injector.js').getInjectedFactory;
 
-createClass = require('../react-with-addons.js').createClass;
+_ref = require('../react-with-addons.js'), createClass = _ref.createClass, createFactory = _ref.createFactory;
 
 encapsulateInfo = function(state) {
   return {
@@ -45,12 +45,12 @@ template = function(getHandlerForType) {
       var args, properties;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       properties = {
-        mixins: [senstiveRenderMixin(getHandlerForType)],
+        mixins: [sensitiveRenderMixin(getHandlerForType)],
         render: function() {
           return factory.apply(null, args);
         }
       };
-      return createClass(properties)();
+      return createFactory(createClass(properties))();
     };
   };
 };
