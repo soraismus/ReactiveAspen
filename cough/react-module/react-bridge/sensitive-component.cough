@@ -1,13 +1,12 @@
-{ getInjectedFactory } = require './factory-injector.js'
-{ createClass }        = require '../react-with-addons.js'
+{ getInjectedFactory }         = require './factory-injector.js'
+{ createClass, createFactory } = require '../react-with-addons.js'
 
 encapsulateInfo = \state ->
   { component: this, state }
 
 sensitiveRenderMixin = \getHandlerForType ->
   trigger = \state ->
-    getHandlerForType 'onStateChange' (
-      encapsulateInfo state)
+    getHandlerForType 'onStateChange' (encapsulateInfo state)
 
   componentDidMount         : -> trigger 'didMount'
   componentDidUpdate        : -> trigger 'didUpdate'
@@ -18,9 +17,9 @@ sensitiveRenderMixin = \getHandlerForType ->
 
 template = (getHandlerForType) -> (factory) -> (args...) ->
   properties =
-    mixins : [senstiveRenderMixin getHandlerForType]
+    mixins : [sensitiveRenderMixin getHandlerForType]
     render : -> factory args...
-  createClass properties ()
+  createFactory (createClass properties) ()
 
 sensitize = getInjectedFactory (template, 'sensitive')
 
