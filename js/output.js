@@ -115,7 +115,7 @@ reactIntakeBus.subscribe(actAsSwitchboard);
 
 module.exports = connectPortsToBuses;
 
-},{"../utilities.js":27,"./channel-registrar.js":1,"./port-registrar.js":5,"./port-utilities.js":6,"./react-intake.js":8}],3:[function(_dereq_,module,exports){
+},{"../utilities.js":29,"./channel-registrar.js":1,"./port-registrar.js":5,"./port-utilities.js":6,"./react-intake.js":8}],3:[function(_dereq_,module,exports){
 var connectPortsToBuses, connectViewToController;
 
 connectPortsToBuses = _dereq_('./connectPortsToBuses.js');
@@ -209,7 +209,7 @@ onValue preventDefault bus
 onValue blur bus
  */
 
-},{"../pando.js":17,"../utilities.js":27}],6:[function(_dereq_,module,exports){
+},{"../pando.js":17,"../utilities.js":29}],6:[function(_dereq_,module,exports){
 var blur, preventDefault;
 
 blur = function(capsule) {
@@ -350,7 +350,7 @@ module.exports = {
   push: push
 };
 
-},{"../pando.js":17,"../utilities.js":27,"./channel-registrar.js":10}],10:[function(_dereq_,module,exports){
+},{"../pando.js":17,"../utilities.js":29,"./channel-registrar.js":10}],10:[function(_dereq_,module,exports){
 var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
 
@@ -437,7 +437,7 @@ module.exports = {
   getProperty: getProperty
 };
 
-},{"../pando.js":17,"../utilities.js":27}],11:[function(_dereq_,module,exports){
+},{"../pando.js":17,"../utilities.js":29}],11:[function(_dereq_,module,exports){
 var connect, getDispatcher, getEventStream, getProperty, interpret, linkTogetherMVC, plug, plugIntoTerminus, push, _ref, _ref1;
 
 _ref = _dereq_('./channel-connectors.js'), connect = _ref.connect, interpret = _ref.interpret, plug = _ref.plug, push = _ref.push;
@@ -524,12 +524,12 @@ module.exports = {
   plugIntoTerminus: plugIntoTerminus
 };
 
-},{"../pando.js":17,"../react-module/exports.js":18,"../utilities.js":27,"./channel-connectors.js":9,"./channel-registrar.js":10,"./linkTogetherMVC.js":12}],14:[function(_dereq_,module,exports){
-var Adapter, Bridge, Controller, Initializer, Pando, React, _ref;
+},{"../pando.js":17,"../react-module/exports.js":18,"../utilities.js":29,"./channel-connectors.js":9,"./channel-registrar.js":10,"./linkTogetherMVC.js":12}],14:[function(_dereq_,module,exports){
+var Adapter, Bridge, Controller, Initializer, Mixins, Pando, React, _ref;
 
 Adapter = _dereq_('./adapter/exports.js');
 
-_ref = _dereq_('./react-module/exports.js'), Bridge = _ref.Bridge, React = _ref.React;
+_ref = _dereq_('./react-module/exports.js'), Bridge = _ref.Bridge, Mixins = _ref.Mixins, React = _ref.React;
 
 Controller = _dereq_('./controller/exports.js');
 
@@ -542,6 +542,7 @@ module.exports = {
   Bridge: Bridge,
   Controller: Controller,
   Initializer: Initializer,
+  Mixins: Mixins,
   Pando: Pando,
   React: React
 };
@@ -2090,18 +2091,21 @@ if ((typeof define !== "undefined" && define !== null) && (define['amd'] != null
 }
 
 },{}],18:[function(_dereq_,module,exports){
-var Bridge, React;
+var Bridge, Mixins, React;
 
 Bridge = _dereq_('./react-bridge/exports.js');
+
+Mixins = _dereq_('./react-mixins/exports.js');
 
 React = _dereq_('./react-bridge/react.js');
 
 module.exports = {
   Bridge: Bridge,
+  Mixins: Mixins,
   React: React
 };
 
-},{"./react-bridge/exports.js":21,"./react-bridge/react.js":23}],19:[function(_dereq_,module,exports){
+},{"./react-bridge/exports.js":21,"./react-bridge/react.js":23,"./react-mixins/exports.js":27}],19:[function(_dereq_,module,exports){
 var getAdapter, getInjectedFactory, getTemplate, handlerRegex, handler_question_, inject, isFunction,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2386,7 +2390,7 @@ module.exports = {
 },{"./utilities.js":25}],23:[function(_dereq_,module,exports){
 module.exports = _dereq_('../react-with-addons.js');
 
-},{"../react-with-addons.js":26}],24:[function(_dereq_,module,exports){
+},{"../react-with-addons.js":28}],24:[function(_dereq_,module,exports){
 var createClass, createFactory, encapsulateInfo, getInjectedFactory, sensitiveRenderMixin, sensitize, template, _ref,
   __slice = [].slice;
 
@@ -2394,52 +2398,67 @@ getInjectedFactory = _dereq_('./factory-injector.js').getInjectedFactory;
 
 _ref = _dereq_('../react-with-addons.js'), createClass = _ref.createClass, createFactory = _ref.createFactory;
 
-encapsulateInfo = function(state) {
+encapsulateInfo = function(component, state) {
   return {
-    component: this,
+    component: component,
     state: state
   };
 };
 
 sensitiveRenderMixin = function(getHandlerForType) {
   var trigger;
-  trigger = function(state) {
-    return getHandlerForType('onStateChange')(encapsulateInfo(state));
+  trigger = function(component, state) {
+    return getHandlerForType('onStateChange')(encapsulateInfo(component, state));
   };
   return {
     componentDidMount: function() {
-      return trigger('didMount');
+      return trigger(this, 'didMount');
     },
     componentDidUpdate: function() {
-      return trigger('didUpdate');
+      return trigger(this, 'didUpdate');
     },
     componentWillMount: function() {
-      return trigger('willMount');
+      return trigger(this, 'willMount');
     },
     componentWillReceiveProps: function() {
-      return trigger('willReceiveProps');
+      return trigger(this, 'willReceiveProps');
     },
     componentWillUnmount: function() {
-      return trigger('willUnmount');
+      return trigger(this, 'willUnmount');
     },
     componentWillUpdate: function() {
-      return trigger('willUpdate');
+      return trigger(this, 'willUpdate');
     }
   };
 };
 
 template = function(getHandlerForType) {
-  return function(factory) {
+  return function() {
+    var DOMFactory, getComponents, getDOMProps, mixins, sensitiveFactory, sensitiveProps, _DOMProps, _components;
+    DOMFactory = arguments[0], mixins = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    _components = null;
+    _DOMProps = null;
+    getComponents = function() {
+      return _components;
+    };
+    getDOMProps = function() {
+      return _DOMProps;
+    };
+    sensitiveProps = {
+      mixins: mixins.concat([sensitiveRenderMixin(getHandlerForType)]),
+      render: function() {
+        return DOMFactory.apply(null, [getDOMProps()].concat(__slice.call(getComponents())));
+      }
+    };
+    sensitiveFactory = createFactory(createClass(sensitiveProps));
     return function() {
-      var args, properties;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      properties = {
-        mixins: [sensitiveRenderMixin(getHandlerForType)],
-        render: function() {
-          return factory.apply(null, args);
-        }
-      };
-      return createFactory(createClass(properties))();
+      var DOMProps, components;
+      DOMProps = arguments[0], components = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      sensitiveProps = DOMProps.sensitiveProps;
+      delete DOMProps.sensitiveProps;
+      _DOMProps = DOMProps;
+      _components = components;
+      return sensitiveFactory(sensitiveProps);
     };
   };
 };
@@ -2448,7 +2467,7 @@ sensitize = getInjectedFactory(template, 'sensitive');
 
 module.exports = sensitize;
 
-},{"../react-with-addons.js":26,"./factory-injector.js":22}],25:[function(_dereq_,module,exports){
+},{"../react-with-addons.js":28,"./factory-injector.js":22}],25:[function(_dereq_,module,exports){
 var ObjProto, applyUnsplat, hasType_question_, isFunction, isObject, isString, memoize, shallowCopy, shallowFlatten, toString, _ref,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2525,6 +2544,49 @@ module.exports = {
 };
 
 },{}],26:[function(_dereq_,module,exports){
+/**
+ * Derivative of source code copyrighted by Facebook.
+ * The original source code is licensed under Facebook's BSD-style license.
+ *
+ * @providesModule AutoPostFocusMixin
+ */
+
+"use strict";
+
+/**
+ * @param {DOMElement} node input/textarea to focus
+ */
+function focusPostNode(node) {
+  // IE8 can throw "Can't move focus to the control because it is invisible,
+  // not enabled, or of a type that does not accept the focus." for all kinds of
+  // reasons that are too expensive and fragile to test.
+  try {
+    node.focus();
+    node.setSelectionRange(node.value.length, node.value.length);
+  } catch(e) {
+  }
+}
+
+var AutoPostFocusMixin = {
+  componentDidMount: function() {
+    if (this.props.autoPostFocus) {
+      focusPostNode(this.getDOMNode());
+    }
+  }
+};
+
+module.exports = AutoPostFocusMixin;
+
+},{}],27:[function(_dereq_,module,exports){
+var AutoPostFocusMixin;
+
+AutoPostFocusMixin = _dereq_('./AutoPostFocusMixin.js');
+
+module.exports = {
+  AutoPostFocusMixin: AutoPostFocusMixin
+};
+
+},{"./AutoPostFocusMixin.js":26}],28:[function(_dereq_,module,exports){
 (function (global){/**
  * React (with addons) v0.12.0
  */
@@ -9057,7 +9119,6 @@ var ReactCompositeComponentMixin = {
         transaction,
         mountDepth
       );
-      console.log('mountComponent');
       this._compositeLifeCycleState = CompositeLifeCycle.MOUNTING;
 
       if (this.__reactAutoBindMap) {
@@ -9113,7 +9174,6 @@ var ReactCompositeComponentMixin = {
    * @internal
    */
   unmountComponent: function() {
-    console.log('unmountComponent');
     this._compositeLifeCycleState = CompositeLifeCycle.UNMOUNTING;
     if (this.componentWillUnmount) {
       this.componentWillUnmount();
@@ -9149,7 +9209,6 @@ var ReactCompositeComponentMixin = {
    * @protected
    */
   setState: function(partialState, callback) {
-    console.log('setState partialState', partialState);
     ("production" !== "development" ? invariant(
       typeof partialState === 'object' || partialState == null,
       'setState(...): takes an object of state variables to update.'
@@ -9181,7 +9240,6 @@ var ReactCompositeComponentMixin = {
    * @protected
    */
   replaceState: function(completeState, callback) {
-    console.log('replaceState completeState', completeState);
     validateLifeCycleOnReplaceState(this);
     this._pendingState = completeState;
     if (this._compositeLifeCycleState !== CompositeLifeCycle.MOUNTING) {
@@ -9267,7 +9325,6 @@ var ReactCompositeComponentMixin = {
    * @private
    */
   _processProps: function(newProps) {
-    console.log('_processProps newProps', newProps);
     if ("production" !== "development") {
       var propTypes = this.constructor.propTypes;
       if (propTypes) {
@@ -9312,7 +9369,6 @@ var ReactCompositeComponentMixin = {
    * @internal
    */
   performUpdateIfNecessary: function(transaction) {
-    console.log('performUpdateIfNecessary');
     var compositeLifeCycleState = this._compositeLifeCycleState;
     // Do not trigger a state transition if we are in the middle of mounting or
     // receiving props because both of those will already be doing this.
@@ -9352,7 +9408,6 @@ var ReactCompositeComponentMixin = {
       !this.shouldComponentUpdate ||
       this.shouldComponentUpdate(nextProps, nextState, nextContext);
 
-    console.log('shouldUpdate', shouldUpdate);
     if ("production" !== "development") {
       if (typeof shouldUpdate === "undefined") {
         console.warn(
@@ -9405,8 +9460,6 @@ var ReactCompositeComponentMixin = {
     nextContext,
     transaction
   ) {
-    console.log('_performComponentUpdate nextElement', nextElement,
-                'nextProps', nextProps, 'nextState', nextState);
     var prevElement = this._currentElement;
     var prevProps = this.props;
     var prevState = this.state;
@@ -9439,7 +9492,6 @@ var ReactCompositeComponentMixin = {
   },
 
   receiveComponent: function(nextElement, transaction) {
-    console.log('receiveComponent nextElement', nextElement);
     if (nextElement === this._currentElement &&
         nextElement._owner != null) {
       // Since elements are immutable after the owner is rendered,
@@ -9466,7 +9518,7 @@ var ReactCompositeComponentMixin = {
    * Sophisticated clients may wish to override this.
    *
    * @param {ReactReconcileTransaction} transaction
-   * @param {ReactEljement} prevElement
+   * @param {ReactElement} prevElement
    * @internal
    * @overridable
    */
@@ -9474,7 +9526,6 @@ var ReactCompositeComponentMixin = {
     'ReactCompositeComponent',
     'updateComponent',
     function(transaction, prevParentElement) {
-      console.log('updateComponent prevParentElement', prevParentElement);
       ReactComponent.Mixin.updateComponent.call(
         this,
         transaction,
@@ -9523,7 +9574,6 @@ var ReactCompositeComponentMixin = {
    * @protected
    */
   forceUpdate: function(callback) {
-    console.log('forceUpdate');
     var compositeLifeCycleState = this._compositeLifeCycleState;
     ("production" !== "development" ? invariant(
       this.isMounted() ||
@@ -22337,9 +22387,8 @@ if ("production" !== "development") {
 module.exports = warning;
 
 },{"./emptyFunction":121}]},{},[1])(1)
-});
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],27:[function(_dereq_,module,exports){
+});}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],29:[function(_dereq_,module,exports){
 var ObjProto, addComponent, atomicKeypath_question_, compose, compositeRegex, dot, getComponent, getKeys, hasType_question_, identity, isArray, isObject, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, useParamListOrArray, _ref,
   __hasProp = {}.hasOwnProperty,
   __slice = [].slice;

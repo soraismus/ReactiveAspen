@@ -1,8 +1,8 @@
-var Adapter, Bridge, Controller, Initializer, Pando, React, _ref;
+var Adapter, Bridge, Controller, Initializer, Mixins, Pando, React, _ref;
 
 Adapter = require('./adapter/exports.js');
 
-_ref = require('./react-module/exports.js'), Bridge = _ref.Bridge, React = _ref.React;
+_ref = require('./react-module/exports.js'), Bridge = _ref.Bridge, Mixins = _ref.Mixins, React = _ref.React;
 
 Controller = require('./controller/exports.js');
 
@@ -15,6 +15,7 @@ module.exports = {
   Bridge: Bridge,
   Controller: Controller,
   Initializer: Initializer,
+  Mixins: Mixins,
   Pando: Pando,
   React: React
 };

@@ -6530,7 +6530,6 @@ var ReactCompositeComponentMixin = {
         transaction,
         mountDepth
       );
-      console.log('mountComponent');
       this._compositeLifeCycleState = CompositeLifeCycle.MOUNTING;
 
       if (this.__reactAutoBindMap) {
@@ -6586,7 +6585,6 @@ var ReactCompositeComponentMixin = {
    * @internal
    */
   unmountComponent: function() {
-    console.log('unmountComponent');
     this._compositeLifeCycleState = CompositeLifeCycle.UNMOUNTING;
     if (this.componentWillUnmount) {
       this.componentWillUnmount();
@@ -6622,7 +6620,6 @@ var ReactCompositeComponentMixin = {
    * @protected
    */
   setState: function(partialState, callback) {
-    console.log('setState partialState', partialState);
     ("production" !== "development" ? invariant(
       typeof partialState === 'object' || partialState == null,
       'setState(...): takes an object of state variables to update.'
@@ -6654,7 +6651,6 @@ var ReactCompositeComponentMixin = {
    * @protected
    */
   replaceState: function(completeState, callback) {
-    console.log('replaceState completeState', completeState);
     validateLifeCycleOnReplaceState(this);
     this._pendingState = completeState;
     if (this._compositeLifeCycleState !== CompositeLifeCycle.MOUNTING) {
@@ -6740,7 +6736,6 @@ var ReactCompositeComponentMixin = {
    * @private
    */
   _processProps: function(newProps) {
-    console.log('_processProps newProps', newProps);
     if ("production" !== "development") {
       var propTypes = this.constructor.propTypes;
       if (propTypes) {
@@ -6785,7 +6780,6 @@ var ReactCompositeComponentMixin = {
    * @internal
    */
   performUpdateIfNecessary: function(transaction) {
-    console.log('performUpdateIfNecessary');
     var compositeLifeCycleState = this._compositeLifeCycleState;
     // Do not trigger a state transition if we are in the middle of mounting or
     // receiving props because both of those will already be doing this.
@@ -6825,7 +6819,6 @@ var ReactCompositeComponentMixin = {
       !this.shouldComponentUpdate ||
       this.shouldComponentUpdate(nextProps, nextState, nextContext);
 
-    console.log('shouldUpdate', shouldUpdate);
     if ("production" !== "development") {
       if (typeof shouldUpdate === "undefined") {
         console.warn(
@@ -6878,8 +6871,6 @@ var ReactCompositeComponentMixin = {
     nextContext,
     transaction
   ) {
-    console.log('_performComponentUpdate nextElement', nextElement,
-                'nextProps', nextProps, 'nextState', nextState);
     var prevElement = this._currentElement;
     var prevProps = this.props;
     var prevState = this.state;
@@ -6912,7 +6903,6 @@ var ReactCompositeComponentMixin = {
   },
 
   receiveComponent: function(nextElement, transaction) {
-    console.log('receiveComponent nextElement', nextElement);
     if (nextElement === this._currentElement &&
         nextElement._owner != null) {
       // Since elements are immutable after the owner is rendered,
@@ -6939,7 +6929,7 @@ var ReactCompositeComponentMixin = {
    * Sophisticated clients may wish to override this.
    *
    * @param {ReactReconcileTransaction} transaction
-   * @param {ReactEljement} prevElement
+   * @param {ReactElement} prevElement
    * @internal
    * @overridable
    */
@@ -6947,7 +6937,6 @@ var ReactCompositeComponentMixin = {
     'ReactCompositeComponent',
     'updateComponent',
     function(transaction, prevParentElement) {
-      console.log('updateComponent prevParentElement', prevParentElement);
       ReactComponent.Mixin.updateComponent.call(
         this,
         transaction,
@@ -6996,7 +6985,6 @@ var ReactCompositeComponentMixin = {
    * @protected
    */
   forceUpdate: function(callback) {
-    console.log('forceUpdate');
     var compositeLifeCycleState = this._compositeLifeCycleState;
     ("production" !== "development" ? invariant(
       this.isMounted() ||
