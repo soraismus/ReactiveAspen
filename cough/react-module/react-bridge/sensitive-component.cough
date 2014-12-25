@@ -1,25 +1,40 @@
 { getInjectedFactory }         = require './factory-injector.js'
 { createClass, createFactory } = require '../react-with-addons.js'
 
-encapsulateInfo = \state ->
-  { component: this, state }
+encapsulateInfo = (component, state) ->
+  { component, state }
 
 sensitiveRenderMixin = \getHandlerForType ->
-  trigger = \state ->
-    getHandlerForType 'onStateChange' (encapsulateInfo state)
+  trigger = (component, state) ->
+    getHandlerForType 'onStateChange' (encapsulateInfo (component, state))
 
-  componentDidMount         : -> trigger 'didMount'
-  componentDidUpdate        : -> trigger 'didUpdate'
-  componentWillMount        : -> trigger 'willMount'
-  componentWillReceiveProps : -> trigger 'willReceiveProps'
-  componentWillUnmount      : -> trigger 'willUnmount'
-  componentWillUpdate       : -> trigger 'willUpdate'
+  componentDidMount         : -> trigger (this, 'didMount')
+  componentDidUpdate        : -> trigger (this, 'didUpdate')
+  componentWillMount        : -> trigger (this, 'willMount')
+  componentWillReceiveProps : -> trigger (this, 'willReceiveProps')
+  componentWillUnmount      : -> trigger (this, 'willUnmount')
+  componentWillUpdate       : -> trigger (this, 'willUpdate')
 
-template = (getHandlerForType) -> (factory) -> (args...) ->
-  properties =
-    mixins : [sensitiveRenderMixin getHandlerForType]
-    render : -> factory args...
-  createFactory (createClass properties) ()
+template = (getHandlerForType) -> (DOMFactory, mixins...) ->
+  _components   = null
+  _DOMProps     = null
+  getComponents = -> _components
+  getDOMProps   = -> _DOMProps
+
+  sensitiveProps =
+    mixins : mixins.concat([sensitiveRenderMixin getHandlerForType])
+    render : -> DOMFactory (getDOMProps(), getComponents()...)
+
+  sensitiveFactory = createFactory (createClass sensitiveProps)
+
+  (DOMProps, components...) ->
+    { sensitiveProps } = DOMProps
+    delete DOMProps.sensitiveProps
+
+    _DOMProps   = DOMProps
+    _components = components
+
+    sensitiveFactory sensitiveProps
 
 sensitize = getInjectedFactory (template, 'sensitive')
 
