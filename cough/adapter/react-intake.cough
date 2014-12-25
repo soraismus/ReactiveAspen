@@ -1,1 +1,2 @@
+# '.reactIntake' is the keypath for the ReactIntake port.
 module.exports = '.reactIntake'
