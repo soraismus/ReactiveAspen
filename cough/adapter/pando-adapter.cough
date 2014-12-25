@@ -2,6 +2,7 @@
 { connectPort } = require './port-registrar.js'
 reactIntake     = require './react-intake.js'
 
+# TODO: Use simpler semi-global-state storage system.
 reactIntakeBus = connectPort reactIntake
 
 connectViewToController = -> connectTo reactIntakeBus
