@@ -1,7 +1,7 @@
 { blur, preventDefault }        = require './port-utilities.js'
 [_blur, _preventDefault]        = [blur, preventDefault]
 { connectBus }                  = require './port-registrar.js'
-{ getEventStream, getProperty } = require './channel-registrar.js'
+{ getEventStream, getProperty } = require '../controller/exports.js'
 { isArray, isObject }           = require '../utilities.js'
 reactIntake                     = require './react-intake.js'
 

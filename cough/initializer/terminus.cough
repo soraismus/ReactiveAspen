@@ -1,10 +1,9 @@
-{ connect }                     = require './channel-connectors.js'
-{ getEventStream, getProperty } = require './channel-registrar.js'
-{ identity }                    = require '../utilities.js'
-linkTogetherMVC                 = require './linkTogetherMVC.js'
-{ render }                      = require('../react-module/exports.js').React
-
 { blockTillReady, checkValue, $onValue } = require '../pando.js'
+{ connect, getEventStream, getProperty } = require '../controller/exports.js'
+
+{ identity }    = require '../utilities.js'
+linkTogetherMVC = require './linkTogetherMVC.js'
+{ render }      = require('../react-module/exports.js').React
 
 [appNodeId, appState, topViewFactory] =
   ['app-node-id', 'app-state', 'top-view-factory'].map getProperty

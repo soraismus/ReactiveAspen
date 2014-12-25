@@ -1,5 +1,5 @@
-connectViewToController = require '../adapter/pando-adapter.js'
-{ push }                = require './channel-connectors.js'
+{ connectViewToController } = require '../adapter/exports.js'
+{ push }                    = require '../controller/exports.js'
 
 appStateChannelName = 'app-state'
 
