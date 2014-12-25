@@ -45,19 +45,3 @@ module.exports = {
   connectBus: connectBus,
   connectPort: connectPort
 };
-
-
-/*
- * This function shouldn't be directly included in this file.
-blur = \capsule ->
-  capsule.event.target.blur () if capsule.type == 'link'
-
- * This function shouldn't be directly included in this file.
-preventDefault = \capsule ->
-  capsule.event.preventDefault () if capsule.event.preventDefault
-
- * These subscriptions perhaps shouldn't be directly included here.
- * As a side effect, these two subscriptions activate the principal bus.
-onValue preventDefault bus
-onValue blur bus
- */

@@ -6,7 +6,7 @@ _ref1 = [blur, preventDefault], _blur = _ref1[0], _preventDefault = _ref1[1];
 
 connectBus = require('./port-registrar.js').connectBus;
 
-_ref2 = require('./channel-registrar.js'), getEventStream = _ref2.getEventStream, getProperty = _ref2.getProperty;
+_ref2 = require('../controller/exports.js'), getEventStream = _ref2.getEventStream, getProperty = _ref2.getProperty;
 
 _ref3 = require('../utilities.js'), isArray = _ref3.isArray, isObject = _ref3.isObject;
 

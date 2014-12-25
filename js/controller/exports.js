@@ -1,12 +1,8 @@
-var connect, getDispatcher, getEventStream, getProperty, interpret, linkTogetherMVC, plug, plugIntoTerminus, push, _ref, _ref1;
+var connect, getDispatcher, getEventStream, getProperty, interpret, plug, push, _ref, _ref1;
 
 _ref = require('./channel-connectors.js'), connect = _ref.connect, interpret = _ref.interpret, plug = _ref.plug, push = _ref.push;
 
 _ref1 = require('./channel-registrar.js'), getDispatcher = _ref1.getDispatcher, getEventStream = _ref1.getEventStream, getProperty = _ref1.getProperty;
-
-linkTogetherMVC = require('./linkTogetherMVC.js');
-
-plugIntoTerminus = require('./terminus.js').plugIntoTerminus;
 
 module.exports = {
   connect: connect,
@@ -14,8 +10,6 @@ module.exports = {
   getEventStream: getEventStream,
   getProperty: getProperty,
   interpret: interpret,
-  linkTogetherMVC: linkTogetherMVC,
   plug: plug,
-  plugIntoTerminus: plugIntoTerminus,
   push: push
 };

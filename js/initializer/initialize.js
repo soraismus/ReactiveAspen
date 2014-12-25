@@ -1,8 +1,10 @@
-var connectPortsToBuses, initialize, linkTogetherMVC, push, render, _ref;
+var connectPortsToBuses, initialize, linkTogetherMVC, push, render;
 
 connectPortsToBuses = require('../adapter/exports.js').connectPortsToBuses;
 
-_ref = require('../controller/exports.js'), linkTogetherMVC = _ref.linkTogetherMVC, push = _ref.push;
+linkTogetherMVC = require('./linkTogetherMVC.js');
+
+push = require('../controller/exports.js').push;
 
 render = require('../react-module/exports.js').React.render;
 

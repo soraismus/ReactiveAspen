@@ -1,7 +1,4 @@
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.ReactiveAspen=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-module.exports = _dereq_('../controller/channel-registrar.js');
-
-},{"../controller/channel-registrar.js":10}],2:[function(_dereq_,module,exports){
 var actAsSwitchboard, blur, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, interpretRecord, isArray, isObject, manageDispatcher, preventDefault, reactIntake, reactIntakeBus, switches, _blur, _preventDefault, _ref, _ref1, _ref2, _ref3;
 
 _ref = _dereq_('./port-utilities.js'), blur = _ref.blur, preventDefault = _ref.preventDefault;
@@ -10,7 +7,7 @@ _ref1 = [blur, preventDefault], _blur = _ref1[0], _preventDefault = _ref1[1];
 
 connectBus = _dereq_('./port-registrar.js').connectBus;
 
-_ref2 = _dereq_('./channel-registrar.js'), getEventStream = _ref2.getEventStream, getProperty = _ref2.getProperty;
+_ref2 = _dereq_('../controller/exports.js'), getEventStream = _ref2.getEventStream, getProperty = _ref2.getProperty;
 
 _ref3 = _dereq_('../utilities.js'), isArray = _ref3.isArray, isObject = _ref3.isObject;
 
@@ -115,7 +112,7 @@ reactIntakeBus.subscribe(actAsSwitchboard);
 
 module.exports = connectPortsToBuses;
 
-},{"../utilities.js":29,"./channel-registrar.js":1,"./port-registrar.js":5,"./port-utilities.js":6,"./react-intake.js":8}],3:[function(_dereq_,module,exports){
+},{"../controller/exports.js":10,"../utilities.js":28,"./port-registrar.js":4,"./port-utilities.js":5,"./react-intake.js":7}],2:[function(_dereq_,module,exports){
 var connectPortsToBuses, connectViewToController;
 
 connectPortsToBuses = _dereq_('./connectPortsToBuses.js');
@@ -127,7 +124,7 @@ module.exports = {
   connectViewToController: connectViewToController
 };
 
-},{"./connectPortsToBuses.js":2,"./pando-adapter.js":4}],4:[function(_dereq_,module,exports){
+},{"./connectPortsToBuses.js":1,"./pando-adapter.js":3}],3:[function(_dereq_,module,exports){
 var connectPort, connectTo, connectViewToController, reactIntake, reactIntakeBus;
 
 connectTo = _dereq_('./react-bridge.js').connectTo;
@@ -144,7 +141,7 @@ connectViewToController = function() {
 
 module.exports = connectViewToController;
 
-},{"./port-registrar.js":5,"./react-bridge.js":7,"./react-intake.js":8}],5:[function(_dereq_,module,exports){
+},{"./port-registrar.js":4,"./react-bridge.js":6,"./react-intake.js":7}],4:[function(_dereq_,module,exports){
 var addComponent, busExt, connectBus, connectPort, connectPortComponent, createEventStreamBus, getComponent, getPortComponent, keypaths, portExt, ports, register, _ref, _ref1;
 
 _ref = _dereq_('../utilities.js'), addComponent = _ref.addComponent, getComponent = _ref.getComponent;
@@ -193,23 +190,7 @@ module.exports = {
   connectPort: connectPort
 };
 
-
-/*
- * This function shouldn't be directly included in this file.
-blur = \capsule ->
-  capsule.event.target.blur () if capsule.type == 'link'
-
- * This function shouldn't be directly included in this file.
-preventDefault = \capsule ->
-  capsule.event.preventDefault () if capsule.event.preventDefault
-
- * These subscriptions perhaps shouldn't be directly included here.
- * As a side effect, these two subscriptions activate the principal bus.
-onValue preventDefault bus
-onValue blur bus
- */
-
-},{"../pando.js":17,"../utilities.js":29}],6:[function(_dereq_,module,exports){
+},{"../pando.js":16,"../utilities.js":28}],5:[function(_dereq_,module,exports){
 var blur, preventDefault;
 
 blur = function(capsule) {
@@ -229,13 +210,13 @@ module.exports = {
   preventDefault: preventDefault
 };
 
-},{}],7:[function(_dereq_,module,exports){
+},{}],6:[function(_dereq_,module,exports){
 module.exports = _dereq_('../react-module/exports.js').Bridge;
 
-},{"../react-module/exports.js":18}],8:[function(_dereq_,module,exports){
+},{"../react-module/exports.js":17}],7:[function(_dereq_,module,exports){
 module.exports = '.reactIntake';
 
-},{}],9:[function(_dereq_,module,exports){
+},{}],8:[function(_dereq_,module,exports){
 var connect, connectMultiple, connectSingle, getDispatcher, interpret, isArray, isString, pandoConnect, plug, push, setAlias, _connect, _ref;
 
 getDispatcher = _dereq_('./channel-registrar.js').getDispatcher;
@@ -350,7 +331,7 @@ module.exports = {
   push: push
 };
 
-},{"../pando.js":17,"../utilities.js":29,"./channel-registrar.js":10}],10:[function(_dereq_,module,exports){
+},{"../pando.js":16,"../utilities.js":28,"./channel-registrar.js":9}],9:[function(_dereq_,module,exports){
 var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
 
@@ -437,16 +418,12 @@ module.exports = {
   getProperty: getProperty
 };
 
-},{"../pando.js":17,"../utilities.js":29}],11:[function(_dereq_,module,exports){
-var connect, getDispatcher, getEventStream, getProperty, interpret, linkTogetherMVC, plug, plugIntoTerminus, push, _ref, _ref1;
+},{"../pando.js":16,"../utilities.js":28}],10:[function(_dereq_,module,exports){
+var connect, getDispatcher, getEventStream, getProperty, interpret, plug, push, _ref, _ref1;
 
 _ref = _dereq_('./channel-connectors.js'), connect = _ref.connect, interpret = _ref.interpret, plug = _ref.plug, push = _ref.push;
 
 _ref1 = _dereq_('./channel-registrar.js'), getDispatcher = _ref1.getDispatcher, getEventStream = _ref1.getEventStream, getProperty = _ref1.getProperty;
-
-linkTogetherMVC = _dereq_('./linkTogetherMVC.js');
-
-plugIntoTerminus = _dereq_('./terminus.js').plugIntoTerminus;
 
 module.exports = {
   connect: connect,
@@ -454,18 +431,73 @@ module.exports = {
   getEventStream: getEventStream,
   getProperty: getProperty,
   interpret: interpret,
-  linkTogetherMVC: linkTogetherMVC,
   plug: plug,
-  plugIntoTerminus: plugIntoTerminus,
   push: push
 };
 
-},{"./channel-connectors.js":9,"./channel-registrar.js":10,"./linkTogetherMVC.js":12,"./terminus.js":13}],12:[function(_dereq_,module,exports){
+},{"./channel-connectors.js":8,"./channel-registrar.js":9}],11:[function(_dereq_,module,exports){
+var Adapter, Bridge, Controller, Initializer, Mixins, Pando, React, _ref;
+
+Adapter = _dereq_('./adapter/exports.js');
+
+_ref = _dereq_('./react-module/exports.js'), Bridge = _ref.Bridge, Mixins = _ref.Mixins, React = _ref.React;
+
+Controller = _dereq_('./controller/exports.js');
+
+Initializer = _dereq_('./initializer/exports.js');
+
+Pando = _dereq_('./pando.js');
+
+module.exports = {
+  Adapter: Adapter,
+  Bridge: Bridge,
+  Controller: Controller,
+  Initializer: Initializer,
+  Mixins: Mixins,
+  Pando: Pando,
+  React: React
+};
+
+},{"./adapter/exports.js":2,"./controller/exports.js":10,"./initializer/exports.js":12,"./pando.js":16,"./react-module/exports.js":17}],12:[function(_dereq_,module,exports){
+var initialize, plugIntoTerminus;
+
+initialize = _dereq_('./initialize.js');
+
+plugIntoTerminus = _dereq_('./terminus.js').plugIntoTerminus;
+
+module.exports = {
+  initialize: initialize,
+  plugIntoTerminus: plugIntoTerminus
+};
+
+},{"./initialize.js":13,"./terminus.js":15}],13:[function(_dereq_,module,exports){
+var connectPortsToBuses, initialize, linkTogetherMVC, push, render;
+
+connectPortsToBuses = _dereq_('../adapter/exports.js').connectPortsToBuses;
+
+linkTogetherMVC = _dereq_('./linkTogetherMVC.js');
+
+push = _dereq_('../controller/exports.js').push;
+
+render = _dereq_('../react-module/exports.js').React.render;
+
+initialize = function(appNodeID, topViewFactory, initialAppState, viewImports) {
+  var topReactDescriptor;
+  push('app-node-id')(appNodeID);
+  push('top-view-factory')(topViewFactory);
+  topReactDescriptor = linkTogetherMVC(topViewFactory, initialAppState);
+  render(topReactDescriptor, document.getElementById(appNodeID));
+  return connectPortsToBuses(viewImports);
+};
+
+module.exports = initialize;
+
+},{"../adapter/exports.js":2,"../controller/exports.js":10,"../react-module/exports.js":17,"./linkTogetherMVC.js":14}],14:[function(_dereq_,module,exports){
 var appStateChannelName, connectViewToController, linkTogetherMVC, push;
 
-connectViewToController = _dereq_('../adapter/pando-adapter.js');
+connectViewToController = _dereq_('../adapter/exports.js').connectViewToController;
 
-push = _dereq_('./channel-connectors.js').push;
+push = _dereq_('../controller/exports.js').push;
 
 appStateChannelName = 'app-state';
 
@@ -479,20 +511,18 @@ linkTogetherMVC = function(topViewFactory, appState) {
 
 module.exports = linkTogetherMVC;
 
-},{"../adapter/pando-adapter.js":4,"./channel-connectors.js":9}],13:[function(_dereq_,module,exports){
+},{"../adapter/exports.js":2,"../controller/exports.js":10}],15:[function(_dereq_,module,exports){
 var $onValue, TERMINUS, appNodeId, appState, blockTillReady, checkValue, connect, doAsync, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, render, resetAppState, topViewFactory, _getElementById, _linkTogetherMVC, _ref, _ref1, _ref2;
 
-connect = _dereq_('./channel-connectors.js').connect;
+_ref = _dereq_('../pando.js'), blockTillReady = _ref.blockTillReady, checkValue = _ref.checkValue, $onValue = _ref.$onValue;
 
-_ref = _dereq_('./channel-registrar.js'), getEventStream = _ref.getEventStream, getProperty = _ref.getProperty;
+_ref1 = _dereq_('../controller/exports.js'), connect = _ref1.connect, getEventStream = _ref1.getEventStream, getProperty = _ref1.getProperty;
 
 identity = _dereq_('../utilities.js').identity;
 
 linkTogetherMVC = _dereq_('./linkTogetherMVC.js');
 
 render = _dereq_('../react-module/exports.js').React.render;
-
-_ref1 = _dereq_('../pando.js'), blockTillReady = _ref1.blockTillReady, checkValue = _ref1.checkValue, $onValue = _ref1.$onValue;
 
 _ref2 = ['app-node-id', 'app-state', 'top-view-factory'].map(getProperty), appNodeId = _ref2[0], appState = _ref2[1], topViewFactory = _ref2[2];
 
@@ -524,59 +554,7 @@ module.exports = {
   plugIntoTerminus: plugIntoTerminus
 };
 
-},{"../pando.js":17,"../react-module/exports.js":18,"../utilities.js":29,"./channel-connectors.js":9,"./channel-registrar.js":10,"./linkTogetherMVC.js":12}],14:[function(_dereq_,module,exports){
-var Adapter, Bridge, Controller, Initializer, Mixins, Pando, React, _ref;
-
-Adapter = _dereq_('./adapter/exports.js');
-
-_ref = _dereq_('./react-module/exports.js'), Bridge = _ref.Bridge, Mixins = _ref.Mixins, React = _ref.React;
-
-Controller = _dereq_('./controller/exports.js');
-
-Initializer = _dereq_('./initializer/exports.js');
-
-Pando = _dereq_('./pando.js');
-
-module.exports = {
-  Adapter: Adapter,
-  Bridge: Bridge,
-  Controller: Controller,
-  Initializer: Initializer,
-  Mixins: Mixins,
-  Pando: Pando,
-  React: React
-};
-
-},{"./adapter/exports.js":3,"./controller/exports.js":11,"./initializer/exports.js":15,"./pando.js":17,"./react-module/exports.js":18}],15:[function(_dereq_,module,exports){
-var initialize;
-
-initialize = _dereq_('./initialize.js');
-
-module.exports = {
-  initialize: initialize
-};
-
-},{"./initialize.js":16}],16:[function(_dereq_,module,exports){
-var connectPortsToBuses, initialize, linkTogetherMVC, push, render, _ref;
-
-connectPortsToBuses = _dereq_('../adapter/exports.js').connectPortsToBuses;
-
-_ref = _dereq_('../controller/exports.js'), linkTogetherMVC = _ref.linkTogetherMVC, push = _ref.push;
-
-render = _dereq_('../react-module/exports.js').React.render;
-
-initialize = function(appNodeID, topViewFactory, initialAppState, viewImports) {
-  var topReactDescriptor;
-  push('app-node-id')(appNodeID);
-  push('top-view-factory')(topViewFactory);
-  topReactDescriptor = linkTogetherMVC(topViewFactory, initialAppState);
-  render(topReactDescriptor, document.getElementById(appNodeID));
-  return connectPortsToBuses(viewImports);
-};
-
-module.exports = initialize;
-
-},{"../adapter/exports.js":3,"../controller/exports.js":11,"../react-module/exports.js":18}],17:[function(_dereq_,module,exports){
+},{"../controller/exports.js":10,"../pando.js":16,"../react-module/exports.js":17,"../utilities.js":28,"./linkTogetherMVC.js":14}],16:[function(_dereq_,module,exports){
 var $dispatch, $onValue, $sample, $subscribe, $transubscribe, CoreCell, CoreDispatcher, CoreSignal, DAG_hyphen_updating_question_, EventStream, FRP, FuncProto, ObjProto, Property, Time, active, any_hyphen_postponement_question_, array_question_, bfiltering, bfilteringNonterminal, bind, bind_hyphen_data, blockTillReady, block_hyphen_N, blocking, bmapping, bracket, call_hyphen_only_hyphen_once, checkValue, clock, connect, createCell, createClock, createDispatcherType, createEventStream, createEventStreamBus, createNonInitProperty, createNonInitPropertyBus, createProperty, createPropertyBus, createSignal, createSignalType, createTime, create_hyphen_singleton, create_hyphen_super_hyphen_type, cytolyse, defined_question_, delaying, display, display_hyphen_cell_hyphen_type, display_hyphen_dispatcher_hyphen_type, display_hyphen_signal_hyphen_type, each, each_hyphen_property, empty_question_, end, endocytate, extend_bang_, extend_hyphen_core_hyphen_dispatcher, extend_hyphen_core_hyphen_signal, extend_hyphen_proto, filtering, filteringDefined, filteringNonterminal, filteringRelevant, flattening, flip, fmapD, fmapS, fromArray, fromCallback, fromDelayedValue, fromDispatcher, fromEventTarget, fromFinitePeriodicSequence, fromInternalDispatchOnly, fromMerger, fromPoll, fromSourceFunction, frpBind, function_question_, functionize, genESOpts, genNonInitPropOpts, genPropOpts, genSignalOpts, genTimeOpts, generate_hyphen_id, getPrototypeOf, getType, get_hyphen_arg_hyphen_array, get_hyphen_initiation_hyphen_status, get_hyphen_key, has_hyphen_postpone_question_, hash_question_, identity, ignoreIrrelevant, inactive, initiating_hyphen_DAG_hyphen_update_question_, isCell, isDispatcher, isEnd, isEventStream, isFromType, isProperty, isRelevant, isSignal, is_hyphen_postpone_question_, liftS, liftS2, map, mapping, merge, monitoringFirst, monitoringLatest, nativeBind, nativeToString, negating, no_hyphen_op, none, nonterminal_question_, object_question_, onFirstAndOnlyValue, onValue, parse_hyphen_opts, parse_hyphen_signal_hyphen_opts, paused, permitting_hyphen_only_hyphen_one_hyphen_value, plug, postpone, postponed_question_, reducing, register, registrar, remerse, removeFromRegistrar, reschedule, reset_hyphen_DAG_hyphen_update_hyphen_process, return_hyphen_no_hyphen_op, sample_hyphen_properties, scanning, seed, sink_hyphen_if_hyphen_sinkable, staggering, stateMachineProcessing, stepper, switcher, taking, transbind, transmit, transubscribe, try_hyphen_10, try_hyphen_N_hyphen_times, _arobase_prototype, _createDispatcherType, _filtering, _mapping, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _subscribe,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2090,7 +2068,7 @@ if ((typeof define !== "undefined" && define !== null) && (define['amd'] != null
   this.FRP = FRP;
 }
 
-},{}],18:[function(_dereq_,module,exports){
+},{}],17:[function(_dereq_,module,exports){
 var Bridge, Mixins, React;
 
 Bridge = _dereq_('./react-bridge/exports.js');
@@ -2105,7 +2083,7 @@ module.exports = {
   React: React
 };
 
-},{"./react-bridge/exports.js":21,"./react-bridge/react.js":23,"./react-mixins/exports.js":27}],19:[function(_dereq_,module,exports){
+},{"./react-bridge/exports.js":20,"./react-bridge/react.js":22,"./react-mixins/exports.js":26}],18:[function(_dereq_,module,exports){
 var getAdapter, getInjectedFactory, getTemplate, handlerRegex, handler_question_, inject, isFunction,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2165,7 +2143,7 @@ module.exports = {
   getAdapter: getAdapter
 };
 
-},{"./factory-injector.js":22,"./utilities.js":25}],20:[function(_dereq_,module,exports){
+},{"./factory-injector.js":21,"./utilities.js":24}],19:[function(_dereq_,module,exports){
 var BUTTON, CHECKBOX, FORM, LABEL, LINK, PASSWORD, TEXT, a, button, collectAdapters, dollarize, ensureCheckboxProps, ensureLinkProps, ensurePasswordProps, ensureProps, ensureTextProps, form, getAdapter, getInjectedFactory, input, isObject, isString, label, onChange, onClick, onSubmit, records, shallowCopy, _ref, _ref1;
 
 _ref = _dereq_('./react.js').DOM, a = _ref.a, button = _ref.button, form = _ref.form, input = _ref.input, label = _ref.label;
@@ -2271,7 +2249,7 @@ records = [[onClick, ensureProps, button, BUTTON], [onClick, ensureCheckboxProps
 
 module.exports = collectAdapters({}, records);
 
-},{"./adapter-utilities.js":19,"./factory-injector.js":22,"./react.js":23,"./utilities.js":25}],21:[function(_dereq_,module,exports){
+},{"./adapter-utilities.js":18,"./factory-injector.js":21,"./react.js":22,"./utilities.js":24}],20:[function(_dereq_,module,exports){
 var adapters, connectTo, sensitize;
 
 adapters = _dereq_('./adapters.js');
@@ -2286,7 +2264,7 @@ module.exports = {
   sensitize: sensitize
 };
 
-},{"./adapters.js":20,"./factory-injector.js":22,"./sensitive-component.js":24}],22:[function(_dereq_,module,exports){
+},{"./adapters.js":19,"./factory-injector.js":21,"./sensitive-component.js":23}],21:[function(_dereq_,module,exports){
 var connectTo, createInjectable, embedEventInside, exportReactEvents, getCapsule, getInjectedFactory, getWrapper, hasher, isFunction, isString, memoize, shallowCopy, stringify, _getInjectedFactory, _ref, _ref1;
 
 _ref = _dereq_('./utilities.js'), isFunction = _ref.isFunction, isString = _ref.isString, memoize = _ref.memoize, shallowCopy = _ref.shallowCopy;
@@ -2387,10 +2365,10 @@ module.exports = {
   getInjectedFactory: getInjectedFactory
 };
 
-},{"./utilities.js":25}],23:[function(_dereq_,module,exports){
+},{"./utilities.js":24}],22:[function(_dereq_,module,exports){
 module.exports = _dereq_('../react-with-addons.js');
 
-},{"../react-with-addons.js":28}],24:[function(_dereq_,module,exports){
+},{"../react-with-addons.js":27}],23:[function(_dereq_,module,exports){
 var createClass, createFactory, encapsulateInfo, getInjectedFactory, sensitiveRenderMixin, sensitize, template, _ref,
   __slice = [].slice;
 
@@ -2467,7 +2445,7 @@ sensitize = getInjectedFactory(template, 'sensitive');
 
 module.exports = sensitize;
 
-},{"../react-with-addons.js":28,"./factory-injector.js":22}],25:[function(_dereq_,module,exports){
+},{"../react-with-addons.js":27,"./factory-injector.js":21}],24:[function(_dereq_,module,exports){
 var ObjProto, applyUnsplat, hasType_question_, isFunction, isObject, isString, memoize, shallowCopy, shallowFlatten, toString, _ref,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2543,7 +2521,7 @@ module.exports = {
   shallowCopy: shallowCopy
 };
 
-},{}],26:[function(_dereq_,module,exports){
+},{}],25:[function(_dereq_,module,exports){
 /**
  * Derivative of source code copyrighted by Facebook.
  * The original source code is licensed under Facebook's BSD-style license.
@@ -2577,7 +2555,7 @@ var AutoPostFocusMixin = {
 
 module.exports = AutoPostFocusMixin;
 
-},{}],27:[function(_dereq_,module,exports){
+},{}],26:[function(_dereq_,module,exports){
 var AutoPostFocusMixin;
 
 AutoPostFocusMixin = _dereq_('./AutoPostFocusMixin.js');
@@ -2586,7 +2564,7 @@ module.exports = {
   AutoPostFocusMixin: AutoPostFocusMixin
 };
 
-},{"./AutoPostFocusMixin.js":26}],28:[function(_dereq_,module,exports){
+},{"./AutoPostFocusMixin.js":25}],27:[function(_dereq_,module,exports){
 (function (global){/**
  * React (with addons) v0.12.0
  */
@@ -22388,7 +22366,7 @@ module.exports = warning;
 
 },{"./emptyFunction":121}]},{},[1])(1)
 });}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],29:[function(_dereq_,module,exports){
+},{}],28:[function(_dereq_,module,exports){
 var ObjProto, addComponent, atomicKeypath_question_, compose, compositeRegex, dot, getComponent, getKeys, hasType_question_, identity, isArray, isObject, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, useParamListOrArray, _ref,
   __hasProp = {}.hasOwnProperty,
   __slice = [].slice;
@@ -22512,6 +22490,6 @@ module.exports = {
   useParamListOrArray: useParamListOrArray
 };
 
-},{}]},{},[14])
-(14)
+},{}]},{},[11])
+(11)
 });
