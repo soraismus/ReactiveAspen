@@ -1,7 +1,7 @@
-{ connect, interpret, plug, push } = require './channel-connectors.js'
+{ connect, interpret, plug, push } = require './channel-connectors'
 
 { getDispatcher, getEventStream, getProperty } =
-  require './channel-registrar.js'
+  require './channel-registrar'
 
 module.exports = {
   connect

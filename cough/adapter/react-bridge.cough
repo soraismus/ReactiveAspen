@@ -1,1 +1,1 @@
-module.exports = require('../react-module/exports.js').Bridge
+module.exports = require('../react-module/exports').Bridge

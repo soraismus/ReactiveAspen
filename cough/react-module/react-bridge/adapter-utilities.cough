@@ -1,5 +1,5 @@
-{ getInjectedFactory } = require './factory-injector.js'
-{ isFunction }         = require './utilities.js'
+{ getInjectedFactory } = require './factory-injector'
+{ isFunction }         = require './utilities'
 
 handlerRegex = /^on[A-Z]/
 

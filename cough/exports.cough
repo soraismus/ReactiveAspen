@@ -1,8 +1,8 @@
-Adapter                   = require './adapter/exports.js'
-{ Bridge, Mixins, React } = require './react-module/exports.js'
-Controller                = require './controller/exports.js'
-Initializer               = require './initializer/exports.js'
-Pando                     = require './pando.js'
+Adapter                   = require './adapter/exports'
+{ Bridge, Mixins, React } = require './react-module/exports'
+Controller                = require './controller/exports'
+Initializer               = require './initializer/exports'
+Pando                     = require './pando'
 
 module.exports = {
   Adapter

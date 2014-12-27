@@ -1,5 +1,5 @@
-adapters      = require './adapters.js'
-{ connectTo } = require './factory-injector.js'
-sensitize     = require './sensitive-component.js'
+adapters      = require './adapters'
+{ connectTo } = require './factory-injector'
+sensitize     = require './sensitive-component'
 
 module.exports = { adapters, connectTo, sensitize }

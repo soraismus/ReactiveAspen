@@ -1,9 +1,9 @@
-{ isArray } = require '../utilities.js'
+{ isArray } = require '../utilities'
 
 { createEventStreamBus
   createNonInitPropertyBus
   plug
-} = require '../pando.js'
+} = require '../pando'
 
 disconnectors = {}
 dispatchers   = {}

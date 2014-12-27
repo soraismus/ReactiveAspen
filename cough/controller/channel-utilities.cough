@@ -4,10 +4,10 @@
   mapping
   merge
   remerse
-} = require '../pando.js'
+} = require '../pando'
 
-{ compose, identity, useParamListOrArray } = require '../utilities.js' 
-{ interpret } = require './channel-connectors.js'
+{ compose, identity, useParamListOrArray } = require '../utilities' 
+{ interpret } = require './channel-connectors'
 
 mapMapping = \array ->
   array.map mapping

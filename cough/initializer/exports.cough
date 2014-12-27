@@ -1,4 +1,4 @@
-initialize           = require './initialize.js'
-{ plugIntoTerminus } = require './terminus.js'
+initialize           = require './initialize'
+{ plugIntoTerminus } = require './terminus'
 
 module.exports = { initialize, plugIntoTerminus }

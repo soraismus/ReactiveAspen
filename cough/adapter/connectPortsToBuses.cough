@@ -1,9 +1,9 @@
-{ blur, preventDefault }        = require './port-utilities.js'
+{ blur, preventDefault }        = require './port-utilities'
 [_blur, _preventDefault]        = [blur, preventDefault]
-{ connectBus }                  = require './port-registrar.js'
-{ getEventStream, getProperty } = require '../controller/exports.js'
-{ isArray, isObject }           = require '../utilities.js'
-reactIntake                     = require './react-intake.js'
+{ connectBus }                  = require './port-registrar'
+{ getEventStream, getProperty } = require '../controller/exports'
+{ isArray, isObject }           = require '../utilities'
+reactIntake                     = require './react-intake'
 
 eventStreamRegex = /^\$/
 

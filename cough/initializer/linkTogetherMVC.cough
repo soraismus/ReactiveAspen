@@ -1,5 +1,5 @@
-{ connectViewToController } = require '../adapter/exports.js'
-{ push }                    = require '../controller/exports.js'
+{ connectViewToController } = require '../adapter/exports'
+{ push }                    = require '../controller/exports'
 
 appStateChannelName = 'app-state'
 

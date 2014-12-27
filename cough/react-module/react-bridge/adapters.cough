@@ -1,7 +1,7 @@
-{ a, button, form, input, label }   = require('./react.js').DOM
-{ getInjectedFactory }              = require './factory-injector.js'
-{ getAdapter }                      = require './adapter-utilities.js'
-{ isObject, isString, shallowCopy } = require './utilities.js'
+{ a, button, form, input, label }   = require('./react').DOM
+{ getInjectedFactory }              = require './factory-injector'
+{ getAdapter }                      = require './adapter-utilities'
+{ isObject, isString, shallowCopy } = require './utilities'
 
 BUTTON   = 'button'
 CHECKBOX = 'checkbox'

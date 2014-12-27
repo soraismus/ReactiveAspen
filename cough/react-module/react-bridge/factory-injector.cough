@@ -1,4 +1,4 @@
-{ isFunction, isString, memoize, shallowCopy } = require './utilities.js'
+{ isFunction, isString, memoize, shallowCopy } = require './utilities'
 
 { connectTo, exportReactEvents } = do ->
   eventHandler = null

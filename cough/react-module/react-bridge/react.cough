@@ -1,1 +1,1 @@
-module.exports = require '../react-with-addons.js'
+module.exports = require '../react-with-addons'

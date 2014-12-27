@@ -1,6 +1,6 @@
-{ connectTo }   = require './react-bridge.js'
-{ connectPort } = require './port-registrar.js'
-reactIntake     = require './react-intake.js'
+{ connectTo }   = require './react-bridge'
+{ connectPort } = require './port-registrar'
+reactIntake     = require './react-intake'
 
 # TODO: Use simpler semi-global-state storage system.
 reactIntakeBus = connectPort reactIntake

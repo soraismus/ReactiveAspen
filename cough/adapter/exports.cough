@@ -1,4 +1,4 @@
-connectPortsToBuses     = require './connectPortsToBuses.js'
-connectViewToController = require './pando-adapter.js'
+connectPortsToBuses     = require './connectPortsToBuses'
+connectViewToController = require './pando-adapter'
 
 module.exports = { connectPortsToBuses, connectViewToController }

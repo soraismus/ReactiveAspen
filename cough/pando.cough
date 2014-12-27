@@ -23,17 +23,17 @@ reset-DAG-update-process = ->
 reschedule = \thunk ->
   setTimeout (thunk, 0)
 
-has-postpone? = \value ->
+hasPostpone? = \value ->
   isCell value && (
       (inner-value = value.read ()) == postpone ||
-      has-postpone? inner-value)
+      hasPostpone? inner-value)
 
 # Necessary?
 is-postpone? = \value ->
   value == postpone
 
 postponed? = \value ->
-  is-postpone? value || has-postpone? value
+  is-postpone? value || hasPostpone? value
 
 any-postponement? = \args ->
   args.some postponed?
