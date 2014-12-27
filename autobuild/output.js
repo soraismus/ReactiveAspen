@@ -1,17 +1,17 @@
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.ReactiveAspen=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/theo/projects/reactive-aspen/cough/adapter/connectPortsToBuses.cough":[function(require,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.ReactiveAspen=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 var actAsSwitchboard, blur, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, interpretRecord, isArray, isObject, manageDispatcher, preventDefault, reactIntake, reactIntakeBus, switches, _blur, _preventDefault, _ref, _ref1, _ref2, _ref3;
 
-_ref = require('./port-utilities'), blur = _ref.blur, preventDefault = _ref.preventDefault;
+_ref = _dereq_('./port-utilities'), blur = _ref.blur, preventDefault = _ref.preventDefault;
 
 _ref1 = [blur, preventDefault], _blur = _ref1[0], _preventDefault = _ref1[1];
 
-connectBus = require('./port-registrar').connectBus;
+connectBus = _dereq_('./port-registrar').connectBus;
 
-_ref2 = require('../controller/exports'), getEventStream = _ref2.getEventStream, getProperty = _ref2.getProperty;
+_ref2 = _dereq_('../controller/exports'), getEventStream = _ref2.getEventStream, getProperty = _ref2.getProperty;
 
-_ref3 = require('../utilities'), isArray = _ref3.isArray, isObject = _ref3.isObject;
+_ref3 = _dereq_('../utilities'), isArray = _ref3.isArray, isObject = _ref3.isObject;
 
-reactIntake = require('./react-intake');
+reactIntake = _dereq_('./react-intake');
 
 eventStreamRegex = /^\$/;
 
@@ -114,12 +114,12 @@ module.exports = connectPortsToBuses;
 
 
 
-},{"../controller/exports":"/home/theo/projects/reactive-aspen/cough/controller/exports.cough","../utilities":"/home/theo/projects/reactive-aspen/cough/utilities.cough","./port-registrar":"/home/theo/projects/reactive-aspen/cough/adapter/port-registrar.cough","./port-utilities":"/home/theo/projects/reactive-aspen/cough/adapter/port-utilities.cough","./react-intake":"/home/theo/projects/reactive-aspen/cough/adapter/react-intake.cough"}],"/home/theo/projects/reactive-aspen/cough/adapter/exports.cough":[function(require,module,exports){
+},{"../controller/exports":10,"../utilities":28,"./port-registrar":4,"./port-utilities":5,"./react-intake":7}],2:[function(_dereq_,module,exports){
 var connectPortsToBuses, connectViewToController;
 
-connectPortsToBuses = require('./connectPortsToBuses');
+connectPortsToBuses = _dereq_('./connectPortsToBuses');
 
-connectViewToController = require('./pando-adapter');
+connectViewToController = _dereq_('./pando-adapter');
 
 module.exports = {
   connectPortsToBuses: connectPortsToBuses,
@@ -128,14 +128,14 @@ module.exports = {
 
 
 
-},{"./connectPortsToBuses":"/home/theo/projects/reactive-aspen/cough/adapter/connectPortsToBuses.cough","./pando-adapter":"/home/theo/projects/reactive-aspen/cough/adapter/pando-adapter.cough"}],"/home/theo/projects/reactive-aspen/cough/adapter/pando-adapter.cough":[function(require,module,exports){
+},{"./connectPortsToBuses":1,"./pando-adapter":3}],3:[function(_dereq_,module,exports){
 var connectPort, connectTo, connectViewToController, reactIntake, reactIntakeBus;
 
-connectTo = require('./react-bridge').connectTo;
+connectTo = _dereq_('./react-bridge').connectTo;
 
-connectPort = require('./port-registrar').connectPort;
+connectPort = _dereq_('./port-registrar').connectPort;
 
-reactIntake = require('./react-intake');
+reactIntake = _dereq_('./react-intake');
 
 reactIntakeBus = connectPort(reactIntake);
 
@@ -147,12 +147,12 @@ module.exports = connectViewToController;
 
 
 
-},{"./port-registrar":"/home/theo/projects/reactive-aspen/cough/adapter/port-registrar.cough","./react-bridge":"/home/theo/projects/reactive-aspen/cough/adapter/react-bridge.cough","./react-intake":"/home/theo/projects/reactive-aspen/cough/adapter/react-intake.cough"}],"/home/theo/projects/reactive-aspen/cough/adapter/port-registrar.cough":[function(require,module,exports){
+},{"./port-registrar":4,"./react-bridge":6,"./react-intake":7}],4:[function(_dereq_,module,exports){
 var addComponent, busExt, connectBus, connectPort, connectPortComponent, createEventStreamBus, getComponent, getPortComponent, keypaths, portExt, ports, register, _ref, _ref1;
 
-_ref = require('../utilities'), addComponent = _ref.addComponent, getComponent = _ref.getComponent;
+_ref = _dereq_('../utilities'), addComponent = _ref.addComponent, getComponent = _ref.getComponent;
 
-createEventStreamBus = require('../pando').createEventStreamBus;
+createEventStreamBus = _dereq_('../pando').createEventStreamBus;
 
 keypaths = {};
 
@@ -198,7 +198,7 @@ module.exports = {
 
 
 
-},{"../pando":"/home/theo/projects/reactive-aspen/cough/pando.cough","../utilities":"/home/theo/projects/reactive-aspen/cough/utilities.cough"}],"/home/theo/projects/reactive-aspen/cough/adapter/port-utilities.cough":[function(require,module,exports){
+},{"../pando":16,"../utilities":28}],5:[function(_dereq_,module,exports){
 var blur, preventDefault;
 
 blur = function(capsule) {
@@ -220,24 +220,24 @@ module.exports = {
 
 
 
-},{}],"/home/theo/projects/reactive-aspen/cough/adapter/react-bridge.cough":[function(require,module,exports){
-module.exports = require('../react-module/exports').Bridge;
+},{}],6:[function(_dereq_,module,exports){
+module.exports = _dereq_('../react-module/exports').Bridge;
 
 
 
-},{"../react-module/exports":"/home/theo/projects/reactive-aspen/cough/react-module/exports.cough"}],"/home/theo/projects/reactive-aspen/cough/adapter/react-intake.cough":[function(require,module,exports){
+},{"../react-module/exports":17}],7:[function(_dereq_,module,exports){
 module.exports = '.reactIntake';
 
 
 
-},{}],"/home/theo/projects/reactive-aspen/cough/controller/channel-connectors.cough":[function(require,module,exports){
+},{}],8:[function(_dereq_,module,exports){
 var connect, connectMultiple, connectSingle, getDispatcher, interpret, isArray, isString, pandoConnect, plug, push, setAlias, _connect, _ref;
 
-getDispatcher = require('./channel-registrar').getDispatcher;
+getDispatcher = _dereq_('./channel-registrar').getDispatcher;
 
-_ref = require('../utilities'), isArray = _ref.isArray, isString = _ref.isString;
+_ref = _dereq_('../utilities'), isArray = _ref.isArray, isString = _ref.isString;
 
-pandoConnect = require('../pando').connect;
+pandoConnect = _dereq_('../pando').connect;
 
 _connect = function(src, tgt, transform) {
   var _ref1, _src, _tgt;
@@ -347,13 +347,13 @@ module.exports = {
 
 
 
-},{"../pando":"/home/theo/projects/reactive-aspen/cough/pando.cough","../utilities":"/home/theo/projects/reactive-aspen/cough/utilities.cough","./channel-registrar":"/home/theo/projects/reactive-aspen/cough/controller/channel-registrar.cough"}],"/home/theo/projects/reactive-aspen/cough/controller/channel-registrar.cough":[function(require,module,exports){
+},{"../pando":16,"../utilities":28,"./channel-registrar":9}],9:[function(_dereq_,module,exports){
 var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
 
-isArray = require('../utilities').isArray;
+isArray = _dereq_('../utilities').isArray;
 
-_ref = require('../pando'), createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus, plug = _ref.plug;
+_ref = _dereq_('../pando'), createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus, plug = _ref.plug;
 
 disconnectors = {};
 
@@ -436,12 +436,12 @@ module.exports = {
 
 
 
-},{"../pando":"/home/theo/projects/reactive-aspen/cough/pando.cough","../utilities":"/home/theo/projects/reactive-aspen/cough/utilities.cough"}],"/home/theo/projects/reactive-aspen/cough/controller/exports.cough":[function(require,module,exports){
+},{"../pando":16,"../utilities":28}],10:[function(_dereq_,module,exports){
 var connect, getDispatcher, getEventStream, getProperty, interpret, plug, push, _ref, _ref1;
 
-_ref = require('./channel-connectors'), connect = _ref.connect, interpret = _ref.interpret, plug = _ref.plug, push = _ref.push;
+_ref = _dereq_('./channel-connectors'), connect = _ref.connect, interpret = _ref.interpret, plug = _ref.plug, push = _ref.push;
 
-_ref1 = require('./channel-registrar'), getDispatcher = _ref1.getDispatcher, getEventStream = _ref1.getEventStream, getProperty = _ref1.getProperty;
+_ref1 = _dereq_('./channel-registrar'), getDispatcher = _ref1.getDispatcher, getEventStream = _ref1.getEventStream, getProperty = _ref1.getProperty;
 
 module.exports = {
   connect: connect,
@@ -455,18 +455,18 @@ module.exports = {
 
 
 
-},{"./channel-connectors":"/home/theo/projects/reactive-aspen/cough/controller/channel-connectors.cough","./channel-registrar":"/home/theo/projects/reactive-aspen/cough/controller/channel-registrar.cough"}],"/home/theo/projects/reactive-aspen/cough/exports.cough":[function(require,module,exports){
+},{"./channel-connectors":8,"./channel-registrar":9}],11:[function(_dereq_,module,exports){
 var Adapter, Bridge, Controller, Initializer, Mixins, Pando, React, _ref;
 
-Adapter = require('./adapter/exports');
+Adapter = _dereq_('./adapter/exports');
 
-_ref = require('./react-module/exports'), Bridge = _ref.Bridge, Mixins = _ref.Mixins, React = _ref.React;
+_ref = _dereq_('./react-module/exports'), Bridge = _ref.Bridge, Mixins = _ref.Mixins, React = _ref.React;
 
-Controller = require('./controller/exports');
+Controller = _dereq_('./controller/exports');
 
-Initializer = require('./initializer/exports');
+Initializer = _dereq_('./initializer/exports');
 
-Pando = require('./pando');
+Pando = _dereq_('./pando');
 
 module.exports = {
   Adapter: Adapter,
@@ -480,12 +480,12 @@ module.exports = {
 
 
 
-},{"./adapter/exports":"/home/theo/projects/reactive-aspen/cough/adapter/exports.cough","./controller/exports":"/home/theo/projects/reactive-aspen/cough/controller/exports.cough","./initializer/exports":"/home/theo/projects/reactive-aspen/cough/initializer/exports.cough","./pando":"/home/theo/projects/reactive-aspen/cough/pando.cough","./react-module/exports":"/home/theo/projects/reactive-aspen/cough/react-module/exports.cough"}],"/home/theo/projects/reactive-aspen/cough/initializer/exports.cough":[function(require,module,exports){
+},{"./adapter/exports":2,"./controller/exports":10,"./initializer/exports":12,"./pando":16,"./react-module/exports":17}],12:[function(_dereq_,module,exports){
 var initialize, plugIntoTerminus;
 
-initialize = require('./initialize');
+initialize = _dereq_('./initialize');
 
-plugIntoTerminus = require('./terminus').plugIntoTerminus;
+plugIntoTerminus = _dereq_('./terminus').plugIntoTerminus;
 
 module.exports = {
   initialize: initialize,
@@ -494,16 +494,16 @@ module.exports = {
 
 
 
-},{"./initialize":"/home/theo/projects/reactive-aspen/cough/initializer/initialize.cough","./terminus":"/home/theo/projects/reactive-aspen/cough/initializer/terminus.cough"}],"/home/theo/projects/reactive-aspen/cough/initializer/initialize.cough":[function(require,module,exports){
+},{"./initialize":13,"./terminus":15}],13:[function(_dereq_,module,exports){
 var connectPortsToBuses, initialize, linkTogetherMVC, push, render;
 
-connectPortsToBuses = require('../adapter/exports').connectPortsToBuses;
+connectPortsToBuses = _dereq_('../adapter/exports').connectPortsToBuses;
 
-linkTogetherMVC = require('./linkTogetherMVC');
+linkTogetherMVC = _dereq_('./linkTogetherMVC');
 
-push = require('../controller/exports').push;
+push = _dereq_('../controller/exports').push;
 
-render = require('../react-module/exports').React.render;
+render = _dereq_('../react-module/exports').React.render;
 
 initialize = function(appNodeID, topViewFactory, initialAppState, viewImports) {
   var topReactDescriptor;
@@ -518,12 +518,12 @@ module.exports = initialize;
 
 
 
-},{"../adapter/exports":"/home/theo/projects/reactive-aspen/cough/adapter/exports.cough","../controller/exports":"/home/theo/projects/reactive-aspen/cough/controller/exports.cough","../react-module/exports":"/home/theo/projects/reactive-aspen/cough/react-module/exports.cough","./linkTogetherMVC":"/home/theo/projects/reactive-aspen/cough/initializer/linkTogetherMVC.cough"}],"/home/theo/projects/reactive-aspen/cough/initializer/linkTogetherMVC.cough":[function(require,module,exports){
+},{"../adapter/exports":2,"../controller/exports":10,"../react-module/exports":17,"./linkTogetherMVC":14}],14:[function(_dereq_,module,exports){
 var appStateChannelName, connectViewToController, linkTogetherMVC, push;
 
-connectViewToController = require('../adapter/exports').connectViewToController;
+connectViewToController = _dereq_('../adapter/exports').connectViewToController;
 
-push = require('../controller/exports').push;
+push = _dereq_('../controller/exports').push;
 
 appStateChannelName = 'app-state';
 
@@ -539,18 +539,18 @@ module.exports = linkTogetherMVC;
 
 
 
-},{"../adapter/exports":"/home/theo/projects/reactive-aspen/cough/adapter/exports.cough","../controller/exports":"/home/theo/projects/reactive-aspen/cough/controller/exports.cough"}],"/home/theo/projects/reactive-aspen/cough/initializer/terminus.cough":[function(require,module,exports){
+},{"../adapter/exports":2,"../controller/exports":10}],15:[function(_dereq_,module,exports){
 var $onValue, TERMINUS, appNodeId, appState, blockTillReady, checkValue, connect, doAsync, getEventStream, getProperty, identity, linkTogetherMVC, plugIntoTerminus, render, resetAppState, topViewFactory, _getElementById, _linkTogetherMVC, _ref, _ref1, _ref2;
 
-_ref = require('../pando'), blockTillReady = _ref.blockTillReady, checkValue = _ref.checkValue, $onValue = _ref.$onValue;
+_ref = _dereq_('../pando'), blockTillReady = _ref.blockTillReady, checkValue = _ref.checkValue, $onValue = _ref.$onValue;
 
-_ref1 = require('../controller/exports'), connect = _ref1.connect, getEventStream = _ref1.getEventStream, getProperty = _ref1.getProperty;
+_ref1 = _dereq_('../controller/exports'), connect = _ref1.connect, getEventStream = _ref1.getEventStream, getProperty = _ref1.getProperty;
 
-identity = require('../utilities').identity;
+identity = _dereq_('../utilities').identity;
 
-linkTogetherMVC = require('./linkTogetherMVC');
+linkTogetherMVC = _dereq_('./linkTogetherMVC');
 
-render = require('../react-module/exports').React.render;
+render = _dereq_('../react-module/exports').React.render;
 
 _ref2 = ['app-node-id', 'app-state', 'top-view-factory'].map(getProperty), appNodeId = _ref2[0], appState = _ref2[1], topViewFactory = _ref2[2];
 
@@ -584,8 +584,8 @@ module.exports = {
 
 
 
-},{"../controller/exports":"/home/theo/projects/reactive-aspen/cough/controller/exports.cough","../pando":"/home/theo/projects/reactive-aspen/cough/pando.cough","../react-module/exports":"/home/theo/projects/reactive-aspen/cough/react-module/exports.cough","../utilities":"/home/theo/projects/reactive-aspen/cough/utilities.cough","./linkTogetherMVC":"/home/theo/projects/reactive-aspen/cough/initializer/linkTogetherMVC.cough"}],"/home/theo/projects/reactive-aspen/cough/pando.cough":[function(require,module,exports){
-var $dispatch, $onValue, $sample, $subscribe, $transubscribe, CoreCell, CoreDispatcher, CoreSignal, DAG_hyphen_updating_question_, EventStream, FRP, FuncProto, ObjProto, Property, Time, active, any_hyphen_postponement_question_, array_question_, bfiltering, bfilteringNonterminal, bind, bind_hyphen_data, blockTillReady, block_hyphen_N, blocking, bmapping, bracket, call_hyphen_only_hyphen_once, checkValue, clock, connect, createCell, createClock, createDispatcherType, createEventStream, createEventStreamBus, createNonInitProperty, createNonInitPropertyBus, createProperty, createPropertyBus, createSignal, createSignalType, createTime, create_hyphen_singleton, create_hyphen_super_hyphen_type, cytolyse, defined_question_, delaying, display, display_hyphen_cell_hyphen_type, display_hyphen_dispatcher_hyphen_type, display_hyphen_signal_hyphen_type, each, each_hyphen_property, empty_question_, end, endocytate, extend_bang_, extend_hyphen_core_hyphen_dispatcher, extend_hyphen_core_hyphen_signal, extend_hyphen_proto, filtering, filteringDefined, filteringNonterminal, filteringRelevant, flattening, flip, fmapD, fmapS, fromArray, fromCallback, fromDelayedValue, fromDispatcher, fromEventTarget, fromFinitePeriodicSequence, fromInternalDispatchOnly, fromMerger, fromPoll, fromSourceFunction, frpBind, function_question_, functionize, genESOpts, genNonInitPropOpts, genPropOpts, genSignalOpts, genTimeOpts, generate_hyphen_id, getPrototypeOf, getType, get_hyphen_arg_hyphen_array, get_hyphen_initiation_hyphen_status, get_hyphen_key, hasPostpone_question_, hash_question_, identity, ignoreIrrelevant, inactive, initiating_hyphen_DAG_hyphen_update_question_, isCell, isDispatcher, isEnd, isEventStream, isFromType, isProperty, isRelevant, isSignal, is_hyphen_postpone_question_, liftS, liftS2, map, mapping, merge, monitoringFirst, monitoringLatest, nativeBind, nativeToString, negating, no_hyphen_op, none, nonterminal_question_, object_question_, onFirstAndOnlyValue, onValue, parse_hyphen_opts, parse_hyphen_signal_hyphen_opts, paused, permitting_hyphen_only_hyphen_one_hyphen_value, plug, postpone, postponed_question_, reducing, register, registrar, remerse, removeFromRegistrar, reschedule, reset_hyphen_DAG_hyphen_update_hyphen_process, return_hyphen_no_hyphen_op, sample_hyphen_properties, scanning, seed, sink_hyphen_if_hyphen_sinkable, staggering, stateMachineProcessing, stepper, switcher, taking, transbind, transmit, transubscribe, try_hyphen_10, try_hyphen_N_hyphen_times, _arobase_prototype, _createDispatcherType, _filtering, _mapping, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _subscribe,
+},{"../controller/exports":10,"../pando":16,"../react-module/exports":17,"../utilities":28,"./linkTogetherMVC":14}],16:[function(_dereq_,module,exports){
+var $dispatch, $onValue, $sample, $subscribe, $transubscribe, CoreCell, CoreDispatcher, CoreSignal, DAG_hyphen_updating_question_, EventStream, FRP, FuncProto, ObjProto, Property, Time, active, anyPostponement_question_, array_question_, bfiltering, bfilteringNonterminal, bind, bindData, blockN, blockTillReady, blocking, bmapping, bracket, callOnlyOnce, checkValue, clock, connect, createCell, createClock, createDispatcherType, createEventStream, createEventStreamBus, createNonInitProperty, createNonInitPropertyBus, createProperty, createPropertyBus, createSignal, createSignalType, createSingleton, createSuperType, createTime, cytolyse, defined_question_, delaying, display, displayCellType, displayDispatcherType, displaySignalType, each, eachProperty, empty_question_, end, endocytate, extendCoreDispatcher, extendCoreSignal, extendProto, extend_bang_, filtering, filteringDefined, filteringNonterminal, filteringRelevant, flattening, flip, fmapD, fmapS, fromArray, fromCallback, fromDelayedValue, fromDispatcher, fromEventTarget, fromFinitePeriodicSequence, fromInternalDispatchOnly, fromMerger, fromPoll, fromSourceFunction, frpBind, function_question_, functionize, genESOpts, genNonInitPropOpts, genPropOpts, genSignalOpts, genTimeOpts, generateID, getArgArray, getInitiationStatus, getKey, getPrototypeOf, getType, hasPostpone_question_, hash_question_, identity, ignoreIrrelevant, inactive, initiating_hyphen_DAG_hyphen_update_question_, isCell, isDispatcher, isEnd, isEventStream, isFromType, isPostpone_question_, isProperty, isRelevant, isSignal, liftS, liftS2, map, mapping, merge, monitoringFirst, monitoringLatest, nativeBind, nativeToString, negating, noOp, none, nonterminal_question_, object_question_, onFirstAndOnlyValue, onValue, parseOpts, parseSignalOpts, paused, permittingOnlyOneValue, plug, postpone, postponed_question_, reducing, register, registrar, remerse, removeFromRegistrar, reschedule, reset_hyphen_DAG_hyphen_update_hyphen_process, returnNoOp, sampleProperties, scanning, seed, sinkIfSinkable, staggering, stateMachineProcessing, stepper, switcher, taking, transbind, transmit, transubscribe, try10, try_hyphen_N_hyphen_times, _arobase_prototype, _createDispatcherType, _filtering, _mapping, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _subscribe,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
 
@@ -593,7 +593,7 @@ initiating_hyphen_DAG_hyphen_update_question_ = true;
 
 DAG_hyphen_updating_question_ = false;
 
-get_hyphen_initiation_hyphen_status = function() {
+getInitiationStatus = function() {
   var _initiating_hyphen_DAG_hyphen_update_question_;
   _initiating_hyphen_DAG_hyphen_update_question_ = initiating_hyphen_DAG_hyphen_update_question_;
   initiating_hyphen_DAG_hyphen_update_question_ = false;
@@ -611,23 +611,23 @@ reschedule = function(thunk) {
 };
 
 hasPostpone_question_ = function(value) {
-  var inner_hyphen_value;
-  return isCell(value) && ((inner_hyphen_value = value.read()) === postpone || hasPostpone_question_(inner_hyphen_value));
+  var innerValue;
+  return isCell(value) && ((innerValue = value.read()) === postpone || hasPostpone_question_(innerValue));
 };
 
-is_hyphen_postpone_question_ = function(value) {
+isPostpone_question_ = function(value) {
   return value === postpone;
 };
 
 postponed_question_ = function(value) {
-  return is_hyphen_postpone_question_(value) || hasPostpone_question_(value);
+  return isPostpone_question_(value) || hasPostpone_question_(value);
 };
 
-any_hyphen_postponement_question_ = function(args) {
+anyPostponement_question_ = function(args) {
   return args.some(postponed_question_);
 };
 
-sample_hyphen_properties = function(args) {
+sampleProperties = function(args) {
   return map(function(val) {
     if (isProperty(val)) {
       return $sample(val);
@@ -645,18 +645,18 @@ cytolyse = function(val) {
   }
 };
 
-endocytate = function(N, fn, managed_hyphen_args, cell) {
-  var cytolysed_hyphen_args;
-  if (any_hyphen_postponement_question_(managed_hyphen_args)) {
+endocytate = function(N, fn, managedArgs, cell) {
+  var cytolysedArgs;
+  if (anyPostponement_question_(managedArgs)) {
     cell.write(postpone);
     if (N > 0) {
       reschedule(function() {
-        return endocytate(N - 1, fn, managed_hyphen_args, cell);
+        return endocytate(N - 1, fn, managedArgs, cell);
       });
     }
   } else {
-    cytolysed_hyphen_args = map(cytolyse)(managed_hyphen_args);
-    cell.write(fn.apply(null, cytolysed_hyphen_args));
+    cytolysedArgs = map(cytolyse)(managedArgs);
+    cell.write(fn.apply(null, cytolysedArgs));
   }
   return cell;
 };
@@ -695,7 +695,7 @@ checkValue = function(fn) {
   return function() {
     var args;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return endocytate(10, ignoreIrrelevant(fn), sample_hyphen_properties(args), createCell());
+    return endocytate(10, ignoreIrrelevant(fn), sampleProperties(args), createCell());
   };
 };
 
@@ -703,7 +703,7 @@ blockTillReady = function(fn) {
   return function() {
     var args;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return block_hyphen_N(10, fn, args);
+    return blockN(10, fn, args);
   };
 };
 
@@ -712,7 +712,7 @@ try_hyphen_N_hyphen_times = function(N) {
     return function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      if (any_hyphen_postponement_question_(args)) {
+      if (anyPostponement_question_(args)) {
         if (N > 0) {
           return reschedule(function() {
             return try_hyphen_N_hyphen_times(N - 1)(fn).apply(null, args);
@@ -725,19 +725,19 @@ try_hyphen_N_hyphen_times = function(N) {
   };
 };
 
-try_hyphen_10 = try_hyphen_N_hyphen_times(10);
+try10 = try_hyphen_N_hyphen_times(10);
 
-block_hyphen_N = function(N, fn, args) {
-  var cytolysed_hyphen_args;
-  if (any_hyphen_postponement_question_(args)) {
+blockN = function(N, fn, args) {
+  var cytolysedArgs;
+  if (anyPostponement_question_(args)) {
     if (N > 0) {
       return reschedule(function() {
-        return block_hyphen_N(N - 1, fn, args);
+        return blockN(N - 1, fn, args);
       });
     }
   } else {
-    cytolysed_hyphen_args = map(cytolyse)(args);
-    return fn.apply(null, cytolysed_hyphen_args);
+    cytolysedArgs = map(cytolyse)(args);
+    return fn.apply(null, cytolysedArgs);
   }
 };
 
@@ -757,13 +757,13 @@ transbind = function(transmerse) {
   };
 };
 
-get_hyphen_key = function(key) {
+getKey = function(key) {
   return function(obj) {
     return obj[key];
   };
 };
 
-_arobase_prototype = get_hyphen_key('prototype');
+_arobase_prototype = getKey('prototype');
 
 _ref = [Function, Object].map(_arobase_prototype), FuncProto = _ref[0], ObjProto = _ref[1];
 
@@ -785,18 +785,18 @@ bind = function(fn) {
   };
 };
 
-call_hyphen_only_hyphen_once = function(fn) {
-  var fn_hyphen_proxy;
-  fn_hyphen_proxy = function() {
+callOnlyOnce = function(fn) {
+  var fnProxy;
+  fnProxy = function() {
     var args;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    fn_hyphen_proxy = no_hyphen_op;
+    fnProxy = noOp;
     return fn.apply(null, args);
   };
   return function() {
     var args;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return fn_hyphen_proxy.apply(null, args);
+    return fnProxy.apply(null, args);
   };
 };
 
@@ -810,7 +810,7 @@ each = function(fn) {
   };
 };
 
-each_hyphen_property = function(fn) {
+eachProperty = function(fn) {
   return function(obj) {
     var key, val, _results;
     _results = [];
@@ -841,7 +841,7 @@ extend_bang_ = function() {
   return obj;
 };
 
-extend_hyphen_proto = function() {
+extendProto = function() {
   var key, mixin, mixins, prototype, result, value, _i, _len;
   prototype = arguments[0], mixins = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
   result = Object.create(prototype);
@@ -872,11 +872,11 @@ function_question_ = function(val) {
   return typeof val === 'function';
 };
 
-get_hyphen_arg_hyphen_array = function(possibly_hyphen_overbuilt_hyphen_array) {
-  if (array_question_(possibly_hyphen_overbuilt_hyphen_array[0])) {
-    return possibly_hyphen_overbuilt_hyphen_array[0];
+getArgArray = function(possiblyOverbuiltArray) {
+  if (array_question_(possiblyOverbuiltArray[0])) {
+    return possiblyOverbuiltArray[0];
   } else {
-    return possibly_hyphen_overbuilt_hyphen_array;
+    return possiblyOverbuiltArray;
   }
 };
 
@@ -902,7 +902,7 @@ bracket = function(label) {
   return '<' + label + '>';
 };
 
-create_hyphen_singleton = function(label) {
+createSingleton = function(label) {
   return {
     inspect: function() {
       return bracket(label);
@@ -910,12 +910,12 @@ create_hyphen_singleton = function(label) {
   };
 };
 
-_ref1 = map(create_hyphen_singleton)(['active', 'clock', 'end', 'inactive', 'none', 'paused', 'postpone']), active = _ref1[0], clock = _ref1[1], end = _ref1[2], inactive = _ref1[3], none = _ref1[4], paused = _ref1[5], postpone = _ref1[6];
+_ref1 = map(createSingleton)(['active', 'clock', 'end', 'inactive', 'none', 'paused', 'postpone']), active = _ref1[0], clock = _ref1[1], end = _ref1[2], inactive = _ref1[3], none = _ref1[4], paused = _ref1[5], postpone = _ref1[6];
 
-no_hyphen_op = (function() {});
+noOp = (function() {});
 
-return_hyphen_no_hyphen_op = function() {
-  return no_hyphen_op;
+returnNoOp = function() {
+  return noOp;
 };
 
 isEnd = function(value) {
@@ -955,16 +955,16 @@ isFromType = function(type) {
   };
 };
 
-createCell = function(initial_hyphen_value) {
+createCell = function(initialValue) {
   var read, value, write;
-  value = initial_hyphen_value != null ? initial_hyphen_value : null;
+  value = initialValue != null ? initialValue : null;
   read = function() {
     return value;
   };
   write = function(_value) {
     return value = _value;
   };
-  return extend_hyphen_proto(CoreCell, {
+  return extendProto(CoreCell, {
     read: read,
     write: write
   });
@@ -976,7 +976,7 @@ isCell = function(val) {
 
 seed = 0;
 
-generate_hyphen_id = function() {
+generateID = function() {
   return seed++;
 };
 
@@ -1008,7 +1008,7 @@ registrar = (function() {
   };
 })();
 
-_ref2 = map(flip(get_hyphen_key)(registrar))(['register', 'removeFromRegistrar', 'transmit']), register = _ref2[0], removeFromRegistrar = _ref2[1], transmit = _ref2[2];
+_ref2 = map(flip(getKey)(registrar))(['register', 'removeFromRegistrar', 'transmit']), register = _ref2[0], removeFromRegistrar = _ref2[1], transmit = _ref2[2];
 
 createDispatcherType = function(opts) {
   return function(source) {
@@ -1021,8 +1021,8 @@ createDispatcherType = function(opts) {
 
 _createDispatcherType = function(opts) {
   return function(source) {
-    var activate, add_hyphen_subscriber, alias, disconnect_hyphen_from, dispatch, dispatch_hyphen_N, distribute, id, inform_hyphen_subscribers, mixins, properties, proto, setAlias, sinks, stop_hyphen_source_hyphen_influx, subscribe, terminate, terminated_question_, transact, transformDispatch, transformSubscribe, unsubscribe, _dispatch, _ref3, _subscribe;
-    _ref3 = parse_hyphen_opts(opts), mixins = _ref3.mixins, proto = _ref3.proto, transformDispatch = _ref3.transformDispatch, transformSubscribe = _ref3.transformSubscribe;
+    var activate, addSubscriber, alias, disconnectFrom, dispatch, dispatch_hyphen_N, distribute, id, informSubscribers, mixins, properties, proto, setAlias, sinks, stopSourceInflux, subscribe, terminate, terminated_question_, transact, transformDispatch, transformSubscribe, unsubscribe, _dispatch, _ref3, _subscribe;
+    _ref3 = parseOpts(opts), mixins = _ref3.mixins, proto = _ref3.proto, transformDispatch = _ref3.transformDispatch, transformSubscribe = _ref3.transformSubscribe;
     if (mixins == null) {
       mixins = {};
     }
@@ -1030,7 +1030,7 @@ _createDispatcherType = function(opts) {
       proto = CoreDispatcher;
     }
     if (source == null) {
-      source = return_hyphen_no_hyphen_op;
+      source = returnNoOp;
     }
     if (transformDispatch == null) {
       transformDispatch = identity;
@@ -1038,46 +1038,46 @@ _createDispatcherType = function(opts) {
     if (transformSubscribe == null) {
       transformSubscribe = identity;
     }
-    id = generate_hyphen_id();
+    id = generateID();
     sinks = {};
-    stop_hyphen_source_hyphen_influx = no_hyphen_op;
+    stopSourceInflux = noOp;
     terminated_question_ = false;
     alias = id;
     setAlias = function(val) {
       return alias = val;
     };
-    activate = call_hyphen_only_hyphen_once(function() {
-      return stop_hyphen_source_hyphen_influx = call_hyphen_only_hyphen_once(source(dispatch));
+    activate = callOnlyOnce(function() {
+      return stopSourceInflux = callOnlyOnce(source(dispatch));
     });
-    add_hyphen_subscriber = function(sink) {
+    addSubscriber = function(sink) {
       if (!sink.id) {
-        sink.id = generate_hyphen_id();
+        sink.id = generateID();
       }
       return sinks[sink.id] = sink;
     };
-    disconnect_hyphen_from = function(source_hyphen_id, sid) {
-      var subscription_hyphen_id;
-      subscription_hyphen_id = sid != null ? sid : id;
-      if (source_hyphen_id) {
-        return transmit(source_hyphen_id)('unsubscribe')(subscription_hyphen_id);
+    disconnectFrom = function(sourceID, sid) {
+      var subscriptionID;
+      subscriptionID = sid != null ? sid : id;
+      if (sourceID) {
+        return transmit(sourceID)('unsubscribe')(subscriptionID);
       }
     };
-    _dispatch = function(value, source_hyphen_id, subscription_hyphen_id) {
-      return dispatch_hyphen_N(10, value, source_hyphen_id, subscription_hyphen_id);
+    _dispatch = function(value, sourceID, subscriptionID) {
+      return dispatch_hyphen_N(10, value, sourceID, subscriptionID);
     };
-    dispatch_hyphen_N = function(N, value, source_hyphen_id, sid) {
+    dispatch_hyphen_N = function(N, value, sourceID, sid) {
       switch (false) {
         case !postponed_question_(value):
           if (N > 0) {
             return reschedule(function() {
-              return dispatch_hyphen_N(N - 1, value, source_hyphen_id, sid);
+              return dispatch_hyphen_N(N - 1, value, sourceID, sid);
             });
           }
           break;
         case !terminated_question_:
-          return disconnect_hyphen_from(source_hyphen_id, sid);
+          return disconnectFrom(sourceID, sid);
         default:
-          return transact(cytolyse(value), source_hyphen_id, sid);
+          return transact(cytolyse(value), sourceID, sid);
       }
     };
     distribute = function(value) {
@@ -1088,51 +1088,51 @@ _createDispatcherType = function(opts) {
         _distrib = function(sink) {
           return sink(value, id, sink.id || 'no-ID');
         };
-        return each_hyphen_property(_distrib)(sinks);
+        return eachProperty(_distrib)(sinks);
       }
     };
-    inform_hyphen_subscribers = function() {
-      return each_hyphen_property(function(sink) {
+    informSubscribers = function() {
+      return eachProperty(function(sink) {
         return sink(end);
       })(sinks);
     };
     _subscribe = function(sink) {
       if (terminated_question_) {
         sink(end);
-        return no_hyphen_op;
+        return noOp;
       } else {
-        add_hyphen_subscriber(sink);
+        addSubscriber(sink);
         activate();
-        return call_hyphen_only_hyphen_once(function() {
+        return callOnlyOnce(function() {
           return unsubscribe(sink);
         });
       }
     };
     terminate = function() {
-      stop_hyphen_source_hyphen_influx();
+      stopSourceInflux();
       terminated_question_ = true;
-      inform_hyphen_subscribers();
+      informSubscribers();
       sinks = {};
       return removeFromRegistrar(id);
     };
-    transact = function(value, source_hyphen_id, sid) {
-      var update_hyphen_initiator_question_;
-      update_hyphen_initiator_question_ = get_hyphen_initiation_hyphen_status();
+    transact = function(value, sourceID, sid) {
+      var updateInitiator_question_;
+      updateInitiator_question_ = getInitiationStatus();
       try {
         distribute(value);
         if (terminated_question_) {
-          return disconnect_hyphen_from(source_hyphen_id, sid);
+          return disconnectFrom(sourceID, sid);
         }
       } finally {
-        if (update_hyphen_initiator_question_) {
+        if (updateInitiator_question_) {
           reset_hyphen_DAG_hyphen_update_hyphen_process();
         }
       }
     };
     unsubscribe = function(val) {
-      var subscriber_hyphen_id;
-      subscriber_hyphen_id = function_question_(val) ? val.id : val;
-      delete sinks[subscriber_hyphen_id];
+      var subscriberID;
+      subscriberID = function_question_(val) ? val.id : val;
+      delete sinks[subscriberID];
       if (empty_question_(sinks)) {
         return terminate();
       }
@@ -1150,7 +1150,7 @@ _createDispatcherType = function(opts) {
       terminate: terminate,
       unsubscribe: unsubscribe
     };
-    return extend_hyphen_proto(proto, properties, mixins);
+    return extendProto(proto, properties, mixins);
   };
 };
 
@@ -1162,45 +1162,45 @@ display = function(supertype) {
   };
 };
 
-create_hyphen_super_hyphen_type = function(display, type_hyphen_label) {
+createSuperType = function(display, typeLabel) {
   return {
     inspect: display('Core'),
-    supertype: type_hyphen_label,
-    type: type_hyphen_label
+    supertype: typeLabel,
+    type: typeLabel
   };
 };
 
-_ref3 = map(display)(['Cell', 'Dispatcher', 'Signal']), display_hyphen_cell_hyphen_type = _ref3[0], display_hyphen_dispatcher_hyphen_type = _ref3[1], display_hyphen_signal_hyphen_type = _ref3[2];
+_ref3 = map(display)(['Cell', 'Dispatcher', 'Signal']), displayCellType = _ref3[0], displayDispatcherType = _ref3[1], displaySignalType = _ref3[2];
 
-CoreCell = create_hyphen_super_hyphen_type(display_hyphen_cell_hyphen_type, 'core-cell');
+CoreCell = createSuperType(displayCellType, 'core-cell');
 
-CoreDispatcher = create_hyphen_super_hyphen_type(display_hyphen_dispatcher_hyphen_type, 'core-dispatcher');
+CoreDispatcher = createSuperType(displayDispatcherType, 'core-dispatcher');
 
-extend_hyphen_core_hyphen_dispatcher = function(type) {
+extendCoreDispatcher = function(type) {
   var inspect;
-  inspect = display_hyphen_dispatcher_hyphen_type(type);
-  return extend_hyphen_proto(CoreDispatcher, {
+  inspect = displayDispatcherType(type);
+  return extendProto(CoreDispatcher, {
     inspect: inspect,
     type: type
   });
 };
 
-_ref4 = map(extend_hyphen_core_hyphen_dispatcher)(['Eventstream', 'Property']), EventStream = _ref4[0], Property = _ref4[1];
+_ref4 = map(extendCoreDispatcher)(['Eventstream', 'Property']), EventStream = _ref4[0], Property = _ref4[1];
 
 isDispatcher = isFromType(CoreDispatcher);
 
-extend_hyphen_core_hyphen_signal = function(type) {
+extendCoreSignal = function(type) {
   var inspect;
-  inspect = display_hyphen_signal_hyphen_type(type);
-  return extend_hyphen_proto(CoreSignal, {
+  inspect = displaySignalType(type);
+  return extendProto(CoreSignal, {
     inspect: inspect,
     type: type
   });
 };
 
-CoreSignal = create_hyphen_super_hyphen_type(display_hyphen_signal_hyphen_type, 'core-signal');
+CoreSignal = createSuperType(displaySignalType, 'core-signal');
 
-Time = extend_hyphen_core_hyphen_signal('Time');
+Time = extendCoreSignal('Time');
 
 isEventStream = isFromType(EventStream);
 
@@ -1215,12 +1215,12 @@ genESOpts = function(opts) {
   if (opts == null) {
     opts = {};
   }
-  result = parse_hyphen_opts(opts);
+  result = parseOpts(opts);
   result.proto = EventStream;
   return result;
 };
 
-parse_hyphen_opts = function(opts) {
+parseOpts = function(opts) {
   var mixins, proto, transformDispatch, transformSubscribe;
   if (function_question_(opts)) {
     transformDispatch = opts;
@@ -1247,7 +1247,7 @@ parse_hyphen_opts = function(opts) {
   };
 };
 
-parse_hyphen_signal_hyphen_opts = function(opts) {
+parseSignalOpts = function(opts) {
   var mixins, proto, transformSource;
   if (function_question_(opts)) {
     transformSource = opts;
@@ -1270,18 +1270,18 @@ parse_hyphen_signal_hyphen_opts = function(opts) {
   };
 };
 
-genPropOpts = function(initial_hyphen_value) {
+genPropOpts = function(initialValue) {
   return function(opts) {
-    var cached_hyphen_value, ended_question_, immediately_hyphen_end, mixins, proto, push_hyphen_value_hyphen_thru, read, sample, sample_hyphen_N, set, transformDispatch, transformSubscribe, write, _ref5, _transformDispatch, _transformSubscribe;
+    var cachedValue, ended_question_, immediatelyEnd, mixins, proto, pushValueThru, read, sample, sample_hyphen_N, set, transformDispatch, transformSubscribe, write, _ref5, _transformDispatch, _transformSubscribe;
     if (opts == null) {
       opts = {};
     }
-    _ref5 = parse_hyphen_opts(opts), mixins = _ref5.mixins, transformDispatch = _ref5.transformDispatch, transformSubscribe = _ref5.transformSubscribe;
-    cached_hyphen_value = initial_hyphen_value != null ? initial_hyphen_value : none;
+    _ref5 = parseOpts(opts), mixins = _ref5.mixins, transformDispatch = _ref5.transformDispatch, transformSubscribe = _ref5.transformSubscribe;
+    cachedValue = initialValue != null ? initialValue : none;
     ended_question_ = false;
     proto = Property;
     read = function() {
-      return cached_hyphen_value;
+      return cachedValue;
     };
     sample = function(cell) {
       return sample_hyphen_N(10, cell);
@@ -1305,14 +1305,14 @@ genPropOpts = function(initial_hyphen_value) {
       };
     };
     write = function(value) {
-      return cached_hyphen_value = value;
+      return cachedValue = value;
     };
     extend_bang_(mixins, {
       read: read,
       sample: sample,
       write: write
     });
-    push_hyphen_value_hyphen_thru = function(sink) {
+    pushValueThru = function(sink) {
       return function(value) {
         if (sink.id) {
           return sink(value, sink.id, '?1');
@@ -1321,26 +1321,26 @@ genPropOpts = function(initial_hyphen_value) {
         }
       };
     };
-    immediately_hyphen_end = function(sink) {
-      push_hyphen_value_hyphen_thru(sink)(end);
-      return no_hyphen_op;
+    immediatelyEnd = function(sink) {
+      pushValueThru(sink)(end);
+      return noOp;
     };
     _transformDispatch = function(dispatch) {
-      return function(value, source_hyphen_id, sid) {
+      return function(value, sourceID, sid) {
         if (isEnd(value)) {
           ended_question_ = true;
         } else {
           write(value);
         }
-        return dispatch(value, source_hyphen_id, sid);
+        return dispatch(value, sourceID, sid);
       };
     };
     _transformSubscribe = function(subscribe) {
       return function(sink) {
-        if (isRelevant(cached_hyphen_value)) {
-          push_hyphen_value_hyphen_thru(sink)(cached_hyphen_value);
+        if (isRelevant(cachedValue)) {
+          pushValueThru(sink)(cachedValue);
           if (ended_question_) {
-            return immediately_hyphen_end(sink);
+            return immediatelyEnd(sink);
           } else {
             return subscribe(sink);
           }
@@ -1384,14 +1384,14 @@ createNonInitPropertyBus = function() {
   return createNonInitProperty()(fromInternalDispatchOnly);
 };
 
-createProperty = function(initial_hyphen_value) {
+createProperty = function(initialValue) {
   return function(__i) {
-    return createDispatcherType(genPropOpts(initial_hyphen_value)(__i));
+    return createDispatcherType(genPropOpts(initialValue)(__i));
   };
 };
 
-createPropertyBus = function(initial_hyphen_value) {
-  return createProperty(initial_hyphen_value)()(fromInternalDispatchOnly);
+createPropertyBus = function(initialValue) {
+  return createProperty(initialValue)()(fromInternalDispatchOnly);
 };
 
 
@@ -1399,21 +1399,21 @@ createPropertyBus = function(initial_hyphen_value) {
 FayeSubscriber = { type: 'faye-subscriber' }
 createFayeSubscriber = \fayeClient \source ->
   channel = null
-  valid-new-channel? = \value ->
+  validNewChannel? = \value ->
     ? value && channel != value
-  transformDispatch = (dispatch) -> (value, source-id) ->
-    dispatch (value, source-id) if isEnd value
-    fayeClient.unsubscribe channel if valid-new-channel?
+  transformDispatch = (dispatch) -> (value, sourceID) ->
+    dispatch (value, sourceID) if isEnd value
+    fayeClient.unsubscribe channel if validNewChannel?
     channel = value
     fayeClient.subscribe (channel, dispatch)
-  create-dispatcher-type { proto: FayeSubscriber, transformDispatch } source
+  createDispatcherType { proto: FayeSubscriber, transformDispatch } source
  */
 
 fromArray = function(array) {
   return function(sink) {
     var available_question_, id, index, length, unsubscribe;
     available_question_ = true;
-    id = generate_hyphen_id();
+    id = generateID();
     index = 0;
     length = array.length;
     unsubscribe = function() {
@@ -1434,15 +1434,15 @@ fromArray = function(array) {
   };
 };
 
-fromEventTarget = function(dom_hyphen_tgt) {
-  return function(event_hyphen_name) {
+fromEventTarget = function(domTgt) {
+  return function(eventName) {
     return function(sink) {
       var sub, unsub, _ref5, _ref6, _ref7, _ref8;
-      sub = (_ref5 = dom_hyphen_tgt.addEventListener) != null ? _ref5 : (_ref6 = dom_hyphen_tgt.addListener) != null ? _ref6 : dom_hyphen_tgt.bind;
-      unsub = (_ref7 = dom_hyphen_tgt.removeEventListener) != null ? _ref7 : (_ref8 = dom_hyphen_tgt.removeListener) != null ? _ref8 : dom_hyphen_tgt.unbind;
-      sub.call(dom_hyphen_tgt, event_hyphen_hame, sink);
+      sub = (_ref5 = domTgt.addEventListener) != null ? _ref5 : (_ref6 = domTgt.addListener) != null ? _ref6 : domTgt.bind;
+      unsub = (_ref7 = domTgt.removeEventListener) != null ? _ref7 : (_ref8 = domTgt.removeListener) != null ? _ref8 : domTgt.unbind;
+      sub.call(domTgt, eventName, sink);
       return function() {
-        return unsub.call(dom_hyphen_tgt, event_hyphen_name);
+        return unsub.call(domTgt, eventName);
       };
     };
   };
@@ -1451,7 +1451,7 @@ fromEventTarget = function(dom_hyphen_tgt) {
 fromSourceFunction = function(subscribe, unsubscribe) {
   return function(sink) {
     if (unsubscribe == null) {
-      unsubscribe = return_hyphen_no_hyphen_op;
+      unsubscribe = returnNoOp;
     }
     subscribe(sink);
     return function() {
@@ -1460,19 +1460,19 @@ fromSourceFunction = function(subscribe, unsubscribe) {
   };
 };
 
-fromCallback = function(use_hyphen_as_hyphen_callback, stop_hyphen_using_hyphen_as_hyphen_callback) {
+fromCallback = function(useAsCallback, stopUsingAsCallback) {
   return function(sink) {
     var _sink;
-    if (stop_hyphen_using_hyphen_as_hyphen_callback == null) {
-      stop_hyphen_using_hyphen_as_hyphen_callback = return_hyphen_no_hyphen_op;
+    if (stopUsingAsCallback == null) {
+      stopUsingAsCallback = returnNoOp;
     }
     _sink = function(val) {
       sink(val);
       return sink(end);
     };
-    use_hyphen_as_hyphen_callback(_sink);
+    useAsCallback(_sink);
     return function() {
-      return stop_hyphen_using_hyphen_as_hyphen_callback(_sink);
+      return stopUsingAsCallback(_sink);
     };
   };
 };
@@ -1481,7 +1481,7 @@ fromDispatcher = function(dispatcher) {
   return dispatcher.subscribe;
 };
 
-fromInternalDispatchOnly = return_hyphen_no_hyphen_op;
+fromInternalDispatchOnly = returnNoOp;
 
 fromMerger = function(dispatchers) {
   return function(sink) {
@@ -1498,13 +1498,13 @@ fromMerger = function(dispatchers) {
   };
 };
 
-fromPoll = function(transform_hyphen_sink) {
-  return function(delay_hyphen_duration) {
+fromPoll = function(transformSink) {
+  return function(delayDuration) {
     return function(sink) {
-      var poll_hyphen_id;
-      poll_hyphen_id = setInterval(transform_hyphen_sink(sink), delay_hyphen_duration);
+      var pollID;
+      pollID = setInterval(transformSink(sink), delayDuration);
       return function() {
-        return clearInterval(poll_hyphen_id);
+        return clearInterval(pollID);
       };
     };
   };
@@ -1534,7 +1534,7 @@ fromDelayedValue = function(value) {
 fromPromise = \promise ->
   source = \sink ->
     promise.then sink
-    return-no-op
+    returnNoOp
   createPointSource source
  */
 
@@ -1557,7 +1557,7 @@ functionize = function(arg, args) {
     case !keypath_question_(arg):
       return function(val) {
         var component;
-        component = get_hyphen_component(arg.slice(1))(val);
+        component = getComponent(arg.slice(1))(val);
         if (function_question_(component)) {
           return apply(component)(args);
         } else {
@@ -1583,13 +1583,13 @@ functionize = function(arg, args) {
 
 blocking = blockTillReady;
 
-bind_hyphen_data = function(sink, source_hyphen_id, sid) {
+bindData = function(sink, sourceID, sid) {
   return function(val) {
-    return sink(val, source_hyphen_id, sid);
+    return sink(val, sourceID, sid);
   };
 };
 
-sink_hyphen_if_hyphen_sinkable = function(sink) {
+sinkIfSinkable = function(sink) {
   return function(value, sinkable_question_) {
     if (isEnd(value) || sinkable_question_ === true) {
       return sink(value);
@@ -1600,27 +1600,27 @@ sink_hyphen_if_hyphen_sinkable = function(sink) {
 _filtering = function(pred) {
   return function(sink) {
     return function(value) {
-      return try_hyphen_10(sink_hyphen_if_hyphen_sinkable(sink))(value, pred(value));
+      return try10(sinkIfSinkable(sink))(value, pred(value));
     };
   };
 };
 
 filtering = function(pred) {
   return function(sink) {
-    return function(value, source_hyphen_id, sid) {
+    return function(value, sourceID, sid) {
       var _sink;
-      _sink = bind_hyphen_data(sink, source_hyphen_id, sid);
+      _sink = bindData(sink, sourceID, sid);
       return _filtering(checkValue(pred))(_sink)(value);
     };
   };
 };
 
 _mapping = function(sink) {
-  return function(original_hyphen_value, transformed_hyphen_value) {
-    if (isEnd(original_hyphen_value)) {
-      return sink(original_hyphen_value);
+  return function(originalValue, transformedValue) {
+    if (isEnd(originalValue)) {
+      return sink(originalValue);
     } else {
-      return sink(transformed_hyphen_value);
+      return sink(transformedValue);
     }
   };
 };
@@ -1630,10 +1630,10 @@ mapping = function() {
   arg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
   fn = functionize.apply(null, [arg].concat(__slice.call(args)));
   return function(sink) {
-    return function(value, source_hyphen_id, sid) {
+    return function(value, sourceID, sid) {
       var _sink;
-      _sink = bind_hyphen_data(sink, source_hyphen_id, sid);
-      return try_hyphen_10(_mapping(_sink))(value, fn(value));
+      _sink = bindData(sink, sourceID, sid);
+      return try10(_mapping(_sink))(value, fn(value));
     };
   };
 };
@@ -1641,24 +1641,24 @@ mapping = function() {
 filteringDefined = filtering(defined_question_);
 
 filteringNonterminal = function(sink) {
-  return function(value, source_hyphen_id, sid) {
+  return function(value, sourceID, sid) {
     if (nonterminal_question_(value)) {
-      return sink(value, source_hyphen_id, sid);
+      return sink(value, sourceID, sid);
     }
   };
 };
 
 filteringRelevant = filtering(isRelevant);
 
-delaying = function(delay_hyphen_duration) {
+delaying = function(delayDuration) {
   return function(sink) {
-    return function(value, source_hyphen_id, sid) {
+    return function(value, sourceID, sid) {
       if (isEnd(value)) {
-        return sink(end, source_hyphen_id, sid);
+        return sink(end, sourceID, sid);
       } else {
         return setInterval((function() {
-          return sink(value, source_hyphen_id, sid);
-        }), delay_hyphen_duration);
+          return sink(value, sourceID, sid);
+        }), delayDuration);
       }
     };
   };
@@ -1672,10 +1672,10 @@ flattening = function(sink) {
       return unsubscribe();
     });
   };
-  return function(dispatcher, source_hyphen_id) {
+  return function(dispatcher, sourceID) {
     if (isEnd(dispatcher)) {
       unsub();
-      return sink(end, source_hyphen_id);
+      return sink(end, sourceID);
     } else {
       return subscriptions.push(dispatcher.subscribe(sink));
     }
@@ -1685,7 +1685,7 @@ flattening = function(sink) {
 monitoringFirst = function(sink) {
   var accepting_question_, unsub;
   accepting_question_ = true;
-  unsub = no_hyphen_op;
+  unsub = noOp;
   return function(dispatcher) {
     if (isEnd(dispatcher)) {
       unsub();
@@ -1700,7 +1700,7 @@ monitoringFirst = function(sink) {
 
 monitoringLatest = function(sink) {
   var unsub;
-  unsub = no_hyphen_op;
+  unsub = noOp;
   return function(dispatcher) {
     if (isEnd(dispatcher)) {
       unsub();
@@ -1711,7 +1711,7 @@ monitoringLatest = function(sink) {
   };
 };
 
-permitting_hyphen_only_hyphen_one_hyphen_value = function(sink) {
+permittingOnlyOneValue = function(sink) {
   return function(value) {
     sink(value);
     return sink(end);
@@ -1721,13 +1721,13 @@ permitting_hyphen_only_hyphen_one_hyphen_value = function(sink) {
 reducing = function(memo) {
   return function(fn) {
     return function(sink) {
-      var cached_hyphen_value;
-      cached_hyphen_value = memo;
+      var cachedValue;
+      cachedValue = memo;
       return function(value) {
         if (nonterminal_question_(value)) {
-          return cached_hyphen_value = fn(cached_hyphen_value)(value);
+          return cachedValue = fn(cachedValue)(value);
         } else {
-          return sink(cached_hyphen_value);
+          return sink(cachedValue);
         }
       };
     };
@@ -1739,9 +1739,9 @@ staggering = function(offset) {
     var cache, sinking_question_;
     cache = [];
     sinking_question_ = false;
-    return function(value, source_hyphen_id, sid) {
+    return function(value, sourceID, sid) {
       var args;
-      cache.push([value, source_hyphen_id, sid]);
+      cache.push([value, sourceID, sid]);
       if (sinking_question_) {
         args = cache.shift();
         return sink.apply(null, args);
@@ -1757,23 +1757,23 @@ taking = function(nbr) {
   return function(sink) {
     var iteration;
     iteration = nbr;
-    return function(value, source_hyphen_id) {
+    return function(value, sourceID) {
       if (iteration > 0) {
         iteration = iteration - 1;
-        return sink(value, source_hyphen_id);
+        return sink(value, sourceID);
       } else {
-        return sink(end, source_hyphen_id);
+        return sink(end, sourceID);
       }
     };
   };
 };
 
-stateMachineProcessing = function(initial_hyphen_state) {
+stateMachineProcessing = function(initialState) {
   return function(fn) {
     return function(sink) {
       return function(value) {
         var newState, newValue, state, _ref5;
-        state = initial_hyphen_state;
+        state = initialState;
         _ref5 = fn(state)(value), newState = _ref5.newState, newValue = _ref5.newValue;
         state = newState;
         return sink(newValue);
@@ -1785,14 +1785,14 @@ stateMachineProcessing = function(initial_hyphen_state) {
 scanning = function(memo) {
   return function(fn) {
     return function(sink) {
-      var cached_hyphen_value;
-      cached_hyphen_value = memo;
+      var cachedValue;
+      cachedValue = memo;
       return function(value) {
         if (isEnd(value)) {
           return sink(value);
         } else {
-          cached_hyphen_value = fn(cached_hyphen_value)(value);
-          return sink(cached_hyphen_value);
+          cachedValue = fn(cachedValue)(value);
+          return sink(cachedValue);
         }
       };
     };
@@ -1801,10 +1801,10 @@ scanning = function(memo) {
 
 _ref5 = map(transbind)([filtering, filteringNonterminal, mapping]), bfiltering = _ref5[0], bfilteringNonterminal = _ref5[1], bmapping = _ref5[2];
 
-fmapD = function(dispatcher_hyphen_factory) {
+fmapD = function(dispatcherFactory) {
   return function(fn) {
     return function(dispatcher) {
-      return dispatcher_hyphen_factory(mapping(fn))(dispatcher.subscribe);
+      return dispatcherFactory(mapping(fn))(dispatcher.subscribe);
     };
   };
 };
@@ -1821,9 +1821,9 @@ _subscribe = function(sink) {
   };
 };
 
-merge = function(tgt_hyphen_dispatcher) {
-  return function(reactive_hyphen_values) {
-    return each(plug(tgt_hyphen_dispatcher))(reactive_hyphen_values);
+merge = function(tgtDispatcher) {
+  return function(reactiveValues) {
+    return each(plug(tgtDispatcher))(reactiveValues);
   };
 };
 
@@ -1831,18 +1831,18 @@ negating = mapping(function(bool) {
   return !bool;
 });
 
-plug = function(tgt_hyphen_dispatcher) {
-  return function(src_hyphen_dispatcher) {
-    return src_hyphen_dispatcher.subscribe(tgt_hyphen_dispatcher.dispatch);
+plug = function(tgtDispatcher) {
+  return function(srcDispatcher) {
+    return srcDispatcher.subscribe(tgtDispatcher.dispatch);
   };
 };
 
-remerse = function(dispatcher_hyphen_factory) {
+remerse = function(dispatcherFactory) {
   return function(fn) {
     return function(source) {
       var _source;
       _source = isDispatcher(source) ? source.subscribe : source;
-      return dispatcher_hyphen_factory(fn)(_source);
+      return dispatcherFactory(fn)(_source);
     };
   };
 };
@@ -1861,7 +1861,7 @@ $transubscribe = function(transmerse) {
   };
 };
 
-onFirstAndOnlyValue = transubscribe(permitting_hyphen_only_hyphen_one_hyphen_value);
+onFirstAndOnlyValue = transubscribe(permittingOnlyOneValue);
 
 onValue = transubscribe(filteringNonterminal);
 
@@ -1873,14 +1873,14 @@ createSignalType = function(opts) {
   }
   return function(source) {
     var mixins, proto, read, replaceTransform, transformSource, _ref6;
-    _ref6 = parse_hyphen_signal_hyphen_opts(opts), mixins = _ref6.mixins, proto = _ref6.proto, transformSource = _ref6.transformSource;
-    replaceTransform = function(new_hyphen_transform) {
-      return transformSource = new_hyphen_transform;
+    _ref6 = parseSignalOpts(opts), mixins = _ref6.mixins, proto = _ref6.proto, transformSource = _ref6.transformSource;
+    replaceTransform = function(newTransform) {
+      return transformSource = newTransform;
     };
     read = function() {
       return transformSource(source());
     };
-    return extend_hyphen_proto(CoreSignal, {
+    return extendProto(CoreSignal, {
       read: read,
       replaceTransform: replaceTransform
     }, mixins);
@@ -1888,24 +1888,24 @@ createSignalType = function(opts) {
 };
 
 createClock = function(opts) {
-  var current_hyphen_time, error_hyphen_msg, offset, pause, read, reset, restart, running_question_, start, start_hyphen_time;
-  error_hyphen_msg = 'Clock is not running';
+  var currentTime, errorMsg, offset, pause, read, reset, restart, running_question_, start, startTime;
+  errorMsg = 'Clock is not running';
   offset = 0;
-  start_hyphen_time = null;
+  startTime = null;
   running_question_ = false;
-  current_hyphen_time = function() {
+  currentTime = function() {
     return new Date();
   };
   pause = function() {
-    offset += current_hyphen_time() - start_hyphen_time;
+    offset += currentTime() - startTime;
     running_question_ = false;
     return paused;
   };
   read = function() {
     if (!running_question_) {
-      throw new Error(error_hyphen_msg);
+      throw new Error(errorMsg);
     }
-    return (current_hyphen_time() - start_hyphen_time + offset) / 1000;
+    return (currentTime() - startTime + offset) / 1000;
   };
   reset = function() {
     running_question_ = false;
@@ -1917,11 +1917,11 @@ createClock = function(opts) {
     return start();
   };
   start = function() {
-    start_hyphen_time = current_hyphen_time();
+    startTime = currentTime();
     running_question_ = true;
     return active;
   };
-  return extend_hyphen_proto(clock, {
+  return extendProto(clock, {
     pause: pause,
     read: read,
     reset: reset,
@@ -1941,7 +1941,7 @@ genTimeOpts = function(opts) {
   if (opts == null) {
     opts = {};
   }
-  result = parse_hyphen_signal_hyphen_opts(opts);
+  result = parseSignalOpts(opts);
   result.proto = Time;
   return result;
 };
@@ -1972,10 +1972,10 @@ switcher = function(signal) {
   };
 };
 
-fmapS = function(signal_hyphen_factory) {
+fmapS = function(signalFactory) {
   return function(fn) {
     return function(readable) {
-      return signal_hyphen_factory(function() {
+      return signalFactory(function() {
         return fn(readable.read());
       });
     };
@@ -1984,7 +1984,7 @@ fmapS = function(signal_hyphen_factory) {
 
 liftS = function(fn) {
   return function(readables) {
-    return signal_hyphen_factory(function() {
+    return signalFactory(function() {
       return readables.reduce((function(memo, val) {
         return memo = memo(val.read());
       }), fn);
@@ -1992,11 +1992,11 @@ liftS = function(fn) {
   };
 };
 
-liftS2 = function(dyadic_hyphen_fn) {
+liftS2 = function(dyadicFn) {
   return function(readable1) {
     return function(readable2) {
-      return signal_hyphen_factory(function() {
-        return dyadic_hyphen_fn(readable1.read())(readable2.read());
+      return signalFactory(function() {
+        return dyadicFn(readable1.read())(readable2.read());
       });
     };
   };
@@ -2005,15 +2005,15 @@ liftS2 = function(dyadic_hyphen_fn) {
 connect = function(src) {
   return function(tgt) {
     return function(transform) {
-      var new_hyphen_sink, subscription;
+      var newSink, subscription;
       if (transform == null) {
         transform = identity;
       }
-      new_hyphen_sink = transform(tgt.dispatch);
-      subscription = function(value, source_hyphen_id) {
-        return new_hyphen_sink(value, source_hyphen_id, subscription.id);
+      newSink = transform(tgt.dispatch);
+      subscription = function(value, sourceID) {
+        return newSink(value, sourceID, subscription.id);
       };
-      subscription.id = generate_hyphen_id();
+      subscription.id = generateID();
       return src.subscribe(subscription);
     };
   };
@@ -2100,14 +2100,14 @@ if ((typeof define !== "undefined" && define !== null) && (define['amd'] != null
 
 
 
-},{}],"/home/theo/projects/reactive-aspen/cough/react-module/exports.cough":[function(require,module,exports){
+},{}],17:[function(_dereq_,module,exports){
 var Bridge, Mixins, React;
 
-Bridge = require('./react-bridge/exports');
+Bridge = _dereq_('./react-bridge/exports');
 
-Mixins = require('./react-mixins/exports');
+Mixins = _dereq_('./react-mixins/exports');
 
-React = require('./react-bridge/react');
+React = _dereq_('./react');
 
 module.exports = {
   Bridge: Bridge,
@@ -2117,14 +2117,14 @@ module.exports = {
 
 
 
-},{"./react-bridge/exports":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/exports.cough","./react-bridge/react":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/react.cough","./react-mixins/exports":"/home/theo/projects/reactive-aspen/cough/react-module/react-mixins/exports.cough"}],"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/adapter-utilities.cough":[function(require,module,exports){
+},{"./react":27,"./react-bridge/exports":20,"./react-mixins/exports":25}],18:[function(_dereq_,module,exports){
 var getAdapter, getInjectedFactory, getTemplate, handlerRegex, handler_question_, inject, isFunction,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
 
-getInjectedFactory = require('./factory-injector').getInjectedFactory;
+getInjectedFactory = _dereq_('./factory-injector').getInjectedFactory;
 
-isFunction = require('./utilities').isFunction;
+isFunction = _dereq_('./utilities').isFunction;
 
 handlerRegex = /^on[A-Z]/;
 
@@ -2179,16 +2179,16 @@ module.exports = {
 
 
 
-},{"./factory-injector":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/factory-injector.cough","./utilities":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/utilities.cough"}],"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/adapters.cough":[function(require,module,exports){
+},{"./factory-injector":21,"./utilities":23}],19:[function(_dereq_,module,exports){
 var BUTTON, CHECKBOX, FORM, LABEL, LINK, PASSWORD, TEXT, a, button, collectAdapters, dollarize, ensureCheckboxProps, ensureLinkProps, ensurePasswordProps, ensureProps, ensureTextProps, form, getAdapter, getInjectedFactory, input, isObject, isString, label, onChange, onClick, onSubmit, records, shallowCopy, _ref, _ref1;
 
-_ref = require('./react').DOM, a = _ref.a, button = _ref.button, form = _ref.form, input = _ref.input, label = _ref.label;
+_ref = _dereq_('../react').DOM, a = _ref.a, button = _ref.button, form = _ref.form, input = _ref.input, label = _ref.label;
 
-getInjectedFactory = require('./factory-injector').getInjectedFactory;
+getInjectedFactory = _dereq_('./factory-injector').getInjectedFactory;
 
-getAdapter = require('./adapter-utilities').getAdapter;
+getAdapter = _dereq_('./adapter-utilities').getAdapter;
 
-_ref1 = require('./utilities'), isObject = _ref1.isObject, isString = _ref1.isString, shallowCopy = _ref1.shallowCopy;
+_ref1 = _dereq_('./utilities'), isObject = _ref1.isObject, isString = _ref1.isString, shallowCopy = _ref1.shallowCopy;
 
 BUTTON = 'button';
 
@@ -2287,14 +2287,14 @@ module.exports = collectAdapters({}, records);
 
 
 
-},{"./adapter-utilities":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/adapter-utilities.cough","./factory-injector":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/factory-injector.cough","./react":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/react.cough","./utilities":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/utilities.cough"}],"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/exports.cough":[function(require,module,exports){
+},{"../react":27,"./adapter-utilities":18,"./factory-injector":21,"./utilities":23}],20:[function(_dereq_,module,exports){
 var adapters, connectTo, sensitize;
 
-adapters = require('./adapters');
+adapters = _dereq_('./adapters');
 
-connectTo = require('./factory-injector').connectTo;
+connectTo = _dereq_('./factory-injector').connectTo;
 
-sensitize = require('./sensitive-component');
+sensitize = _dereq_('./sensitive-component');
 
 module.exports = {
   adapters: adapters,
@@ -2304,10 +2304,10 @@ module.exports = {
 
 
 
-},{"./adapters":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/adapters.cough","./factory-injector":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/factory-injector.cough","./sensitive-component":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/sensitive-component.cough"}],"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/factory-injector.cough":[function(require,module,exports){
+},{"./adapters":19,"./factory-injector":21,"./sensitive-component":22}],21:[function(_dereq_,module,exports){
 var connectTo, createInjectable, embedEventInside, exportReactEvents, getCapsule, getInjectedFactory, getWrapper, hasher, isFunction, isString, memoize, shallowCopy, stringify, _getInjectedFactory, _ref, _ref1;
 
-_ref = require('./utilities'), isFunction = _ref.isFunction, isString = _ref.isString, memoize = _ref.memoize, shallowCopy = _ref.shallowCopy;
+_ref = _dereq_('./utilities'), isFunction = _ref.isFunction, isString = _ref.isString, memoize = _ref.memoize, shallowCopy = _ref.shallowCopy;
 
 _ref1 = (function() {
   var connectTo, eventHandler, exportReactEvents;
@@ -2407,18 +2407,13 @@ module.exports = {
 
 
 
-},{"./utilities":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/utilities.cough"}],"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/react.cough":[function(require,module,exports){
-module.exports = require('../react-with-addons');
-
-
-
-},{"../react-with-addons":"/home/theo/projects/reactive-aspen/cough/react-module/react-with-addons.js"}],"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/sensitive-component.cough":[function(require,module,exports){
+},{"./utilities":23}],22:[function(_dereq_,module,exports){
 var createClass, createFactory, encapsulateInfo, getInjectedFactory, sensitiveRenderMixin, sensitize, template, _ref,
   __slice = [].slice;
 
-getInjectedFactory = require('./factory-injector').getInjectedFactory;
+getInjectedFactory = _dereq_('./factory-injector').getInjectedFactory;
 
-_ref = require('../react-with-addons'), createClass = _ref.createClass, createFactory = _ref.createFactory;
+_ref = _dereq_('../react'), createClass = _ref.createClass, createFactory = _ref.createFactory;
 
 encapsulateInfo = function(component, state) {
   return {
@@ -2491,7 +2486,7 @@ module.exports = sensitize;
 
 
 
-},{"../react-with-addons":"/home/theo/projects/reactive-aspen/cough/react-module/react-with-addons.js","./factory-injector":"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/factory-injector.cough"}],"/home/theo/projects/reactive-aspen/cough/react-module/react-bridge/utilities.cough":[function(require,module,exports){
+},{"../react":27,"./factory-injector":21}],23:[function(_dereq_,module,exports){
 var ObjProto, applyUnsplat, hasType_question_, isFunction, isObject, isString, memoize, shallowCopy, shallowFlatten, toString, _ref,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -2569,7 +2564,7 @@ module.exports = {
 
 
 
-},{}],"/home/theo/projects/reactive-aspen/cough/react-module/react-mixins/AutoPostFocusMixin.js":[function(require,module,exports){
+},{}],24:[function(_dereq_,module,exports){
 /**
  * Derivative of source code copyrighted by Facebook.
  * This source code is licensed under Facebook's  BSD-style license.
@@ -2603,10 +2598,10 @@ var AutoPostFocusMixin = {
 
 module.exports = AutoPostFocusMixin;
 
-},{}],"/home/theo/projects/reactive-aspen/cough/react-module/react-mixins/exports.cough":[function(require,module,exports){
+},{}],25:[function(_dereq_,module,exports){
 var AutoPostFocusMixin;
 
-AutoPostFocusMixin = require('./AutoPostFocusMixin');
+AutoPostFocusMixin = _dereq_('./AutoPostFocusMixin');
 
 module.exports = {
   AutoPostFocusMixin: AutoPostFocusMixin
@@ -2614,12 +2609,11 @@ module.exports = {
 
 
 
-},{"./AutoPostFocusMixin":"/home/theo/projects/reactive-aspen/cough/react-module/react-mixins/AutoPostFocusMixin.js"}],"/home/theo/projects/reactive-aspen/cough/react-module/react-with-addons.js":[function(require,module,exports){
-(function (global){
-/**
+},{"./AutoPostFocusMixin":24}],26:[function(_dereq_,module,exports){
+(function (global){/**
  * React (with addons) v0.12.0
  */
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.React=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.React=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof _dereq_=="function"&&_dereq_;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof _dereq_=="function"&&_dereq_;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22416,9 +22410,11 @@ if ("production" !== "development") {
 module.exports = warning;
 
 },{"./emptyFunction":121}]},{},[1])(1)
-});
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/home/theo/projects/reactive-aspen/cough/utilities.cough":[function(require,module,exports){
+});}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],27:[function(_dereq_,module,exports){
+module.exports = _dereq_('./react-with-addons');
+
+},{"./react-with-addons":26}],28:[function(_dereq_,module,exports){
 var ObjProto, addComponent, atomicKeypath_question_, compose, compositeRegex, dot, getComponent, getKeys, hasType_question_, identity, isArray, isObject, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, useParamListOrArray, _ref,
   __hasProp = {}.hasOwnProperty,
   __slice = [].slice;
@@ -22544,5 +22540,6 @@ module.exports = {
 
 
 
-},{}]},{},["/home/theo/projects/reactive-aspen/cough/exports.cough"])("/home/theo/projects/reactive-aspen/cough/exports.cough")
+},{}]},{},[11])
+(11)
 });
