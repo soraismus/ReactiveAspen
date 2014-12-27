@@ -1,5 +1,5 @@
 Bridge = require './react-bridge/exports'
 Mixins = require './react-mixins/exports'
-React  = require './react-bridge/react'
+React  = require './react'
 
 module.exports = { Bridge, Mixins, React }
