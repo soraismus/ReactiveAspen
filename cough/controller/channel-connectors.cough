@@ -1,12 +1,12 @@
 { getDispatcher }     = require './channel-registrar'
 { isArray, isString } = require '../utilities'
-pandoConnect          = require('../pando').connect
+pandoConnect          = require('../pando/pando').utilities.connect
 
 _connect = (src, tgt, transform) ->
   [_src, _tgt] = [src, tgt].map interpret
   setAlias _src src
   setAlias _tgt tgt
-  pandoConnect _src _tgt transform
+  pandoConnect (_src, _tgt, transform)
 
 connect = \sources \targets \thunk ->
   if isArray sources
