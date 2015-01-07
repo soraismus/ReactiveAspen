@@ -1,3 +1,0 @@
-AutoPostFocusMixin = require './AutoPostFocusMixin'
-
-module.exports = { AutoPostFocusMixin }
