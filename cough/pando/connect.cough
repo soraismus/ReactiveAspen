@@ -1,1 +1,1 @@
-module.exports = require('pando').utilities.connect
+module.exports = require('./utilities').connect
