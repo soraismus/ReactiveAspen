@@ -1,9 +1,8 @@
-{ isArray } = require '../utilities'
-
+{ isArray }                 = require '../utilities'
+{ factories, utilities }    = require '../pando/pando'
 { createEventStreamBus
-  createNonInitPropertyBus
-  plug
-} = require '../pando'
+  createNonInitPropertyBus } = factories
+{ connect }                  = utilities
 
 disconnectors = {}
 dispatchers   = {}
@@ -32,7 +31,7 @@ _register = (busFactory, label) ->
   bus.setAlias label
 
   load = \observable ->
-    _unplug = plug bus observable
+    _unplug = connect (observable, bus)
 
     observable-id = id
 
