@@ -1,12 +1,12 @@
 var connectPortsToBuses, initialize, linkTogetherMVC, push, render;
 
-connectPortsToBuses = require('../adapter/exports.js').connectPortsToBuses;
+connectPortsToBuses = require('../adapter/exports').connectPortsToBuses;
 
-linkTogetherMVC = require('./linkTogetherMVC.js');
+linkTogetherMVC = require('./linkTogetherMVC');
 
-push = require('../controller/exports.js').push;
+push = require('../controller/exports').push;
 
-render = require('../react-module/exports.js').React.render;
+render = require('../react-render');
 
 initialize = function(appNodeID, topViewFactory, initialAppState, viewImports) {
   var topReactDescriptor;

@@ -1,8 +1,8 @@
 var appStateChannelName, connectViewToController, linkTogetherMVC, push;
 
-connectViewToController = require('../adapter/exports.js').connectViewToController;
+connectViewToController = require('../adapter/exports').connectViewToController;
 
-push = require('../controller/exports.js').push;
+push = require('../controller/exports').push;
 
 appStateChannelName = 'app-state';
 

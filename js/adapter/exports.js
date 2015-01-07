@@ -1,8 +1,8 @@
 var connectPortsToBuses, connectViewToController;
 
-connectPortsToBuses = require('./connectPortsToBuses.js');
+connectPortsToBuses = require('./connectPortsToBuses');
 
-connectViewToController = require('./pando-adapter.js');
+connectViewToController = require('./pando-adapter');
 
 module.exports = {
   connectPortsToBuses: connectPortsToBuses,

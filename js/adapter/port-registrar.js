@@ -1,8 +1,8 @@
 var addComponent, busExt, connectBus, connectPort, connectPortComponent, createEventStreamBus, getComponent, getPortComponent, keypaths, portExt, ports, register, _ref, _ref1;
 
-_ref = require('../utilities.js'), addComponent = _ref.addComponent, getComponent = _ref.getComponent;
+_ref = require('../utilities'), addComponent = _ref.addComponent, getComponent = _ref.getComponent;
 
-createEventStreamBus = require('../pando.js').createEventStreamBus;
+createEventStreamBus = require('../pando/factories').createEventStreamBus;
 
 keypaths = {};
 

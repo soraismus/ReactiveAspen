@@ -1,9 +1,11 @@
-var createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plug, plugs, register, _ref, _ref1, _register,
+var connect, createEventStreamBus, createNonInitPropertyBus, deleteBus, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
 
-isArray = require('../utilities.js').isArray;
+_ref = require('../pando/factories'), createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus;
 
-_ref = require('../pando.js'), createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus, plug = _ref.plug;
+connect = require('../pando/connect');
+
+isArray = require('../utilities').isArray;
 
 disconnectors = {};
 
@@ -46,7 +48,7 @@ _register = function(busFactory, label) {
   bus.setAlias(label);
   load = function(observable) {
     var observable_hyphen_id, unplug, _unplug;
-    _unplug = plug(bus)(observable);
+    _unplug = connect(observable, bus);
     observable_hyphen_id = id;
     unplug = function() {
       delete disconnectors[label][observable_hyphen_id];

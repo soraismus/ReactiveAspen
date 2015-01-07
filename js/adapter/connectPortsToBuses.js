@@ -1,16 +1,16 @@
 var actAsSwitchboard, blur, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, interpretRecord, isArray, isObject, manageDispatcher, preventDefault, reactIntake, reactIntakeBus, switches, _blur, _preventDefault, _ref, _ref1, _ref2, _ref3;
 
-_ref = require('./port-utilities.js'), blur = _ref.blur, preventDefault = _ref.preventDefault;
+_ref = require('./port-utilities'), blur = _ref.blur, preventDefault = _ref.preventDefault;
 
 _ref1 = [blur, preventDefault], _blur = _ref1[0], _preventDefault = _ref1[1];
 
-connectBus = require('./port-registrar.js').connectBus;
+connectBus = require('./port-registrar').connectBus;
 
-_ref2 = require('../controller/exports.js'), getEventStream = _ref2.getEventStream, getProperty = _ref2.getProperty;
+_ref2 = require('../controller/exports'), getEventStream = _ref2.getEventStream, getProperty = _ref2.getProperty;
 
-_ref3 = require('../utilities.js'), isArray = _ref3.isArray, isObject = _ref3.isObject;
+_ref3 = require('../utilities'), isArray = _ref3.isArray, isObject = _ref3.isObject;
 
-reactIntake = require('./react-intake.js');
+reactIntake = require('./react-intake');
 
 eventStreamRegex = /^\$/;
 

@@ -1,17 +1,17 @@
 var connect, connectMultiple, connectSingle, getDispatcher, interpret, isArray, isString, pandoConnect, plug, push, setAlias, _connect, _ref;
 
-getDispatcher = require('./channel-registrar.js').getDispatcher;
+getDispatcher = require('./channel-registrar').getDispatcher;
 
-_ref = require('../utilities.js'), isArray = _ref.isArray, isString = _ref.isString;
+_ref = require('../utilities'), isArray = _ref.isArray, isString = _ref.isString;
 
-pandoConnect = require('../pando.js').connect;
+pandoConnect = require('../pando/connect');
 
 _connect = function(src, tgt, transform) {
   var _ref1, _src, _tgt;
   _ref1 = [src, tgt].map(interpret), _src = _ref1[0], _tgt = _ref1[1];
   setAlias(_src)(src);
   setAlias(_tgt)(tgt);
-  return pandoConnect(_src)(_tgt)(transform);
+  return pandoConnect(_src, _tgt, transform);
 };
 
 connect = function(sources) {

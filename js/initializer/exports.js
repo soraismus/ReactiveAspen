@@ -1,8 +1,8 @@
 var initialize, plugIntoTerminus;
 
-initialize = require('./initialize.js');
+initialize = require('./initialize');
 
-plugIntoTerminus = require('./terminus.js').plugIntoTerminus;
+plugIntoTerminus = require('./terminus').plugIntoTerminus;
 
 module.exports = {
   initialize: initialize,

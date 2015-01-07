@@ -1,21 +1,15 @@
-var Adapter, Bridge, Controller, Initializer, Mixins, Pando, React, _ref;
+var AutoPostFocusMixin;
 
-Adapter = require('./adapter/exports.js');
-
-_ref = require('./react-module/exports.js'), Bridge = _ref.Bridge, Mixins = _ref.Mixins, React = _ref.React;
-
-Controller = require('./controller/exports.js');
-
-Initializer = require('./initializer/exports.js');
-
-Pando = require('./pando.js');
+AutoPostFocusMixin = require('react-auto-post-focus-mixin');
 
 module.exports = {
-  Adapter: Adapter,
-  Bridge: Bridge,
-  Controller: Controller,
-  Initializer: Initializer,
-  Mixins: Mixins,
-  Pando: Pando,
-  React: React
+  Adapter: require('./adapter/exports'),
+  Bridge: require('react-bridge'),
+  Controller: require('./controller/exports'),
+  Initializer: require('./initializer/exports'),
+  Mixins: {
+    AutoPostFocusMixin: AutoPostFocusMixin
+  },
+  Pando: require('pando'),
+  React: require('react')
 };
