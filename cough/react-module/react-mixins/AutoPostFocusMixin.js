@@ -23,7 +23,7 @@ function focusPostNode(node) {
 
 var AutoPostFocusMixin = {
   componentDidMount: function() {
-    if (this.props.autoFocus) {
+    if (this.props.autoPostFocus) {
       focusPostNode(this.getDOMNode());
     }
   }
