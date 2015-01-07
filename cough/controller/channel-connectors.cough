@@ -1,6 +1,6 @@
 { getDispatcher }     = require './channel-registrar'
 { isArray, isString } = require '../utilities'
-pandoConnect          = require('../pando/pando').utilities.connect
+pandoConnect          = require '../pando/connect'
 
 _connect = (src, tgt, transform) ->
   [_src, _tgt] = [src, tgt].map interpret

@@ -1,5 +1,5 @@
 { addComponent, getComponent } = require '../utilities'
-{ createEventStreamBus }       = require('../pando/pando').factories
+{ createEventStreamBus }       = require '../pando/factories'
 
 keypaths = {}
 ports    = {}

@@ -1,9 +1,9 @@
-{ blockTillReady, doAsync, onValue } = require('../pando/pando').utilities
+{ blockTillReady, doAsync, onValue }     = require '../pando/utilities'
 { connect, getEventStream, getProperty } = require '../controller/exports'
 
 { identity }    = require '../utilities'
 linkTogetherMVC = require './linkTogetherMVC'
-{ render }      = require('../react-module/exports').React
+render          = require '../react-render'
 
 [appNodeId, appState, topViewFactory] =
   ['app-node-id', 'app-state', 'top-view-factory'].map getProperty

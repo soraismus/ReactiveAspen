@@ -1,8 +1,8 @@
-{ isArray }                 = require '../utilities'
-{ factories, utilities }    = require '../pando/pando'
-{ createEventStreamBus
-  createNonInitPropertyBus } = factories
-{ connect }                  = utilities
+{ createEventStreamBus,
+  createNonInitPropertyBus } = require '../pando/factories'
+
+connect     = require '../pando/connect'
+{ isArray } = require '../utilities'
 
 disconnectors = {}
 dispatchers   = {}
