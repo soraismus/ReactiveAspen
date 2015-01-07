@@ -1,4 +1,4 @@
-{ blockTillReady, checkValue, $onValue } = require '../pando'
+{ blockTillReady, doAsync, onValue } = require('../pando/pando').utilities
 { connect, getEventStream, getProperty } = require '../controller/exports'
 
 { identity }    = require '../utilities'
@@ -8,7 +8,6 @@ linkTogetherMVC = require './linkTogetherMVC'
 [appNodeId, appState, topViewFactory] =
   ['app-node-id', 'app-state', 'top-view-factory'].map getProperty
 
-doAsync          = checkValue
 _getElementById  = doAsync (document.getElementById.bind document)
 _linkTogetherMVC = doAsync linkTogetherMVC
 TERMINUS         = 'terminus'
@@ -28,6 +27,6 @@ resetAppState = \transform ->
   component   = _linkTogetherMVC (topViewFactory, newAppState)
   blockTillReady render (component, node)
 
-$onValue (getEventStream 'terminus') (blockTillReady resetAppState)
+onValue (getEventStream 'terminus') (blockTillReady resetAppState)
 
 module.exports = { plugIntoTerminus }
