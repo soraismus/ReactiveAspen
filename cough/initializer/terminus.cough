@@ -3,7 +3,7 @@
 
 { identity }    = require '../utilities'
 linkTogetherMVC = require './linkTogetherMVC'
-render          = require '../react-render'
+render          = require '../react/render'
 
 [appNodeId, appState, topViewFactory] =
   ['app-node-id', 'app-state', 'top-view-factory'].map getProperty

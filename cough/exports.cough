@@ -7,5 +7,5 @@ module.exports = {
   Initializer : require './initializer/exports'
   Mixins      : { AutoPostFocusMixin }
   Pando       : require 'pando'
-  React       : require 'react'
+  React       : require './react/react'
 }

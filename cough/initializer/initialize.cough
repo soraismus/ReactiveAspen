@@ -1,7 +1,7 @@
 { connectPortsToBuses } = require '../adapter/exports'
 linkTogetherMVC         = require './linkTogetherMVC'
 { push }                = require '../controller/exports'
-render                  = require '../react-render'
+render                  = require '../react/render'
 
 initialize = (appNodeID, topViewFactory, initialAppState, viewImports) ->
   push 'app-node-id' appNodeID
