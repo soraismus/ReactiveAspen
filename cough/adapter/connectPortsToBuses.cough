@@ -1,9 +1,11 @@
-{ blur, preventDefault }        = require './port-utilities'
-[_blur, _preventDefault]        = [blur, preventDefault]
 { connectBus }                  = require './port-registrar'
 { getEventStream, getProperty } = require '../controller/exports'
 { isArray, isObject }           = require '../utilities'
 reactIntake                     = require './react-intake'
+
+portUtilities   = require './port-utilities'
+_blur           = portUtilities.blur
+_preventDefault = portUtilities.preventDefault
 
 eventStreamRegex = /^\$/
 
