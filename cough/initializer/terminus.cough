@@ -12,15 +12,6 @@ _getElementById  = doAsync (document.getElementById.bind document)
 _linkTogetherMVC = doAsync linkTogetherMVC
 TERMINUS         = 'terminus'
 
-# Rewrite to use pando directly.
-plugIntoTerminus = \observable ->
-  connect observable TERMINUS (-> identity)
-
-# connectToTerminus = \observable \thunk ->
-#   connect observable TERMINUS thunk
-# mapToTerminus = \observable \thunk ->
-#   connect observable TERMINUS (-> mapping (thunk ()))
-
 resetAppState = \transform ->
   node        = _getElementById appNodeId
   newAppState = doAsync transform appState
@@ -28,5 +19,3 @@ resetAppState = \transform ->
   blockTillReady render (component, node)
 
 onValue (getEventStream 'terminus') (blockTillReady resetAppState)
-
-module.exports = { plugIntoTerminus }
