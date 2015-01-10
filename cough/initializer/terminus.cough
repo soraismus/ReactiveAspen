@@ -1,21 +1,17 @@
-{ blockTillReady, doAsync, onValue }     = require '../pando/utilities'
-{ connect, getEventStream, getProperty } = require '../controller/exports'
+{ appStateProperty, getAppNodeID,
+  getTopViewFactory, terminusEventStream } = require '../aspen-state'
+{ blockTillReady, doAsync, onValue }       = require '../pando/utilities'
+{ connect, getEventStream, getProperty }   = require '../controller/exports'
+linkTogetherMVC                            = require './linkTogetherMVC'
+render                                     = require '../react/render'
 
-{ identity }    = require '../utilities'
-linkTogetherMVC = require './linkTogetherMVC'
-render          = require '../react/render'
-
-[appNodeId, appState, topViewFactory] =
-  ['app-node-id', 'app-state', 'top-view-factory'].map getProperty
-
-_getElementById  = doAsync (document.getElementById.bind document)
 _linkTogetherMVC = doAsync linkTogetherMVC
-TERMINUS         = 'terminus'
+_render          = blockTillReady render
 
 resetAppState = \transform ->
-  node        = _getElementById appNodeId
-  newAppState = doAsync transform appState
-  component   = _linkTogetherMVC (topViewFactory, newAppState)
-  blockTillReady render (component, node)
+  node         = document.getElementById (getAppNodeID ())
+  newAppState  = doAsync transform appStateProperty
+  reactElement = _linkTogetherMVC (getTopViewFactory (), newAppState)
+  _render (reactElement, node)
 
-onValue (getEventStream 'terminus') (blockTillReady resetAppState)
+onValue terminusEventStream (blockTillReady resetAppState)
