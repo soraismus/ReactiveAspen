@@ -8,7 +8,7 @@ disconnectors = {}
 dispatchers   = {}
 plugs         = {}
 
-deleteBus = \label ->
+deleteDispatcher = \label ->
   free label
   delete dispatchers[label]
   delete plugs[label]
@@ -62,4 +62,9 @@ register = (busFactory) -> (label/s) ->
 [getEventStream, getProperty] =
   [createEventStreamBus, createNonInitPropertyBus].map register
 
-module.exports = { getDispatcher, getEventStream, getProperty }
+module.exports = {
+  deleteDispatcher
+  getDispatcher
+  getEventStream
+  getProperty
+}
