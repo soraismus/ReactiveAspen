@@ -1,8 +1,8 @@
 module.exports = {
   Adapter     : require './adapter/exports'
-  Bridge      : require 'react-bridge'
+  Bridge      : require './bridge'
   Controller  : require './controller/exports'
   Initializer : require './initializer/exports'
-  Pando       : require 'pando'
+  Pando       : require './pando/pando'
   React       : require './react/react'
 }
