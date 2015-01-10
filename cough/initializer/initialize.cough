@@ -2,10 +2,10 @@
 linkTogetherMVC         = require './linkTogetherMVC'
 { push }                = require '../controller/exports'
 render                  = require '../react/render'
+{ setAppState }         = require '../appstate-utilities'
 
 initialize = (appNodeID, topViewFactory, initialAppState, viewImports) ->
-  push 'app-node-id' appNodeID
-  push 'top-view-factory' topViewFactory
+  setAppState { appNodeID, topViewFactory }
   topReactDescriptor = linkTogetherMVC (topViewFactory, initialAppState)
   render (topReactDescriptor, (document.getElementById appNodeID))
   connectPortsToBuses viewImports
