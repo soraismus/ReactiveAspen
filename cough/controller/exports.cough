@@ -1,9 +1,12 @@
+{ appStateProperty }               = require '../aspen-state'
 { connect, interpret, plug, push } = require './channel-connectors'
-{ getDispatcher,
+{ deleteDispatcher, getDispatcher,
   getEventStream, getProperty }    = require './channel-registrar'
 
 module.exports = {
+  appStateProperty
   connect
+  deleteDispatcher
   getDispatcher
   getEventStream
   getProperty
