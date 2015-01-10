@@ -1,12 +1,11 @@
+{ appStateProperty }        = require '../aspen-state'
 { connectViewToController } = require '../adapter/exports'
 { push }                    = require '../controller/exports'
 
-appStateChannelName = 'app-state'
-
 linkTogetherMVC = (topViewFactory, appState) ->
-  push appStateChannelName appState    # Connect model and controller.
-  descriptor = topViewFactory appState # Connect model and view.
-  connectViewToController ()           # Connect view and controller.
-  descriptor
+  push appStateProperty appState         # Connect model and controller.
+  reactElement = topViewFactory appState # Connect model and view.
+  connectViewToController ()             # Connect view and controller.
+  reactElement
 
 module.exports = linkTogetherMVC
