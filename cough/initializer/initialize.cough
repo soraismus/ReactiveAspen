@@ -2,7 +2,7 @@
 linkTogetherMVC         = require './linkTogetherMVC'
 { push }                = require '../controller/exports'
 render                  = require '../react/render'
-{ setAppState }         = require '../appstate-utilities'
+{ setAppState }         = require '../aspen-state'
 
 initialize = (appNodeID, topViewFactory, initialAppState, viewImports) ->
   setAppState { appNodeID, topViewFactory }
