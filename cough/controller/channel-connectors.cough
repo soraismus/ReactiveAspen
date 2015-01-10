@@ -4,8 +4,8 @@ pandoConnect          = require '../pando/connect'
 
 _connect = (src, tgt, transform) ->
   [_src, _tgt] = [src, tgt].map interpret
-  setAlias _src src
-  setAlias _tgt tgt
+  setAlias (_src, src)
+  setAlias (_tgt, tgt)
   pandoConnect (_src, _tgt, transform)
 
 connect = \sources \targets \thunk ->
@@ -40,7 +40,7 @@ push = \label \val ->
   bus = interpret label
   bus.dispatch (val, bus.id)
 
-setAlias = \bus \val ->
+setAlias = (bus, val) ->
   bus.setAlias val if isString val
 
 module.exports = { connect, interpret, plug, push }
