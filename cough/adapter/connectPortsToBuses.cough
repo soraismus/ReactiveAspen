@@ -1,15 +1,13 @@
 { connectBus }                  = require './port-registrar'
 { getEventStream, getProperty } = require '../controller/exports'
 { isArray, isObject }           = require '../utilities'
-reactIntake                     = require './react-intake'
+portUtilities                   = require './port-utilities'
+{ reactIntake }                 = require '../aspen-state'
 
-portUtilities   = require './port-utilities'
-_blur           = portUtilities.blur
-_preventDefault = portUtilities.preventDefault
-
+_blur            = portUtilities.blur
 eventStreamRegex = /^\$/
-
-switches = []
+_preventDefault  = portUtilities.preventDefault
+switches         = []
 
 actAsSwitchboard = \event ->
   for swich in switches

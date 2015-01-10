@@ -1,10 +1,10 @@
-{ connectTo }   = require 'react-bridge'
+{ connectTo }   = require '../bridge'
 { connectPort } = require './port-registrar'
-reactIntake     = require './react-intake'
+{ reactIntake } = require '../aspen-state'
 
 connectViewToController = ->
-  connectTo reactIntakeBus
+  connectTo reactIntakePort
 
-reactIntakeBus = connectPort reactIntake
+reactIntakePort = connectPort reactIntake
 
 module.exports = connectViewToController
