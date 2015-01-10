@@ -65,7 +65,6 @@ transformResult = (result, fn) ->
 module.exports = {
   addComponent
   getComponent
-  identity
   isArray
   isObject
   isString
