@@ -1,4 +1,4 @@
-{ getEventStream, getProperty } = require './controller/exports'
+{ getEventStream, getProperty } = require './controller/channel-registrar'
 
 appState = null
 
