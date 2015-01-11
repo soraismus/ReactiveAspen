@@ -10,4 +10,6 @@ initialize = (appNodeID, topViewFactory, initialAppState, viewImports) ->
   render (topReactDescriptor, (document.getElementById appNodeID))
   connectPortsToBuses viewImports
 
+require './terminus'
+
 module.exports = initialize
