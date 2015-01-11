@@ -1,0 +1,1 @@
+../../react-bridge/build/output.js
