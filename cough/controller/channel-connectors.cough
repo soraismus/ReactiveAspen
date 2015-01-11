@@ -1,6 +1,7 @@
-{ getDispatcher }     = require './channel-registrar'
-{ isArray, isString } = require '../utilities'
-pandoConnect          = require '../pando/connect'
+{ getDispatcher }       = require './channel-registrar'
+{ isArray, isString }   = require '../utilities'
+pandoConnect            = require '../pando/connect'
+{ terminusEventStream } = require '../aspen-state'
 
 _connect = (src, tgt, transform) ->
   [_src, _tgt] = [src, tgt].map interpret
@@ -36,6 +37,9 @@ interpret = \value ->
 plug = \targets \thunk \sources ->
   connect sources targets thunk
 
+plugIntoTerminus = (source, transform) ->
+  connect source terminusEventStream transform
+
 push = \label \val ->
   bus = interpret label
   bus.dispatch (val, bus.id)
@@ -43,4 +47,4 @@ push = \label \val ->
 setAlias = (bus, val) ->
   bus.setAlias val if isString val
 
-module.exports = { connect, interpret, plug, push }
+module.exports = { connect, interpret, plug, plugIntoTerminus, push }
