@@ -11,8 +11,8 @@ initialize = (appNodeID, topViewFactory, initialAppState, viewImports) ->
   node = document.getElementById appNodeID
   _topViewFactory = topViewFactory
 
-  topReactDescriptor = linkTogetherMVC (topViewFactory, initialAppState)
-  render (topReactDescriptor, (document.getElementById appNodeID))
+  reactElement = linkTogetherMVC (topViewFactory, initialAppState)
+  render (reactElement, node)
   connectPortsToBuses viewImports
 
 linkTogetherMVC = (topViewFactory, appState) ->
