@@ -1613,7 +1613,7 @@ _ref1 = _dereq_('../utilities'), isArray = _ref1.isArray, isObject = _ref1.isObj
 
 portUtilities = _dereq_('./port-utilities');
 
-reactIntake = _dereq_('../aspen-state').reactIntake;
+reactIntake = _dereq_('../aspen-constants').reactIntake;
 
 _blur = portUtilities.blur;
 
@@ -1720,7 +1720,7 @@ module.exports = connectPortsToBuses;
 
 
 
-},{"../aspen-state":7,"../controller/exports":11,"../utilities":20,"./port-registrar":5,"./port-utilities":6}],3:[function(_dereq_,module,exports){
+},{"../aspen-constants":7,"../controller/exports":11,"../utilities":20,"./port-registrar":5,"./port-utilities":6}],3:[function(_dereq_,module,exports){
 var connectPortsToBuses, connectViewToController;
 
 connectPortsToBuses = _dereq_('./connectPortsToBuses');
@@ -1741,7 +1741,7 @@ connectTo = _dereq_('../bridge').connectTo;
 
 connectPort = _dereq_('./port-registrar').connectPort;
 
-reactIntake = _dereq_('../aspen-state').reactIntake;
+reactIntake = _dereq_('../aspen-constants').reactIntake;
 
 connectViewToController = function() {
   return connectTo(reactIntakePort);
@@ -1753,7 +1753,7 @@ module.exports = connectViewToController;
 
 
 
-},{"../aspen-state":7,"../bridge":8,"./port-registrar":5}],5:[function(_dereq_,module,exports){
+},{"../aspen-constants":7,"../bridge":8,"./port-registrar":5}],5:[function(_dereq_,module,exports){
 var addComponent, busExt, connectBus, connectPort, connectPortComponent, createEventStreamBus, getComponent, getPortComponent, keypaths, portExt, ports, register, _ref, _ref1;
 
 _ref = _dereq_('../utilities'), addComponent = _ref.addComponent, getComponent = _ref.getComponent;
@@ -1827,36 +1827,19 @@ module.exports = {
 
 
 },{}],7:[function(_dereq_,module,exports){
-var appState, appStateProperty, getAppNodeID, getEventStream, getProperty, getTopViewFactory, reactIntake, setAppState, terminusEventStream, _ref;
+var appStateProperty, getEventStream, getProperty, reactIntake, terminusEventStream, _ref;
 
 _ref = _dereq_('./controller/channel-registrar'), getEventStream = _ref.getEventStream, getProperty = _ref.getProperty;
 
-appState = null;
-
 appStateProperty = getProperty('_appState_');
 
-getAppNodeID = function() {
-  return appState.appNodeID;
-};
-
-getTopViewFactory = function() {
-  return appState.topViewFactory;
-};
-
 reactIntake = '.reactIntake';
-
-setAppState = function(config) {
-  return appState = config;
-};
 
 terminusEventStream = getEventStream('_terminus_');
 
 module.exports = {
   appStateProperty: appStateProperty,
-  getAppNodeID: getAppNodeID,
-  getTopViewFactory: getTopViewFactory,
   reactIntake: reactIntake,
-  setAppState: setAppState,
   terminusEventStream: terminusEventStream
 };
 
@@ -1876,7 +1859,7 @@ _ref = _dereq_('../utilities'), isArray = _ref.isArray, isString = _ref.isString
 
 pandoConnect = _dereq_('../pando/connect');
 
-terminusEventStream = _dereq_('../aspen-state').terminusEventStream;
+terminusEventStream = _dereq_('../aspen-constants').terminusEventStream;
 
 _connect = function(src, tgt, transform) {
   var _ref1, _src, _tgt;
@@ -1989,7 +1972,7 @@ module.exports = {
 
 
 
-},{"../aspen-state":7,"../pando/connect":14,"../utilities":20,"./channel-registrar":10}],10:[function(_dereq_,module,exports){
+},{"../aspen-constants":7,"../pando/connect":14,"../utilities":20,"./channel-registrar":10}],10:[function(_dereq_,module,exports){
 var connect, createEventStreamBus, createNonInitPropertyBus, deleteDispatcher, disconnectors, dispatchers, free, getDispatcher, getEventStream, getProperty, isArray, matchesExistingDispatcher_question_, plugs, register, _ref, _ref1, _register,
   __hasProp = {}.hasOwnProperty;
 
@@ -2097,7 +2080,7 @@ module.exports = extend({}, connectors, registrationUtilities);
 },{"../utilities":20,"./channel-connectors":9,"./channel-registrar":10}],12:[function(_dereq_,module,exports){
 module.exports = {
   Adapter: _dereq_('./adapter/exports'),
-  appStateProperty: _dereq_('./aspen-state').appStateProperty,
+  appStateProperty: _dereq_('./aspen-constants').appStateProperty,
   Bridge: _dereq_('./bridge'),
   Controller: _dereq_('./controller/exports'),
   initialize: _dereq_('./initialize'),
@@ -2107,12 +2090,10 @@ module.exports = {
 
 
 
-},{"./adapter/exports":3,"./aspen-state":7,"./bridge":8,"./controller/exports":11,"./initialize":13,"./pando/pando":16,"./react/react":18}],13:[function(_dereq_,module,exports){
-var appStateProperty, blockTillReady, connect, connectPortsToBuses, connectViewToController, doAsync, getAppNodeID, getEventStream, getProperty, getTopViewFactory, initialize, linkTogetherMVC, onValue, push, render, resetAppState, setAppState, terminusEventStream, _linkTogetherMVC, _ref, _ref1, _ref2, _ref3, _render;
+},{"./adapter/exports":3,"./aspen-constants":7,"./bridge":8,"./controller/exports":11,"./initialize":13,"./pando/pando":16,"./react/react":18}],13:[function(_dereq_,module,exports){
+var appStateProperty, blockTillReady, connect, connectPortsToBuses, connectViewToController, doAsync, getEventStream, getProperty, initialize, linkTogetherMVC, node, onValue, push, render, resetAppState, terminusEventStream, _linkTogetherMVC, _ref, _ref1, _ref2, _ref3, _render, _topViewFactory;
 
-render = _dereq_('./react/render');
-
-_ref = _dereq_('./aspen-state'), appStateProperty = _ref.appStateProperty, getAppNodeID = _ref.getAppNodeID, getTopViewFactory = _ref.getTopViewFactory, setAppState = _ref.setAppState, terminusEventStream = _ref.terminusEventStream;
+_ref = _dereq_('./aspen-constants'), appStateProperty = _ref.appStateProperty, terminusEventStream = _ref.terminusEventStream;
 
 _ref1 = _dereq_('./pando/utilities'), blockTillReady = _ref1.blockTillReady, doAsync = _ref1.doAsync, onValue = _ref1.onValue;
 
@@ -2120,12 +2101,16 @@ _ref2 = _dereq_('./controller/exports'), connect = _ref2.connect, getEventStream
 
 _ref3 = _dereq_('./adapter/exports'), connectPortsToBuses = _ref3.connectPortsToBuses, connectViewToController = _ref3.connectViewToController;
 
+render = _dereq_('./react/render');
+
+node = null;
+
+_topViewFactory = null;
+
 initialize = function(appNodeID, topViewFactory, initialAppState, viewImports) {
   var topReactDescriptor;
-  setAppState({
-    appNodeID: appNodeID,
-    topViewFactory: topViewFactory
-  });
+  node = document.getElementById(appNodeID);
+  _topViewFactory = topViewFactory;
   topReactDescriptor = linkTogetherMVC(topViewFactory, initialAppState);
   render(topReactDescriptor, document.getElementById(appNodeID));
   return connectPortsToBuses(viewImports);
@@ -2140,10 +2125,9 @@ linkTogetherMVC = function(topViewFactory, appState) {
 };
 
 resetAppState = function(transform) {
-  var newAppState, node, reactElement;
-  node = document.getElementById(getAppNodeID());
+  var newAppState, reactElement;
   newAppState = doAsync(transform)(appStateProperty);
-  reactElement = _linkTogetherMVC(getTopViewFactory(), newAppState);
+  reactElement = _linkTogetherMVC(_topViewFactory, newAppState);
   return _render(reactElement, node);
 };
 
@@ -2157,7 +2141,7 @@ module.exports = initialize;
 
 
 
-},{"./adapter/exports":3,"./aspen-state":7,"./controller/exports":11,"./pando/utilities":17,"./react/render":19}],14:[function(_dereq_,module,exports){
+},{"./adapter/exports":3,"./aspen-constants":7,"./controller/exports":11,"./pando/utilities":17,"./react/render":19}],14:[function(_dereq_,module,exports){
 module.exports = _dereq_('./utilities').connect;
 
 
