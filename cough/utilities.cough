@@ -17,6 +17,12 @@ addComponent = (keypath, newComponent, recipient) ->
 
   proxy[keys[last]] = newComponent
 
+extend = (obj, mixins...) ->
+  for mixin in mixins
+    for own key, val of mixin
+      obj[key] = val
+  obj
+
 getComponent = (keypath, obj) ->
   if isAtomicKeypath keypath
     key = keypath.slice 1
@@ -64,6 +70,7 @@ transformResult = (result, fn) ->
 
 module.exports = {
   addComponent
+  extend
   getComponent
   isArray
   isObject

@@ -1,14 +1,5 @@
-{ connect, interpret, plug, push } = require './channel-connectors'
-{ deleteDispatcher, getDispatcher,
-  getEventStream, getProperty }    = require './channel-registrar'
+connectors            = require './channel-connectors'
+{ extend }            = require '../utilities'
+registrationUtilities = require './channel-registrar'
 
-module.exports = {
-  connect
-  deleteDispatcher
-  getDispatcher
-  getEventStream
-  getProperty
-  interpret
-  plug
-  push
-}
+module.exports = extend ({}, connectors, registrationUtilities)
