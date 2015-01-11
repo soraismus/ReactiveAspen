@@ -2108,11 +2108,11 @@ node = null;
 _topViewFactory = null;
 
 initialize = function(appNodeID, topViewFactory, initialAppState, viewImports) {
-  var topReactDescriptor;
+  var reactElement;
   node = document.getElementById(appNodeID);
   _topViewFactory = topViewFactory;
-  topReactDescriptor = linkTogetherMVC(topViewFactory, initialAppState);
-  render(topReactDescriptor, document.getElementById(appNodeID));
+  reactElement = linkTogetherMVC(topViewFactory, initialAppState);
+  render(reactElement, node);
   return connectPortsToBuses(viewImports);
 };
 
