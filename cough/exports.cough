@@ -1,9 +1,9 @@
 module.exports = {
-  Adapter     : require './adapter/exports'
+  Adapter          : require './adapter/exports'
   appStateProperty : require('./aspen-state').appStateProperty
-  Bridge      : require './bridge'
-  Controller  : require './controller/exports'
-  Initializer : require './initializer/exports'
-  Pando       : require './pando/pando'
-  React       : require './react/react'
+  Bridge           : require './bridge'
+  Controller       : require './controller/exports'
+  initialize       : require './initializer/exports'
+  Pando            : require './pando/pando'
+  React            : require './react/react'
 }
