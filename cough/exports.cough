@@ -3,7 +3,7 @@ module.exports = {
   appStateProperty : require('./aspen-state').appStateProperty
   Bridge           : require './bridge'
   Controller       : require './controller/exports'
-  initialize       : require './initializer/exports'
+  initialize       : require './initialize'
   Pando            : require './pando/pando'
   React            : require './react/react'
 }

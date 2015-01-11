@@ -1,0 +1,48 @@
+render = require './react/render'
+
+{ appStateProperty
+  getAppNodeID
+  getTopViewFactory
+  setAppState
+  terminusEventStream
+} = require './aspen-state'
+
+{ blockTillReady
+  doAsync
+  onValue
+} = require './pando/utilities'
+
+{ connect
+  getEventStream
+  getProperty
+  push
+} = require './controller/exports'
+
+{ connectPortsToBuses
+  connectViewToController
+} = require './adapter/exports'
+
+initialize = (appNodeID, topViewFactory, initialAppState, viewImports) ->
+  setAppState { appNodeID, topViewFactory }
+  topReactDescriptor = linkTogetherMVC (topViewFactory, initialAppState)
+  render (topReactDescriptor, (document.getElementById appNodeID))
+  connectPortsToBuses viewImports
+
+linkTogetherMVC = (topViewFactory, appState) ->
+  push appStateProperty appState         # Connect model and controller.
+  reactElement = topViewFactory appState # Connect model and view.
+  connectViewToController ()             # Connect view and controller.
+  reactElement
+
+resetAppState = \transform ->
+  node         = document.getElementById (getAppNodeID ())
+  newAppState  = doAsync transform appStateProperty
+  reactElement = _linkTogetherMVC (getTopViewFactory (), newAppState)
+  _render (reactElement, node)
+
+_linkTogetherMVC = doAsync linkTogetherMVC
+_render          = blockTillReady render
+
+onValue terminusEventStream (blockTillReady resetAppState)
+
+module.exports = initialize
