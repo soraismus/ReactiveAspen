@@ -2,7 +2,7 @@
 { getEventStream, getProperty } = require '../controller/exports'
 { isArray, isObject }           = require '../utilities'
 portUtilities                   = require './port-utilities'
-{ reactIntake }                 = require '../aspen-state'
+{ reactIntake }                 = require '../aspen-constants'
 
 _blur            = portUtilities.blur
 eventStreamRegex = /^\$/

@@ -1,28 +1,10 @@
 { getEventStream, getProperty } = require './controller/channel-registrar'
 
-appState = null
-
 appStateProperty = getProperty '_appState_'
-
-getAppNodeID = ->
-  appState.appNodeID
-
-getTopViewFactory = ->
-  appState.topViewFactory
 
 # '.reactIntake' is the keypath for the ReactIntake port.
 reactIntake = '.reactIntake'
 
-setAppState = \config ->
-  appState = config
-
 terminusEventStream = getEventStream '_terminus_'
 
-module.exports = {
-  appStateProperty
-  getAppNodeID
-  getTopViewFactory
-  reactIntake
-  setAppState
-  terminusEventStream
-}
+module.exports = { appStateProperty, reactIntake, terminusEventStream }

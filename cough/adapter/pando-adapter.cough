@@ -1,6 +1,6 @@
 { connectTo }   = require '../bridge'
 { connectPort } = require './port-registrar'
-{ reactIntake } = require '../aspen-state'
+{ reactIntake } = require '../aspen-constants'
 
 connectViewToController = ->
   connectTo reactIntakePort

@@ -1,7 +1,7 @@
 { getDispatcher }       = require './channel-registrar'
 { isArray, isString }   = require '../utilities'
 pandoConnect            = require '../pando/connect'
-{ terminusEventStream } = require '../aspen-state'
+{ terminusEventStream } = require '../aspen-constants'
 
 _connect = (src, tgt, transform) ->
   [_src, _tgt] = [src, tgt].map interpret

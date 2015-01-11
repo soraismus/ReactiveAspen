@@ -1,6 +1,6 @@
 module.exports = {
   Adapter          : require './adapter/exports'
-  appStateProperty : require('./aspen-state').appStateProperty
+  appStateProperty : require('./aspen-constants').appStateProperty
   Bridge           : require './bridge'
   Controller       : require './controller/exports'
   initialize       : require './initialize'

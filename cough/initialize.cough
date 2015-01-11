@@ -1,4 +1,4 @@
-{ appStateProperty, terminusEventStream }        = require './aspen-state'
+{ appStateProperty, terminusEventStream }        = require './aspen-constants'
 { blockTillReady, doAsync, onValue }             = require './pando/utilities'
 { connect, getEventStream, getProperty, push }   = require './controller/exports'
 { connectPortsToBuses, connectViewToController } = require './adapter/exports'
