@@ -19,15 +19,15 @@ connectMultiple = (sources, targets, transforms) ->
   if isArray targets
     for tgt, i in targets
       for src, j in sources
-        connect src tgt (-> transforms[i][j])
+        _connect (src, tgt, transforms[i][j])
   else
     for src, i in sources
-      connect src targets (-> transforms[i])
+      _connect (src, targets, transforms[i])
 
 connectSingle = (source, targets, transforms) ->
   if isArray targets
     for tgt, i in targets
-      connect source tgt (-> transforms[i])
+      _connect (source, tgt, transforms[i])
   else
     _connect (source, targets, transforms)
 
