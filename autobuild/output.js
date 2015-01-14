@@ -1892,9 +1892,7 @@ connectMultiple = function(sources, targets, transforms) {
         _results1 = [];
         for (j = _j = 0, _len1 = sources.length; _j < _len1; j = ++_j) {
           src = sources[j];
-          _results1.push(connect(src)(tgt)(function() {
-            return transforms[i][j];
-          }));
+          _results1.push(_connect(src, tgt, transforms[i][j]));
         }
         return _results1;
       })());
@@ -1904,9 +1902,7 @@ connectMultiple = function(sources, targets, transforms) {
     _results1 = [];
     for (i = _j = 0, _len1 = sources.length; _j < _len1; i = ++_j) {
       src = sources[i];
-      _results1.push(connect(src)(targets)(function() {
-        return transforms[i];
-      }));
+      _results1.push(_connect(src, targets, transforms[i]));
     }
     return _results1;
   }
@@ -1918,9 +1914,7 @@ connectSingle = function(source, targets, transforms) {
     _results = [];
     for (i = _i = 0, _len = targets.length; _i < _len; i = ++_i) {
       tgt = targets[i];
-      _results.push(connect(source)(tgt)(function() {
-        return transforms[i];
-      }));
+      _results.push(_connect(source, tgt, transforms[i]));
     }
     return _results;
   } else {
