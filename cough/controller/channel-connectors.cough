@@ -1,6 +1,8 @@
 { getDispatcher }       = require './channel-registrar'
 { isArray, isString }   = require '../utilities'
+{ onValue }             = require '../pando/utilities'
 pandoConnect            = require '../pando/connect'
+pandoOnValue            = require('../pando/utilities').onValue
 { terminusEventStream } = require '../aspen-constants'
 
 _connect = (src, tgt, transform) ->
@@ -34,6 +36,12 @@ connectSingle = (source, targets, transforms) ->
 interpret = \value ->
   if isString value then getDispatcher (value, false) else value
 
+onEvent = (source, sink) ->
+  interpret(source).subscribe sink
+
+onValue = (source, sink) ->
+  pandoOnValue ((interpret source), sink)
+
 plug = \targets \thunk \sources ->
   connect sources targets thunk
 
@@ -47,4 +55,12 @@ push = \label \val ->
 setAlias = (bus, val) ->
   bus.setAlias val if isString val
 
-module.exports = { connect, interpret, plug, plugIntoTerminus, push }
+module.exports = {
+  connect
+  interpret
+  onEvent
+  onValue
+  plug
+  plugIntoTerminus
+  push
+}
