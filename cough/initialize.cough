@@ -29,6 +29,6 @@ resetAppState = \transform ->
 _linkTogetherMVC = doAsync linkTogetherMVC
 _render          = blockTillReady render
 
-onValue terminusEventStream (blockTillReady resetAppState)
+onValue (terminusEventStream, (blockTillReady resetAppState))
 
 module.exports = initialize
