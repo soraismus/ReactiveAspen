@@ -1,6 +1,6 @@
 { addComponent, getComponent } = require '../utilities'
 
-getPortRegistrar = \createEventStreamBus ->
+module.exports = \createEventStreamBus ->
   keypaths = {}
   ports    = {}
 
@@ -23,5 +23,3 @@ getPortRegistrar = \createEventStreamBus ->
 
   connectBus  : connectPortComponent busExt
   connectPort : connectPortComponent portExt
-
-module.exports = getPortRegistrar

@@ -1,4 +1,4 @@
-getAspenInitializer = \config ->
+module.exports = \config ->
   {
     appStateProperty
     blockTillReady
@@ -39,5 +39,3 @@ getAspenInitializer = \config ->
   onValue (terminusEventStream, (blockTillReady resetAppState))
 
   initialize
-
-module.exports = getAspenInitializer

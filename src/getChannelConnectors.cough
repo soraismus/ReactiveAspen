@@ -1,6 +1,6 @@
 { isArray, isString }   = require '../utilities'
 
-getConnectors = \config ->
+module.exports = \config ->
   getDispatcher       = config.getDispatcher
   pandoConnect        = config.connect
   pandoOnValue        = config.onValue
@@ -65,5 +65,3 @@ getConnectors = \config ->
     plugIntoTerminus
     push
   }
-
-module.exports = getConnectors

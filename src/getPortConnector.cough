@@ -1,6 +1,6 @@
 { isArray, isObject } = require '../utilities'
 
-getPortBusConnector = \args ->
+module.exports = \args ->
   { connectBus, getEventStream, getProperty, reactIntake } = args
 
   eventStreamRegex = /^\$/
@@ -80,5 +80,3 @@ getPortBusConnector = \args ->
   reactIntakeBus.subscribe actAsSwitchboard
 
   connectPortsToBuses 
-
-module.exports = getPortBusConnector

@@ -1,6 +1,6 @@
 { isArray } = require '../utilities'
 
-getRegistrationUtilities = \config ->
+module.exports = \config ->
   { connect, createEventStreamBus, createNonInitPropertyBus } = config
 
   disconnectors = {}
@@ -64,5 +64,3 @@ getRegistrationUtilities = \config ->
     getEventStream : register createEventStreamBus
     getProperty    : register createNonInitPropertyBus
   }
-
-module.exports = getRegistrationUtilities
