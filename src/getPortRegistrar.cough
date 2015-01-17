@@ -1,4 +1,4 @@
-{ addComponent, getComponent } = require '../utilities'
+{ addComponent, getComponent } = require './utilities'
 
 module.exports = \createEventStreamBus ->
   keypaths = {}

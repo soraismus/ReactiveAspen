@@ -1,4 +1,4 @@
-{ isArray, isString }   = require '../utilities'
+{ isArray, isString }   = require './utilities'
 
 module.exports = \config ->
   getDispatcher       = config.getDispatcher

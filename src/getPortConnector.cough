@@ -1,4 +1,4 @@
-{ isArray, isObject } = require '../utilities'
+{ isArray, isObject } = require './utilities'
 
 module.exports = \args ->
   { connectBus, getEventStream, getProperty, reactIntake } = args

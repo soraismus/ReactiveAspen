@@ -1,4 +1,4 @@
-{ isArray } = require '../utilities'
+{ isArray } = require './utilities'
 
 module.exports = \config ->
   { connect, createEventStreamBus, createNonInitPropertyBus } = config
