@@ -1,5 +1,0 @@
-connectors            = require './channel-connectors'
-{ extend }            = require '../utilities'
-registrationUtilities = require './channel-registrar'
-
-module.exports = extend ({}, connectors, registrationUtilities)
