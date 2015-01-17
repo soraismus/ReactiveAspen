@@ -1,26 +1,27 @@
 { addComponent, getComponent } = require '../utilities'
-{ createEventStreamBus }       = require '../pando/factories'
 
-keypaths = {}
-ports    = {}
+getPortRegistrar = \createEventStreamBus ->
+  keypaths = {}
+  ports    = {}
 
-busExt  = '.bus'
-portExt = '.port'
+  busExt  = '.bus'
+  portExt = '.port'
 
-connectPortComponent = \extension \keypath ->
-  register keypath unless keypaths[keypath]
-  getPortComponent (extension, keypath)
+  connectPortComponent = \extension \keypath ->
+    register keypath unless keypaths[keypath]
+    getPortComponent (extension, keypath)
 
-getPortComponent = (extension, keypath) ->
-  getComponent ((keypath + extension), ports)
+  getPortComponent = (extension, keypath) ->
+    getComponent ((keypath + extension), ports)
 
-register = \keypath ->
-  bus = createEventStreamBus ()
-  bus.setAlias keypath
-  port = \val -> bus.dispatch (val, bus.id)
-  addComponent (keypath, { bus, port }, ports)
-  keypaths[keypath] = true
+  register = \keypath ->
+    bus = createEventStreamBus ()
+    bus.setAlias keypath
+    port = \val -> bus.dispatch (val, bus.id)
+    addComponent (keypath, { bus, port }, ports)
+    keypaths[keypath] = true
 
-[connectBus, connectPort] = [busExt, portExt].map connectPortComponent
+  connectBus  : connectPortComponent busExt
+  connectPort : connectPortComponent portExt
 
-module.exports = { connectBus, connectPort }
+module.exports = getPortRegistrar

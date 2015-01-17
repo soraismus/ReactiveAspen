@@ -1,79 +1,84 @@
-{ connectBus }                  = require './port-registrar'
-{ getEventStream, getProperty } = require '../controller/exports'
-{ isArray, isObject }           = require '../utilities'
-portUtilities                   = require './port-utilities'
-{ reactIntake }                 = require '../aspen-constants'
+{ isArray, isObject } = require '../utilities'
 
-_blur            = portUtilities.blur
-eventStreamRegex = /^\$/
-_preventDefault  = portUtilities.preventDefault
-switches         = []
+getPortBusConnector = \args ->
+  { connectBus, getEventStream, getProperty, reactIntake } = args
 
-actAsSwitchboard = \event ->
-  for swich in switches
-    { condition, dispatch } = swich
-    return dispatch event if condition event
+  eventStreamRegex = /^\$/
+  switches         = []
 
-connectPortsToBuses = \triplets ->
-  triplets.forEach connectIntakeToTarget
+  actAsSwitchboard = \event ->
+    for swich in switches
+      { condition, dispatch } = swich
+      return dispatch event if condition event
 
-connectIntakeToTarget = \record ->
-  { config, handler, reactViewLabel, tgtBusLabel, type } =
-    interpretRecord record
+  _blur = \capsule ->
+    capsule.event.target.blur () if capsule.type == 'link'
 
-  dispatcher = getDispatcher tgtBusLabel
+  connectPortsToBuses = \triplets ->
+    triplets.forEach connectIntakeToTarget
 
-  manageDispatcher (dispatcher, config)
+  connectIntakeToTarget = \record ->
+    { config, handler, reactViewLabel, tgtBusLabel, type } =
+      interpretRecord record
 
-  switches.push
-    condition : getFilter (reactViewLabel, type, handler)
-    dispatch  : dispatchBy dispatcher
+    dispatcher = getDispatcher tgtBusLabel
 
-dispatchBy = \bus \capsule ->
-  bus.dispatch (capsule, bus.id)
+    manageDispatcher (dispatcher, config)
 
-eventStreamName? = \val ->
-  eventStreamRegex.test val
+    switches.push
+      condition : getFilter (reactViewLabel, type, handler)
+      dispatch  : dispatchBy dispatcher
 
-getDispatcher = \label ->
-  interpret = if eventStreamName? label then getEventStream else getProperty
-  interpret label
+  dispatchBy = \bus \capsule ->
+    bus.dispatch (capsule, bus.id)
 
-getFilter = (label, type, handler) -> (val) ->
-  val.label == label &&
-      (!type || val.type == type) &&
-      (!handler || val.handler == handler)
+  eventStreamName? = \val ->
+    eventStreamRegex.test val
 
-getTargetValue = \capsule ->
-  capsule|['event']|['target']|['value']
+  getDispatcher = \label ->
+    interpret = if eventStreamName? label then getEventStream else getProperty
+    interpret label
 
-interpretRecord = \record ->
-  if isArray record
-    [tgtBusLabel, reactViewLabel, type, handler, manage?] = record
+  getFilter = (label, type, handler) -> (val) ->
+    val.label == label &&
+        (!type || val.type == type) &&
+        (!handler || val.handler == handler)
 
-    if isObject type
-      { blur, preventDefault, handler, type } = type
+  getTargetValue = \capsule ->
+    capsule|['event']|['target']|['value']
+
+  interpretRecord = \record ->
+    if isArray record
+      [tgtBusLabel, reactViewLabel, type, handler, manage?] = record
+
+      if isObject type
+        { blur, preventDefault, handler, type } = type
+      else
+        blur = preventDefault = manage?
+
     else
-      blur = preventDefault = manage?
+      { handler
+        reactViewLabel
+        blur
+        preventDefault
+        tgtBusLabel
+        type
+      } = record
 
-  else
-    { handler
-      reactViewLabel
-      blur
-      preventDefault
-      tgtBusLabel
-      type
-    } = record
+    config = { doBlur: blur, doPreventDefault: preventDefault }
+    { config, handler, reactViewLabel, tgtBusLabel, type }
 
-  config = { doBlur: blur, doPreventDefault: preventDefault }
-  { config, handler, reactViewLabel, tgtBusLabel, type }
+  manageDispatcher = (dispatcher, config) ->
+    { doBlur, doPreventDefault } = config
+    dispatcher.subscribe _blur if doBlur
+    dispatcher.subscribe _preventDefault if doPreventDefault
 
-manageDispatcher = (dispatcher, config) ->
-  { doBlur, doPreventDefault } = config
-  dispatcher.subscribe _blur if doBlur
-  dispatcher.subscribe _preventDefault if doPreventDefault
+  _preventDefault = \capsule ->
+    capsule.event.preventDefault () if capsule.event.preventDefault
 
-reactIntakeBus = connectBus reactIntake
-reactIntakeBus.subscribe actAsSwitchboard
+  reactIntakeBus = connectBus reactIntake
+  reactIntakeBus.subscribe actAsSwitchboard
 
-module.exports = connectPortsToBuses 
+  connectPortsToBuses 
+
+module.exports = getPortBusConnector

@@ -1,9 +1,50 @@
-module.exports = {
-  Adapter          : require './adapter/exports'
-  appStateProperty : require('./aspen-constants').appStateProperty
-  Bridge           : require './bridge'
-  Controller       : require './controller/exports'
-  initialize       : require './initialize'
-  Pando            : require './pando/pando'
-  React            : require './react/react'
-}
+{ extend }               = require './utilities'
+getAspenInitializer      = require './initialize'
+getConnectors            = require './controller/channel-connectors'
+getPortBusConnector      = require './adapter/connectPortsToBuses'
+getPortRegistrar         = require './adapter/port-registrar'
+getRegistrationUtilities = require './controller/channel-registrar'
+
+getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
+  { createEventStreamBus, createNonInitPropertyBus } = EventManager.factories
+  { blockTillReady, connect, doAsync, onValue }      = EventManager.utilities
+
+  config1                 = { connect, createEventStreamBus, createNonInitPropertyBus }
+  registrationUtilities   = getRegistrationUtilities config1
+  getDispacher            = registrationUtilities.getDispatcher
+  getEventStream          = registrationUtilities.getEventStream
+  getProperty             = registrationUtilities.getProperty
+
+  appStateProperty        = getProperty '_appState_'
+  reactIntake             = '.reactIntake'
+  terminusEventStream     = getEventStream '_terminus_'
+
+  config2                 = { connect, getDispatcher, onValue, terminusEventStream }
+  connectors              = getConnectors config2
+  push                    = connectors.push
+
+  portRegistrar           = getPortRegistrar createEventStreamBus
+  connectBus              = portRegistrar.connectBus
+  connectPort             = portRegistrar.connectPort
+
+  config3                 = { connectBus, getEventStream, getProperty, reactIntake }
+  connectPortsTosBuses    = getPortBusConnector config3
+
+  reactIntakePort         = connectPort reactIntake
+  connectViewToController = -> connectTo reactIntakePort
+
+  initialize = getAspenInitializer {
+    appStateProperty
+    blockTillReady
+    connectPortsToBuses
+    connectViewToController
+    doAsync
+    onValue
+    push
+    renderToDOM
+    terminusEventStream
+  }
+
+  Controller = extend ({}, connectors, registrationUtilities)
+
+  { appStateProperty, Controller, initialize }

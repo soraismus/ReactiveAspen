@@ -1,70 +1,68 @@
-{ createEventStreamBus,
-  createNonInitPropertyBus } = require '../pando/factories'
-
-connect     = require '../pando/connect'
 { isArray } = require '../utilities'
 
-disconnectors = {}
-dispatchers   = {}
-plugs         = {}
+getRegistrationUtilities = \config ->
+  { connect, createEventStreamBus, createNonInitPropertyBus } = config
 
-deleteDispatcher = \label ->
-  free label
-  delete dispatchers[label]
-  delete plugs[label]
+  disconnectors = {}
+  dispatchers   = {}
+  plugs         = {}
 
-free = \label ->
-  for own key, disconnect of disconnectors[label]
-    disconnect ()
+  deleteDispatcher = \label ->
+    free label
+    delete dispatchers[label]
+    delete plugs[label]
 
-getDispatcher = (label, eventstream?) ->
-  getBus = if eventstream? then getEventStream else getProperty
-  dispatchers[label] || getBus label
+  free = \label ->
+    for own key, disconnect of disconnectors[label]
+      disconnect ()
 
-matchesExistingDispatcher? = \label ->
-  !! dispatchers[label]
+  getDispatcher = (label, eventstream?) ->
+    getBus = if eventstream? then getEventStream else getProperty
+    dispatchers[label] || getBus label
 
-_register = (busFactory, label) ->
-  id = 0
+  matchesExistingDispatcher? = \label ->
+    !! dispatchers[label]
 
-  bus = dispatchers[label] = busFactory ()
-  bus.setAlias label
+  _register = (busFactory, label) ->
+    id = 0
 
-  load = \observable ->
-    _unplug = connect (observable, bus)
+    bus = dispatchers[label] = busFactory ()
+    bus.setAlias label
 
-    observable-id = id
+    load = \observable ->
+      _unplug = connect (observable, bus)
 
-    unplug = ->
-      delete disconnectors[label][observable-id]
-      _unplug ()
+      observable-id = id
 
-    disconnectors[label] ?= {}
-    disconnectors[label][observable-id] = unplug
+      unplug = ->
+        delete disconnectors[label][observable-id]
+        _unplug ()
 
-    id += 1
+      disconnectors[label] ?= {}
+      disconnectors[label][observable-id] = unplug
 
-    unplug
+      id += 1
 
-  plugs[label] = load
+      unplug
 
-  bus
+    plugs[label] = load
 
-register = (busFactory) -> (label/s) ->
-  switch
-    when isArray label/s
-      label/s.map (register busFactory)
-    when matchesExistingDispatcher? label/s
-      dispatchers[label/s]
-    else
-      _register (busFactory, label/s)
+    bus
 
-[getEventStream, getProperty] =
-  [createEventStreamBus, createNonInitPropertyBus].map register
+  register = (busFactory) -> (label/s) ->
+    switch
+      when isArray label/s
+        label/s.map (register busFactory)
+      when matchesExistingDispatcher? label/s
+        dispatchers[label/s]
+      else
+        _register (busFactory, label/s)
 
-module.exports = {
-  deleteDispatcher
-  getDispatcher
-  getEventStream
-  getProperty
-}
+  {
+    deleteDispatcher
+    getDispatcher
+    getEventStream : register createEventStreamBus
+    getProperty    : register createNonInitPropertyBus
+  }
+
+module.exports = getRegistrationUtilities

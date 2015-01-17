@@ -1,66 +1,69 @@
-{ getDispatcher }       = require './channel-registrar'
 { isArray, isString }   = require '../utilities'
-{ onValue }             = require '../pando/utilities'
-pandoConnect            = require '../pando/connect'
-pandoOnValue            = require('../pando/utilities').onValue
-{ terminusEventStream } = require '../aspen-constants'
 
-_connect = (src, tgt, transform) ->
-  [_src, _tgt] = [src, tgt].map interpret
-  setAlias (_src, src)
-  setAlias (_tgt, tgt)
-  pandoConnect (_src, _tgt, transform)
+getConnectors = \config ->
+  getDispatcher       = config.getDispatcher
+  pandoConnect        = config.connect
+  pandoOnValue        = config.onValue
+  terminusEventStream = config.terminusEventStream
 
-connect = \sources \targets \thunk ->
-  if isArray sources
-    connectMultiple (sources, targets, thunk ())
-  else
-    connectSingle (sources, targets, thunk ())
+  _connect = (src, tgt, transform) ->
+    [_src, _tgt] = [src, tgt].map interpret
+    setAlias (_src, src)
+    setAlias (_tgt, tgt)
+    pandoConnect (_src, _tgt, transform)
 
-connectMultiple = (sources, targets, transforms) ->
-  if isArray targets
-    for tgt, i in targets
-      for src, j in sources
-        _connect (src, tgt, transforms[i][j])
-  else
-    for src, i in sources
-      _connect (src, targets, transforms[i])
+  connect = \sources \targets \thunk ->
+    if isArray sources
+      connectMultiple (sources, targets, thunk ())
+    else
+      connectSingle (sources, targets, thunk ())
 
-connectSingle = (source, targets, transforms) ->
-  if isArray targets
-    for tgt, i in targets
-      _connect (source, tgt, transforms[i])
-  else
-    _connect (source, targets, transforms)
+  connectMultiple = (sources, targets, transforms) ->
+    if isArray targets
+      for tgt, i in targets
+        for src, j in sources
+          _connect (src, tgt, transforms[i][j])
+    else
+      for src, i in sources
+        _connect (src, targets, transforms[i])
 
-interpret = \value ->
-  if isString value then getDispatcher (value, false) else value
+  connectSingle = (source, targets, transforms) ->
+    if isArray targets
+      for tgt, i in targets
+        _connect (source, tgt, transforms[i])
+    else
+      _connect (source, targets, transforms)
 
-onEvent = (source, sink) ->
-  interpret(source).subscribe sink
+  interpret = \value ->
+    if isString value then getDispatcher (value, false) else value
 
-onValue = (source, sink) ->
-  pandoOnValue ((interpret source), sink)
+  onEvent = (source, sink) ->
+    interpret(source).subscribe sink
 
-plug = \targets \thunk \sources ->
-  connect sources targets thunk
+  onValue = (source, sink) ->
+    pandoOnValue ((interpret source), sink)
 
-plugIntoTerminus = (source, transform) ->
-  connect source terminusEventStream transform
+  plug = \targets \thunk \sources ->
+    connect sources targets thunk
 
-push = \label \val ->
-  bus = interpret label
-  bus.dispatch (val, bus.id)
+  plugIntoTerminus = (source, transform) ->
+    connect source terminusEventStream transform
 
-setAlias = (bus, val) ->
-  bus.setAlias val if isString val
+  push = \label \val ->
+    bus = interpret label
+    bus.dispatch (val, bus.id)
 
-module.exports = {
-  connect
-  interpret
-  onEvent
-  onValue
-  plug
-  plugIntoTerminus
-  push
-}
+  setAlias = (bus, val) ->
+    bus.setAlias val if isString val
+
+  {
+    connect
+    interpret
+    onEvent
+    onValue
+    plug
+    plugIntoTerminus
+    push
+  }
+
+module.exports = getConnectors
