@@ -1,9 +1,9 @@
 { extend }               = require './utilities'
-getAspenInitializer      = require './initialize'
-getConnectors            = require './controller/channel-connectors'
-getPortBusConnector      = require './adapter/connectPortsToBuses'
-getPortRegistrar         = require './adapter/port-registrar'
-getRegistrationUtilities = require './controller/channel-registrar'
+getAspenInitializer      = require './getAspenInitializer'
+getChannelConnectors     = require './getChannelConnectors'
+getPortConnector         = require './getPortConnector'
+getPortRegistrar         = require './getPortRegistrar'
+getRegistrationUtilities = require './getRegistrationUtilities'
 
 getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
   { createEventStreamBus, createNonInitPropertyBus } = EventManager.factories
@@ -20,7 +20,7 @@ getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
   terminusEventStream     = getEventStream '_terminus_'
 
   config2                 = { connect, getDispatcher, onValue, terminusEventStream }
-  connectors              = getConnectors config2
+  connectors              = getChannelConnectors config2
   push                    = connectors.push
 
   portRegistrar           = getPortRegistrar createEventStreamBus
@@ -28,7 +28,7 @@ getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
   connectPort             = portRegistrar.connectPort
 
   config3                 = { connectBus, getEventStream, getProperty, reactIntake }
-  connectPortsTosBuses    = getPortBusConnector config3
+  connectPortsTosBuses    = getPortConnector config3
 
   reactIntakePort         = connectPort reactIntake
   connectViewToController = -> connectTo reactIntakePort
