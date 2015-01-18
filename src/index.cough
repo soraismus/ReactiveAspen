@@ -11,7 +11,7 @@ getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
 
   config1                 = { connect, createEventStreamBus, createNonInitPropertyBus }
   registrationUtilities   = getRegistrationUtilities config1
-  getDispacher            = registrationUtilities.getDispatcher
+  getDispatcher           = registrationUtilities.getDispatcher
   getEventStream          = registrationUtilities.getEventStream
   getProperty             = registrationUtilities.getProperty
 
