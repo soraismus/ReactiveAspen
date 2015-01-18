@@ -58,9 +58,12 @@ module.exports = \config ->
       else
         _register (busFactory, label/s)
 
+  getEventStream = register createEventStreamBus
+  getProperty    = register createNonInitPropertyBus
+
   {
     deleteDispatcher
     getDispatcher
-    getEventStream : register createEventStreamBus
-    getProperty    : register createNonInitPropertyBus
+    getEventStream
+    getProperty
   }
