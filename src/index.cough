@@ -28,7 +28,7 @@ getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
   connectPort             = portRegistrar.connectPort
 
   config3                 = { connectBus, getEventStream, getProperty, reactIntake }
-  connectPortsTosBuses    = getPortConnector config3
+  connectPortsToBuses     = getPortConnector config3
 
   reactIntakePort         = connectPort reactIntake
   connectViewToController = -> connectTo reactIntakePort
