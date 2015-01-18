@@ -48,3 +48,5 @@ getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
   Controller = extend ({}, connectors, registrationUtilities)
 
   { appStateProperty, Controller, initialize }
+
+module.exports = getReactiveAspen
