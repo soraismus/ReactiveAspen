@@ -1,43 +1,35 @@
-{ extend }               = require './utilities'
-getAspenInitializer      = require './getAspenInitializer'
-getChannelConnectors     = require './getChannelConnectors'
-getPortConnector         = require './getPortConnector'
-getPortRegistrar         = require './getPortRegistrar'
-getRegistrationUtilities = require './getRegistrationUtilities'
+{ extend }           = require './utilities'
+getAspenInitializer  = require './getAspenInitializer'
+getChannelConnectors = require './getChannelConnectors'
+getPortConnector     = require './getPortConnector'
+getRegistrationUtils = require './getRegistrationUtils'
 
 getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
   { createEventStreamBus, createNonInitPropertyBus } = EventManager.factories
   { blockTillReady, connect, doAsync, onValue }      = EventManager.utilities
 
-  config1                 = { connect, createEventStreamBus, createNonInitPropertyBus }
-  registrationUtilities   = getRegistrationUtilities config1
-  getDispatcher           = registrationUtilities.getDispatcher
-  getEventStream          = registrationUtilities.getEventStream
-  getProperty             = registrationUtilities.getProperty
+  config1             = { connect, createEventStreamBus, createNonInitPropertyBus }
+  registrationUtils   = getRegistrationUtils config1
+  getDispatcher       = registrationUtils.getDispatcher
+  getEventStream      = registrationUtils.getEventStream
+  getProperty         = registrationUtils.getProperty
 
-  appStateProperty        = getProperty '_appState_'
-  reactIntake             = '.reactIntake'
-  terminusEventStream     = getEventStream '_terminus_'
+  appStateProperty    = getProperty '_appState_'
+  terminusEventStream = getEventStream '_terminus_'
 
-  config2                 = { connect, getDispatcher, onValue, terminusEventStream }
-  connectors              = getChannelConnectors config2
-  push                    = connectors.push
+  config2             = { connect, getDispatcher, onValue, terminusEventStream }
+  connectors          = getChannelConnectors config2
+  push                = connectors.push
 
-  portRegistrar           = getPortRegistrar createEventStreamBus
-  connectBus              = portRegistrar.connectBus
-  connectPort             = portRegistrar.connectPort
-
-  config3                 = { connectBus, getEventStream, getProperty, reactIntake }
-  connectPortsToBuses     = getPortConnector config3
-
-  reactIntakePort         = connectPort reactIntake
-  connectViewToController = -> connectTo reactIntakePort
+  portConnector       = getPortConnector (getEventStream, getProperty)
+  connectPortsToBuses = portConnector.connectPortsToBuses
+  relayReactEvents    = portConnector.relayReactEvents
 
   initialize = getAspenInitializer {
     appStateProperty
     blockTillReady
     connectPortsToBuses
-    connectViewToController
+    connectViewToController : -> connectTo relayReactEvents
     doAsync
     onValue
     push
@@ -45,7 +37,7 @@ getReactiveAspen = (renderToDOM, connectTo, EventManager) ->
     terminusEventStream
   }
 
-  Controller = extend ({}, connectors, registrationUtilities)
+  Controller = extend ({}, connectors, registrationUtils)
 
   { appStateProperty, Controller, initialize }
 

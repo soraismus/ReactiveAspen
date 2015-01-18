@@ -1,15 +1,8 @@
 { isArray, isObject } = require './utilities'
 
-module.exports = \args ->
-  { connectBus, getEventStream, getProperty, reactIntake } = args
-
+module.exports = (getEventStream, getProperty) ->
   eventStreamRegex = /^\$/
   switches         = []
-
-  actAsSwitchboard = \event ->
-    for swich in switches
-      { condition, dispatch } = swich
-      return dispatch event if condition event
 
   _blur = \capsule ->
     capsule.event.target.blur () if capsule.type == 'link'
@@ -76,7 +69,9 @@ module.exports = \args ->
   _preventDefault = \capsule ->
     capsule.event.preventDefault () if capsule.event.preventDefault
 
-  reactIntakeBus = connectBus reactIntake
-  reactIntakeBus.subscribe actAsSwitchboard
+  relayReactEvents = \event ->
+    for swich in switches
+      { condition, dispatch } = swich
+      return dispatch event if condition event
 
-  connectPortsToBuses 
+  { connectPortsToBuses, relayReactEvents }
