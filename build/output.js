@@ -14,7 +14,7 @@ module.exports = function(config) {
   };
   linkTogetherMVC = function(topViewFactory, appState) {
     var reactElement;
-    push(appStateProperty)(appState);
+    push(appStateProperty, appState);
     reactElement = topViewFactory(appState);
     connectViewToController();
     return reactElement;
@@ -39,7 +39,7 @@ var isArray, isString, _ref;
 _ref = _dereq_('./utilities'), isArray = _ref.isArray, isString = _ref.isString;
 
 module.exports = function(config) {
-  var connect, connectMultiple, connectSingle, getDispatcher, interpret, onEvent, onValue, pandoConnect, pandoOnValue, plug, plugIntoTerminus, push, setAlias, terminusEventStream, _connect;
+  var connect, connectMultiple, connectSingle, getDispatcher, interpret, onEvent, onValue, pandoConnect, pandoOnValue, plugIntoTerminus, push, setAlias, terminusEventStream, _connect;
   getDispatcher = config.getDispatcher;
   pandoConnect = config.connect;
   pandoOnValue = config.onValue;
@@ -51,16 +51,12 @@ module.exports = function(config) {
     setAlias(_tgt, tgt);
     return pandoConnect(_src, _tgt, transform);
   };
-  connect = function(sources) {
-    return function(targets) {
-      return function(thunk) {
-        if (isArray(sources)) {
-          return connectMultiple(sources, targets, thunk());
-        } else {
-          return connectSingle(sources, targets, thunk());
-        }
-      };
-    };
+  connect = function(sources, targets, thunk) {
+    if (isArray(sources)) {
+      return connectMultiple(sources, targets, thunk());
+    } else {
+      return connectSingle(sources, targets, thunk());
+    }
   };
   connectMultiple = function(sources, targets, transforms) {
     var i, j, src, tgt, _i, _j, _len, _len1, _results, _results1;
@@ -114,22 +110,13 @@ module.exports = function(config) {
   onValue = function(source, sink) {
     return pandoOnValue(interpret(source), sink);
   };
-  plug = function(targets) {
-    return function(thunk) {
-      return function(sources) {
-        return connect(sources)(targets)(thunk);
-      };
-    };
-  };
   plugIntoTerminus = function(source, transform) {
-    return connect(source)(terminusEventStream)(transform);
+    return connect(source, terminusEventStream, transform);
   };
-  push = function(label) {
-    return function(val) {
-      var bus;
-      bus = interpret(label);
-      return bus.dispatch(val, bus.id);
-    };
+  push = function(label, val) {
+    var bus;
+    bus = interpret(label);
+    return bus.dispatch(val, bus.id);
   };
   setAlias = function(bus, val) {
     if (isString(val)) {
@@ -141,7 +128,6 @@ module.exports = function(config) {
     interpret: interpret,
     onEvent: onEvent,
     onValue: onValue,
-    plug: plug,
     plugIntoTerminus: plugIntoTerminus,
     push: push
   };
@@ -149,26 +135,15 @@ module.exports = function(config) {
 
 
 
-},{"./utilities":7}],3:[function(_dereq_,module,exports){
+},{"./utilities":6}],3:[function(_dereq_,module,exports){
 var isArray, isObject, _ref;
 
 _ref = _dereq_('./utilities'), isArray = _ref.isArray, isObject = _ref.isObject;
 
-module.exports = function(args) {
-  var actAsSwitchboard, connectBus, connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getEventStream, getFilter, getProperty, getTargetValue, interpretRecord, manageDispatcher, reactIntake, reactIntakeBus, switches, _blur, _preventDefault;
-  connectBus = args.connectBus, getEventStream = args.getEventStream, getProperty = args.getProperty, reactIntake = args.reactIntake;
+module.exports = function(getEventStream, getProperty) {
+  var connectIntakeToTarget, connectPortsToBuses, dispatchBy, eventStreamName_question_, eventStreamRegex, getDispatcher, getFilter, getTargetValue, interpretRecord, manageDispatcher, relayReactEvents, switches, _blur, _preventDefault;
   eventStreamRegex = /^\$/;
   switches = [];
-  actAsSwitchboard = function(event) {
-    var condition, dispatch, swich, _i, _len;
-    for (_i = 0, _len = switches.length; _i < _len; _i++) {
-      swich = switches[_i];
-      condition = swich.condition, dispatch = swich.dispatch;
-      if (condition(event)) {
-        return dispatch(event);
-      }
-    }
-  };
   _blur = function(capsule) {
     if (capsule.type === 'link') {
       return capsule.event.target.blur();
@@ -248,57 +223,25 @@ module.exports = function(args) {
       return capsule.event.preventDefault();
     }
   };
-  reactIntakeBus = connectBus(reactIntake);
-  reactIntakeBus.subscribe(actAsSwitchboard);
-  return connectPortsToBuses;
-};
-
-
-
-},{"./utilities":7}],4:[function(_dereq_,module,exports){
-var addComponent, getComponent, _ref;
-
-_ref = _dereq_('./utilities'), addComponent = _ref.addComponent, getComponent = _ref.getComponent;
-
-module.exports = function(createEventStreamBus) {
-  var busExt, connectPortComponent, getPortComponent, keypaths, portExt, ports, register;
-  keypaths = {};
-  ports = {};
-  busExt = '.bus';
-  portExt = '.port';
-  connectPortComponent = function(extension) {
-    return function(keypath) {
-      if (!keypaths[keypath]) {
-        register(keypath);
+  relayReactEvents = function(event) {
+    var condition, dispatch, swich, _i, _len;
+    for (_i = 0, _len = switches.length; _i < _len; _i++) {
+      swich = switches[_i];
+      condition = swich.condition, dispatch = swich.dispatch;
+      if (condition(event)) {
+        return dispatch(event);
       }
-      return getPortComponent(extension, keypath);
-    };
-  };
-  getPortComponent = function(extension, keypath) {
-    return getComponent(keypath + extension, ports);
-  };
-  register = function(keypath) {
-    var bus, port;
-    bus = createEventStreamBus();
-    bus.setAlias(keypath);
-    port = function(val) {
-      return bus.dispatch(val, bus.id);
-    };
-    addComponent(keypath, {
-      bus: bus,
-      port: port
-    }, ports);
-    return keypaths[keypath] = true;
+    }
   };
   return {
-    connectBus: connectPortComponent(busExt),
-    connectPort: connectPortComponent(portExt)
+    connectPortsToBuses: connectPortsToBuses,
+    relayReactEvents: relayReactEvents
   };
 };
 
 
 
-},{"./utilities":7}],5:[function(_dereq_,module,exports){
+},{"./utilities":6}],4:[function(_dereq_,module,exports){
 var isArray,
   __hasProp = {}.hasOwnProperty;
 
@@ -381,8 +324,8 @@ module.exports = function(config) {
 
 
 
-},{"./utilities":7}],6:[function(_dereq_,module,exports){
-var extend, getAspenInitializer, getChannelConnectors, getPortConnector, getPortRegistrar, getReactiveAspen, getRegistrationUtilities;
+},{"./utilities":6}],5:[function(_dereq_,module,exports){
+var extend, getAspenInitializer, getChannelConnectors, getPortConnector, getReactiveAspen, getRegistrationUtils;
 
 extend = _dereq_('./utilities').extend;
 
@@ -392,12 +335,10 @@ getChannelConnectors = _dereq_('./getChannelConnectors');
 
 getPortConnector = _dereq_('./getPortConnector');
 
-getPortRegistrar = _dereq_('./getPortRegistrar');
-
-getRegistrationUtilities = _dereq_('./getRegistrationUtilities');
+getRegistrationUtils = _dereq_('./getRegistrationUtils');
 
 getReactiveAspen = function(renderToDOM, connectTo, EventManager) {
-  var Controller, appStateProperty, blockTillReady, config1, config2, config3, connect, connectBus, connectPort, connectPortsToBuses, connectViewToController, connectors, createEventStreamBus, createNonInitPropertyBus, doAsync, getDispatcher, getEventStream, getProperty, initialize, onValue, portRegistrar, push, reactIntake, reactIntakePort, registrationUtilities, terminusEventStream, _ref, _ref1;
+  var Controller, appStateProperty, blockTillReady, config1, config2, connect, connectPortsToBuses, connectors, createEventStreamBus, createNonInitPropertyBus, doAsync, getDispatcher, getEventStream, getProperty, initialize, onValue, portConnector, push, registrationUtils, relayReactEvents, terminusEventStream, _ref, _ref1;
   _ref = EventManager.factories, createEventStreamBus = _ref.createEventStreamBus, createNonInitPropertyBus = _ref.createNonInitPropertyBus;
   _ref1 = EventManager.utilities, blockTillReady = _ref1.blockTillReady, connect = _ref1.connect, doAsync = _ref1.doAsync, onValue = _ref1.onValue;
   config1 = {
@@ -405,12 +346,11 @@ getReactiveAspen = function(renderToDOM, connectTo, EventManager) {
     createEventStreamBus: createEventStreamBus,
     createNonInitPropertyBus: createNonInitPropertyBus
   };
-  registrationUtilities = getRegistrationUtilities(config1);
-  getDispatcher = registrationUtilities.getDispatcher;
-  getEventStream = registrationUtilities.getEventStream;
-  getProperty = registrationUtilities.getProperty;
+  registrationUtils = getRegistrationUtils(config1);
+  getDispatcher = registrationUtils.getDispatcher;
+  getEventStream = registrationUtils.getEventStream;
+  getProperty = registrationUtils.getProperty;
   appStateProperty = getProperty('_appState_');
-  reactIntake = '.reactIntake';
   terminusEventStream = getEventStream('_terminus_');
   config2 = {
     connect: connect,
@@ -420,32 +360,23 @@ getReactiveAspen = function(renderToDOM, connectTo, EventManager) {
   };
   connectors = getChannelConnectors(config2);
   push = connectors.push;
-  portRegistrar = getPortRegistrar(createEventStreamBus);
-  connectBus = portRegistrar.connectBus;
-  connectPort = portRegistrar.connectPort;
-  config3 = {
-    connectBus: connectBus,
-    getEventStream: getEventStream,
-    getProperty: getProperty,
-    reactIntake: reactIntake
-  };
-  connectPortsToBuses = getPortConnector(config3);
-  reactIntakePort = connectPort(reactIntake);
-  connectViewToController = function() {
-    return connectTo(reactIntakePort);
-  };
+  portConnector = getPortConnector(getEventStream, getProperty);
+  connectPortsToBuses = portConnector.connectPortsToBuses;
+  relayReactEvents = portConnector.relayReactEvents;
   initialize = getAspenInitializer({
     appStateProperty: appStateProperty,
     blockTillReady: blockTillReady,
     connectPortsToBuses: connectPortsToBuses,
-    connectViewToController: connectViewToController,
+    connectViewToController: function() {
+      return connectTo(relayReactEvents);
+    },
     doAsync: doAsync,
     onValue: onValue,
     push: push,
     renderToDOM: renderToDOM,
     terminusEventStream: terminusEventStream
   });
-  Controller = extend({}, connectors, registrationUtilities);
+  Controller = extend({}, connectors, registrationUtils);
   return {
     appStateProperty: appStateProperty,
     Controller: Controller,
@@ -457,7 +388,7 @@ module.exports = getReactiveAspen;
 
 
 
-},{"./getAspenInitializer":1,"./getChannelConnectors":2,"./getPortConnector":3,"./getPortRegistrar":4,"./getRegistrationUtilities":5,"./utilities":7}],7:[function(_dereq_,module,exports){
+},{"./getAspenInitializer":1,"./getChannelConnectors":2,"./getPortConnector":3,"./getRegistrationUtils":4,"./utilities":6}],6:[function(_dereq_,module,exports){
 var ObjProto, addComponent, compositeRegex, dot, extend, getComponent, getKeys, hasType, identity, isArray, isAtomicKeypath, isObject, isString, keypathRegex, processKeypath, shallowCopy, toString, transformResult, _ref,
   __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
@@ -576,6 +507,6 @@ module.exports = {
 
 
 
-},{}]},{},[6])
-(6)
+},{}]},{},[5])
+(5)
 });
