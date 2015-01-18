@@ -12,7 +12,7 @@ module.exports = \config ->
     setAlias (_tgt, tgt)
     pandoConnect (_src, _tgt, transform)
 
-  connect = \sources \targets \thunk ->
+  connect = (sources, targets, thunk) ->
     if isArray sources
       connectMultiple (sources, targets, thunk ())
     else
@@ -43,13 +43,10 @@ module.exports = \config ->
   onValue = (source, sink) ->
     pandoOnValue ((interpret source), sink)
 
-  plug = \targets \thunk \sources ->
-    connect sources targets thunk
-
   plugIntoTerminus = (source, transform) ->
-    connect source terminusEventStream transform
+    connect (source, terminusEventStream, transform)
 
-  push = \label \val ->
+  push = (label, val) ->
     bus = interpret label
     bus.dispatch (val, bus.id)
 
@@ -61,7 +58,6 @@ module.exports = \config ->
     interpret
     onEvent
     onValue
-    plug
     plugIntoTerminus
     push
   }

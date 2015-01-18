@@ -23,7 +23,7 @@ module.exports = \config ->
     connectPortsToBuses viewImports
 
   linkTogetherMVC = (topViewFactory, appState) ->
-    push appStateProperty appState         # Connect model and controller.
+    push (appStateProperty, appState)      # Connect model and controller.
     reactElement = topViewFactory appState # Connect model and view.
     connectViewToController ()             # Connect view and controller.
     reactElement
